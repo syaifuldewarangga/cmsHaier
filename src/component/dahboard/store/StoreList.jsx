@@ -5,25 +5,26 @@ import { connect, useDispatch } from 'react-redux';
 import { getToken } from '../../../action/action';
 
 function StoreList(props) {
-  const [data, setData] = React.useState({});
+  const [data, setData] = React.useState([]);
   const [state, setState] = React.useState({
     tempSearch: '',
     search: '',
     isSearch: false,
     dataSearch: [],
   });
+  const [border, setBorder] = React.useState(10);
+  let dataShowing;
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    dispatch(getToken());
     async function fetchData() {
       const request = await axios
         .post(
           props.gtm_url + 'pmtcommondata/GetStoreListByCondition',
           {
-            Barcode: state.search,
-            ProductID: '',
-            ProductName: '',
+            StoreName: state.search,
+            StoreID: '',
+            StoreCode: '',
           },
           {
             headers: {
@@ -33,9 +34,11 @@ function StoreList(props) {
           }
         )
         .then((res) => {
-          setData(res.data.data[0]);
+          setData(res.data.data);
         })
         .catch((e) => {
+          dispatch(getToken());
+
           if (e.response) {
             console.log(e.response);
           } else if (e.request) {
@@ -47,7 +50,7 @@ function StoreList(props) {
       return request;
     }
     fetchData();
-  }, [state.search]);
+  }, [props.token, state.search]);
 
   React.useEffect(() => {
     const timeOutId = setTimeout(
@@ -60,6 +63,13 @@ function StoreList(props) {
     );
     return () => clearTimeout(timeOutId);
   }, [state.tempSearch]);
+
+  const List = () => {
+    dataShowing = data.slice(0, border);
+    return dataShowing.map((item, i) => {
+      return <StoreListData data={item} key={i} />;
+    });
+  };
 
   return (
     <div className="user-role">
@@ -78,6 +88,12 @@ function StoreList(props) {
                 }
               />
             </div>
+            <button
+              className="btn d-flex justify-content-center btn-export"
+              onClick={() => setBorder(border + 10)}
+            >
+              <span className="fw-bold">Load More</span>
+            </button>
           </div>
         </div>
 
@@ -93,14 +109,12 @@ function StoreList(props) {
                     <th>Province</th>
                     <th>City</th>
                     <th>District</th>
-                    <th>Postal</th>
                     <th>Street</th>
-                    <th>Operational</th>
-                    <th>Office Hours</th>
+                    {/* <th>Operational</th>
+                    <th>Office Hours</th> */}
                   </tr>
                 </thead>
-
-                <StoreListData />
+                <List />
               </table>
             </div>
           </div>

@@ -1,24 +1,22 @@
-import React, { Component } from "react";
+import React from 'react';
 
-class ProductListData extends Component {
-    render() {
-        return(
-            <tbody>
-                <tr>
-                    <td>
-                        <img src="assets/images/product/product1.png" height="65px" alt="kulkas aqua japan"/>
-                    </td>
-                    <td>328799898989</td>
-                    <td>KLK1234098</td>
-                    <td>Aqua Japan</td>
-                    <td>Kulkas 1 Pintu</td>
-                    <td>Aqua Japan</td>
-                    <td>KLK1234098</td>
-                    <td>12/08/2021 11:45</td>
-                </tr>
-            </tbody>
-        );
-    }
+function ProductListData(props) {
+  return (
+    <tbody>
+      <tr>
+        <td>
+          <img src={props.data.Photo} height="65px" alt="kulkas aqua japan" />
+        </td>
+        <td>{props.data.Barcode}</td>
+        <td>{props.data.ProductID}</td>
+        <td>{props.data.Brand}</td>
+        <td>{props.data.ProductName}</td>
+        <td>{props.data.ProductModel}</td>
+        <td>{props.data.SerialNumber}</td>
+        <td>{props.data.CreatedDate}</td>
+      </tr>
+    </tbody>
+  );
 }
 
 export default ProductListData;
