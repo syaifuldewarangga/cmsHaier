@@ -1,0 +1,153 @@
+/* Google Font Impor Link */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+/* Material Desain CSS */
+@font-face {
+    font-family: 'Universe';
+    src: local('Universe'), url(./fonts/UniversLTStd.otf) format('opentype');
+}
+
+body, p, div, li, a{
+    font-family: 'Universe', arial, sans-serif !important;
+}
+
+body {
+    font-size: 16px;
+}
+
+.md-18 {
+    font-size: 18px;
+}
+
+.md-24 {
+    font-size: 24px;
+}
+
+.md-36 {
+    font-size: 36px;
+}
+
+.md-48 {
+    font-size: 48px;
+}
+
+.mb-10 {
+    margin-bottom: 90px;
+}
+/* End Material Desain CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+.login-background {
+    overflow: hidden;
+}
+
+.cover {
+    object-fit: cover;
+    width: 100%;
+}
+
+.card-login {
+    border-radius: 0;
+    height: 99vh;
+}
+
+.right-content .right-menu a{
+    text-decoration: none;
+    font-weight: 600;
+    color: #CDCDCD;
+}
+
+.right-content .right-menu a:hover {
+    color: #004D8B;
+}
+
+.right-content .right-menu a.active {
+    color: #004D8B;
+}
+
+.right-content .form-content {
+    margin-top: 25% !important;
+}
+
+.color-primary {
+    color: #266BAF;
+}
+
+.btn-color-primary {
+    background:#004D8B;
+    color: #ffffff;
+    font-weight: 600
+}
+
+.btn-color-primary:hover {
+    color: #ffffff;
+    background: #013661;;
+}
+
+.btn-color-outline-primary {
+    border-color:#004D8B;
+    color: #004D8B;
+    background: white;
+    font-weight: 600
+}
+
+.btn-color-outline-primary:hover {
+    background:#004D8B;
+    color: #ffffff;
+}
+
+.password {
+    position: absolute;
+    right: 0px;
+    top: 30px;
+    cursor: pointer;
+    color: rgb(0, 0, 0, 0.5);
+    padding: 8px 12px;
+}
+
+.addon {
+    position: absolute;
+    left: 0px;
+    top: 35px;
+    cursor: pointer;
+    color: rgb(0, 0, 0, 0.5);
+    /* padding: 8px 13px; */
+    border-right: 1px solid #ced4da;
+    line-height: 15px;
+}
+
+.forgot-password {
+    text-align: right;
+    font-size: 12px;
+    text-decoration: underline;
+    font-weight: 600;
+    color: #266BAF;
+}
+
+.addon .username-addon {
+    font-size: 15px
+}
+
+.pl-65 {
+    padding-left: 65px
+}
+
+.font-size-15 {
+    font-size: 15px;
+}
+
+.font-size-13 {
+    font-size: 13px;
+}
+
+.send-code-button {
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}

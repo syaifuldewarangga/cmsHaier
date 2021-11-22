@@ -1,0 +1,38 @@
+.dashboard-navbar  {
+    margin-bottom: 75px;
+}
+.dashboard-navbar .navbar{
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-navbar .menu {
+    margin: 0 15px;
+    cursor: pointer;
+}
+
+.dashboard-navbar .profile-menu {
+    text-decoration: none;
+}
+.dashboard-navbar .profile-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: #000;
+}
+
+.dashboard-navbar .sub-profile .profile-name {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.dashboard-navbar .text {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+@media (max-width: 420px) { 
+    .home-section .home-content .text {
+        white-space: nowrap; 
+        overflow: hidden;
+        text-overflow: clip; 
+    }
+}

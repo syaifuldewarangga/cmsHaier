@@ -1,0 +1,28 @@
+.admin-login {
+    margin-top: 150px;
+}
+
+.admin-login a {
+    text-decoration: none;
+}
+
+.admin-login .card {
+    border-radius: 0px 0px 10px 10px;
+}
+
+.admin-login .card-header,
+.admin-login .card {
+    border-radius: 10px 10px 0px 0px;
+    border: none;
+}
+
+.admin-login .card-body {
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 0px 0px 10px 10px;
+}
+
+.admin-login .title {
+    color: white;
+    font-size: 21px;
+    background: #004D8B;
+}

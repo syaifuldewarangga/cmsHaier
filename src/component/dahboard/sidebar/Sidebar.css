@@ -1,0 +1,221 @@
+/* Google Font Impor Link */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+  
+.dasboard-sidebar.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 260px;
+    background: #ffffff;
+    z-index: 100;
+    transition: all 0.5s ease;
+}
+
+.dasboard-sidebar.sidebar.close {
+    width: 78px;
+}
+
+.dasboard-sidebar.sidebar ul.nav-links{
+    margin-top: 50px;
+}
+
+.dasboard-sidebar.sidebar .logo-details {
+    height: 60px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}Z
+
+.dasboard-sidebar.sidebar.close .logo-details .logo-name{
+    transition-delay: 0s;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.dasboard-sidebar.sidebar .nav-links {
+    height: 100%;
+    padding: 30px 0 150px 0;
+    overflow: auto;
+}
+
+.dasboard-sidebar.sidebar.close .nav-links {
+    overflow: visible;
+}
+
+.dasboard-sidebar.sidebar .nav-links::-webkit-scrollbar {
+    display: none;
+}
+
+
+.dasboard-sidebar.sidebar .nav-links li{
+    position: relative;
+    list-style: none;
+    transition: all 0.4s ease;
+}
+
+.dasboard-sidebar.sidebar .nav-links li:hover{
+    position: relative;
+    list-style: none;
+    /* background: #00aeff; */
+}
+
+.dasboard-sidebar.sidebar .nav-links .active{
+    background: #00aeff;
+}
+
+.dasboard-sidebar.sidebar .nav-links li .icon-link{
+    display: flex;
+    align-items: center;
+    /* justify-content: space-between; */
+}
+
+.dasboard-sidebar.sidebar.close .nav-links li .icon-link{
+    display: block;
+}
+
+.dasboard-sidebar.sidebar .nav-links li i{
+    height: 50px;
+    min-width: 78px;
+    text-align: center;
+    line-height: 50px;
+    color:#000000;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dasboard-sidebar.sidebar .drop-down-menu {
+    cursor: pointer;
+}
+
+.dasboard-sidebar.sidebar.close .drop-down-menu .link-name{
+    display: none;
+    pointer-events: none;
+}
+
+.dasboard-sidebar.sidebar .nav-links li.show-menu i.arrow{
+    transform: rotate(-180deg);
+}
+
+.dasboard-sidebar.sidebar.close .nav-links li i.arrow{
+    display: none;
+}
+
+.dasboard-sidebar.sidebar .nav-links li a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.dasboard-sidebar.sidebar .nav-links li a .link-name,
+.dasboard-sidebar.sidebar .nav-links li .link-name{
+    font-size: 14px;
+    font-weight: 400;
+    color: #000000;
+}
+
+.dasboard-sidebar.sidebar.close .nav-links li a .link-name{
+    opacity: 0;
+    pointer-events: none;
+}
+
+.dasboard-sidebar.sidebar .nav-links li .sub-menu {
+    padding: 6px 6px 14px 80px;
+    margin-top: -10px;
+    background: #ffffff;
+    display: none;
+}
+
+.dasboard-sidebar.sidebar .nav-links li.show-menu .sub-menu {
+    display: block;
+}
+
+.dasboard-sidebar.sidebar .nav-links li .sub-menu a {
+    color: #000000;
+    font-size: 15px;
+    padding: 5px 0;
+    white-space: nowrap;
+    opacity: 0.6;
+    transition: all 0.3s ease;
+}
+
+.dasboard-sidebar.sidebar .nav-links li .sub-menu a:hover {
+    opacity: 1;
+}
+
+.dasboard-sidebar.sidebar.close .nav-links li .sub-menu {
+    position: absolute;
+    left: 100%;
+    top: -10px;
+    margin-top: 0;
+    padding: 10px 20px;
+    border-radius: 0 6px 6px 0;
+    opacity: 0;
+    display: block;
+    pointer-events: none;
+    transition: all 0.5s ease;
+}
+
+.dasboard-sidebar.sidebar.close .nav-links li:hover .sub-menu {
+    top: 0px;
+    opacity: 1;
+    pointer-events: auto;
+    transition: all 0.5s ease;
+}
+
+.dasboard-sidebar.sidebar .nav-links li .sub-menu .link-name {
+    display: none;
+}
+
+.dasboard-sidebar.sidebar.close .nav-links li .sub-menu .link-name {
+    display: none;
+}
+
+.dasboard-sidebar.sidebar.close .nav-links li .sub-menu .link-name {
+    font-size: 18px;
+    opacity: 1;
+    display: block;
+}
+
+.dasboard-sidebar.sidebar .nav-links li .sub-menu.blank {
+    opacity: 1;
+    pointer-events: auto;
+    padding: 3px 20px 6px 16px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.dasboard-sidebar.sidebar .nav-links li:hover .sub-menu.blank {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+@media (max-width: 420px) {
+    .dasboard-sidebar.sidebar.close {
+        width: 0;
+    }
+
+    .dasboard-sidebar.sidebar.close .logo-details {
+        display: none;
+    }
+
+    .dasboard-sidebar.sidebar.close .nav-links li .sub-menu {
+        display: none;
+    }
+
+    .dasboard-sidebar.sidebar.close .nav-links li i{
+        display: none;
+    }
+
+    .dasboard-sidebar.sidebar.close .profile-details {
+        display: none;
+    }
+}

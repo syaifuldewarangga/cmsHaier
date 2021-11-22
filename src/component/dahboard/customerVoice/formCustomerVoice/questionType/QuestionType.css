@@ -1,0 +1,20 @@
+.question-type  {
+    cursor: pointer;
+}
+
+.question-type .active  {
+    background: #e5e5e5;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.question-type .question-type {
+    padding: 21px 0;
+    color: white;
+    border-radius: 10px;
+}
+
+.question-type .question-type p {
+    font-weight: 600;
+    margin: 0;
+}

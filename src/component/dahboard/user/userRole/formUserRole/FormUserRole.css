@@ -1,0 +1,8 @@
+.form-user-role tbody {
+    color: #666666;
+    font-size: 12px;
+}
+
+.form-user-role tr td span.material-icons {
+    font-size: 18px;
+}

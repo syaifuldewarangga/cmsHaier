@@ -1,0 +1,27 @@
+.form-otp {
+    margin-top: 250px;
+}
+
+.form-otp .card {
+    border-radius: 10px;
+    border: none;
+}
+.form-otp .card-body {
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.form-otp .header {
+    margin-bottom: 50px;
+    margin-top: 15px;
+}
+
+.form-otp .title {
+    font-size: 21px;
+    font-weight: 600;
+}
+
+.form-otp .sub-title {
+    font-size: 13px;
+    color: rgb(129, 129, 129);
+}

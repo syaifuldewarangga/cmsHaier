@@ -1,0 +1,28 @@
+.dashboard-component .title {
+    font-weight: 600;
+}
+
+.dashboard-component .card {
+    border-radius: 5px;
+    border: none;
+}
+
+.dashboard-component .count-icon {
+    border-radius: 10px 0 0 10px;
+}
+
+.dashboard-component .count-icon .icon{
+    font-size: 75px;
+    color: #fff;
+    padding: 25px;
+}
+.dashboard-component .count{
+    margin: auto;
+}
+.dashboard-component .count p{
+    margin: 0;
+}
+
+.dashboard-component .count .total{
+    font-size: 27px;
+}
