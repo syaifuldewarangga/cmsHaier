@@ -15,9 +15,7 @@ const AdminLogin = (props) => {
 
   useEffect(() => {
     console.log(props.customer_login);
-    if (props.customer_login) {
-      props.history.push('/landing-page');
-    } else if (props.admin_login) {
+    if (props.admin_login) {
       props.history.push('/dashboard');
     }
   }, []);
