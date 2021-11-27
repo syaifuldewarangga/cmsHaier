@@ -367,11 +367,6 @@ function FormUser(props) {
         });
     }
   };
-
-  // console.log(data.photo !== undefined)
-  // if(data.photo.length !== 0) {
-  //   console.log(data.photo[0].path)
-  // }
   return (
     <div>
       <div className="form-user">
@@ -390,7 +385,7 @@ function FormUser(props) {
                 <div className="col-lg-12 d-flex justify-content-center mb-3">
                   <img src={filePreview} alt="file" className="img-fluid" />
                 </div>
-              ) : data.photo !== '' && data.photo !== undefined ? (
+              ) : data.photo !== '' && data.photo !== undefined && data.photo.length !== 0 ? (
                 <div className="col-lg-12 d-flex justify-content-center mb-3">
                   <img
                     src={props.image_url + data.photo[0].path}
@@ -548,16 +543,16 @@ function FormUser(props) {
                     -- Select Gender --
                   </option>
                   <option
-                    value="Male"
-                    selected={data.gender === 'Male' ? 'selected' : null}
+                    value="Pria"
+                    selected={data.gender === 'Pria' ? 'selected' : null}
                   >
-                    Male
+                    Pria
                   </option>
                   <option
-                    value="Female"
-                    selected={data.gender === 'Female' ? 'selected' : null}
+                    value="Wanita"
+                    selected={data.gender === 'Wanita' ? 'selected' : null}
                   >
-                    Female
+                    Wanita
                   </option>
                 </select>
                 <div className="invalid-feedback">{errorData.gender}</div>

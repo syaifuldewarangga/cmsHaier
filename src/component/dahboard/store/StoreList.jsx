@@ -88,12 +88,6 @@ function StoreList(props) {
                 }
               />
             </div>
-            <button
-              className="btn d-flex justify-content-center btn-export"
-              onClick={() => setBorder(border + 10)}
-            >
-              <span className="fw-bold">Load More</span>
-            </button>
           </div>
         </div>
 
@@ -117,6 +111,14 @@ function StoreList(props) {
                 <List />
               </table>
             </div>
+          </div>
+          <div className="d-grid gap-2 my-3">
+            <button
+              className="btn btn-export"
+              onClick={() => setBorder(border + 10)}
+            >
+              <span className="fw-bold">Load More</span>
+            </button>
           </div>
         </div>
       </div>

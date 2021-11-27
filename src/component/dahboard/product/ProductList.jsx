@@ -88,12 +88,6 @@ function ProductList(props) {
               />
             </div>
             <div className="col-lg-6 d-flex justify-content-lg-end mb-3">
-              <button
-                className="btn d-flex justify-content-center btn-export"
-                onClick={() => setBorder(border + 10)}
-              >
-                <span className="fw-bold">Load More</span>
-              </button>
               <button className="btn d-flex justify-content-center btn-export">
                 <span class="material-icons-outlined me-3">
                   {' '}
@@ -128,6 +122,14 @@ function ProductList(props) {
                 <List />
               </table>
             </div>
+          </div>
+          <div className="d-grid gap-2 mt-3">
+            <button
+              className="btn d-flex justify-content-center btn-export"
+              onClick={() => setBorder(border + 10)}
+            >
+              <span className="fw-bold">Load More</span>
+            </button>
           </div>
         </div>
       </div>

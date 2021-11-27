@@ -60,26 +60,31 @@ const FormContactFooter = (props) => {
         }).catch((err) => {
             console.log(err.response.data)
             if(err.response.data !== undefined) {
-                let responError = err.response.data.errors;
-                if(responError.location === 'address') {
-                    setErrorData({
-                        ...errorData,
-                        address: err.response.data.message,
-                    });
-                }
+                if(err.response.data.errors) {
 
-                if(responError.location === 'phone') {
-                    setErrorData({
-                        ...errorData,
-                        phone: err.response.data.message,
-                    });
-                }
-
-                if(responError.location === 'fax') {
-                    setErrorData({
-                        ...errorData,
-                        fax: err.response.data.message,
-                    });
+                    let responError = err.response.data.errors;
+                    if(responError.location === 'address') {
+                        setErrorData({
+                            ...errorData,
+                            address: err.response.data.message,
+                        });
+                    }
+    
+                    if(responError.location === 'phone') {
+                        setErrorData({
+                            ...errorData,
+                            phone: err.response.data.message,
+                        });
+                    }
+    
+                    if(responError.location === 'fax') {
+                        setErrorData({
+                            ...errorData,
+                            fax: err.response.data.message,
+                        });
+                    }
+                } else {
+                    console.log(err.d)
                 }
             }
         })
@@ -115,7 +120,7 @@ const FormContactFooter = (props) => {
                                 <div class="mb-3">
                                     <label class="form-label">Phone</label>
                                     <input 
-                                        type="number" 
+                                        type="text" 
                                         name="phone"
                                         class={`form-control ${errorData.phone !== '' ? 'is-invalid' : null}`}
                                         value={data.phone}
@@ -128,7 +133,7 @@ const FormContactFooter = (props) => {
                                 <div class="mb-3">
                                     <label class="form-label">Fax</label>
                                     <input 
-                                        type="number" 
+                                        type="text" 
                                         name="fax"
                                         class={`form-control ${errorData.fax !== '' ? 'is-invalid' : null}`}
                                         value={data.fax}

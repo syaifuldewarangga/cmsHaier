@@ -39,6 +39,7 @@ import UserList from '../../../component/dahboard/user/userList/UserList';
 import AddUserRole from '../../../component/dahboard/user/userRole/addUserRole/AddUserRole';
 import EditUserRole from '../../../component/dahboard/user/userRole/editUserRole/EditUserRole';
 import UserRole from '../../../component/dahboard/user/userRole/UserRole';
+import WebConfig from '../../../component/dahboard/webConfig/WebConfig';
 import NotFound from '../../../component/errorPage/notFound/Notfound';
 import ChangePassword from '../../forgotPassword/changePassword/ChangePassword';
 import ForgotPassword from '../../forgotPassword/forgotPassword/ForgotPassword';
@@ -111,6 +112,7 @@ class Dashboard extends Component {
             <AdminRoute exact path="/setting/contact-footer/edit" component={FormContactFooter} />
             <AdminRoute exact path="/setting/contact-information" component={ContactInformationList} />
             <AdminRoute exact path="/setting/contact-information/edit" component={FormContactInformation} />
+            <AdminRoute exact path="/setting/web-config" component={WebConfig} />
 
             <AdminRoute exact path="/change-password-admin" component={ResetPasswordAdmin} />
             <AdminRoute exact path="/admin-profile" component={AdminProfile} />

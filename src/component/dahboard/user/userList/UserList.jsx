@@ -30,7 +30,8 @@ function UserList(props) {
         },
         params: {
           page: currentPage,
-          itemPerPage: 10
+          itemPerPage: 10,
+          except_id: localStorage.getItem('id')
         }
       })
       .then((res) => {
@@ -39,15 +40,15 @@ function UserList(props) {
         setTotalPage(res.data.totalPages)
       })
 
-      .catch((e) => {
-        if (e.response) {
-          console.log(e.response);
-        } else if (e.request) {
-          console.log('request : ' + e.request);
-        } else {
-          console.log('message : ' + e.message);
-        }
-      });
+      // .catch((e) => {
+      //   if (e.response) {
+      //     console.log(e.response);
+      //   } else if (e.request) {
+      //     console.log('request : ' + e.request);
+      //   } else {
+      //     console.log('message : ' + e.message);
+      //   }
+      // });
     return request;
   }
 

@@ -96,7 +96,7 @@ class Sidebar extends Component
                     <li>
                         <div className="icon-link drop-down-menu">
                             <i class="material-icons-outlined"> settings </i>
-                            <span className="link-name">Customer</span>
+                            <span className="link-name">Settings</span>
                             <i className="material-icons-outlined arrow"> expand_more </i>
                         </div>
                         <ul className="sub-menu">
@@ -104,7 +104,7 @@ class Sidebar extends Component
                             <li><Link to="/setting/about">About</Link></li>
                             <li><Link to="/setting/contact-footer">Contact Footer</Link></li>
                             <li><Link to="/setting/contact-information">Contact Information</Link></li>
-                            <li><Link to="/customer/status-service">Web Config</Link></li>
+                            <li><Link to="/setting/web-config">Web Config</Link></li>
                         </ul>
                     </li>
 
