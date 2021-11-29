@@ -16,38 +16,43 @@ function ProductList(props) {
   let dataShowing;
   const dispatch = useDispatch();
 
-  React.useEffect(() => {
-    async function fetchData() {
-      await axios
-        .post(
-          props.gtm_url + 'pmtcommondata/GetProductListByCondition',
-          {
-            Barcode: state.search,
-            ProductID: '',
-            ProductName: '',
+  async function fetchData(type = null) {
+    await axios
+      .post(
+        props.gtm_url + 'pmtcommondata/GetProductListByCondition',
+        {
+          Barcode: state.search,
+          ProductID: '',
+          ProductName: '',
+        },
+        {
+          headers: {
+            Authorization: props.token,
+            'Content-Type': 'text/plain',
           },
-          {
-            headers: {
-              Authorization: props.token,
-              'Content-Type': 'text/plain',
-            },
-          }
-        )
-        .then((res) => {
+        }
+      )
+      .then((res) => {
+        if(type === 'download') {
+          JSONToCSVConvertor(res.data.data, 'Product', true);
+        } else {
           setData(res.data.data);
-        })
-        .catch((e) => {
-          dispatch(getToken());
+        }
+      })
+      .catch((e) => {
+        dispatch(getToken());
 
-          if (e.response) {
-            console.log(e.response);
-          } else if (e.request) {
-            console.log('request : ' + e.request);
-          } else {
-            console.log('message : ' + e.message);
-          }
-        });
-    }
+        if (e.response) {
+          console.log(e.response);
+        } else if (e.request) {
+          console.log('request : ' + e.request);
+        } else {
+          console.log('message : ' + e.message);
+        }
+      });
+  }
+
+  React.useEffect(() => {
     fetchData();
   }, [props.token, state.search]);
 
@@ -70,6 +75,60 @@ function ProductList(props) {
     });
   };
 
+  const downloadCSV = () => {
+    fetchData('download');
+  }
+  const JSONToCSVConvertor = (JSONData, ReportTitle, ShowLabel) => {
+    var arrData =
+      typeof JSONData !== 'object' ? JSON.parse(JSONData) : JSONData;
+
+    var CSV = '';
+
+    if (ShowLabel) {
+      var row = '';
+
+      for (var index in arrData[0]) {
+        row += index + ',';
+      }
+
+      row = row.slice(0, -1);
+
+      CSV += row + '\r\n';
+    }
+
+    for (var i = 0; i < arrData.length; i++) {
+      var row = '';
+
+      for (var index in arrData[i]) {
+        row += '"' + arrData[i][index] + '",';
+      }
+
+      row.slice(0, row.length - 1);
+
+      CSV += row + '\r\n';
+    }
+
+    if (CSV === '') {
+      alert('Invalid data');
+      return;
+    }
+
+    var fileName = 'Data_';
+    fileName += ReportTitle.replace(/ /g, '_');
+
+    var uri = 'data:text/csv;charset=utf-8,' + escape(CSV);
+
+    var link = document.createElement('a');
+    link.href = uri;
+
+    link.style = 'visibility:hidden';
+    link.download = fileName + '.csv';
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="user-role">
       <h5 className="dashboard title">Product</h5>
@@ -88,10 +147,12 @@ function ProductList(props) {
               />
             </div>
             <div className="col-lg-6 d-flex justify-content-lg-end mb-3">
-              <button className="btn d-flex justify-content-center btn-export">
+              <button 
+                className="btn d-flex justify-content-center btn-export"
+                onClick={downloadCSV}
+              >
                 <span class="material-icons-outlined me-3">
-                  {' '}
-                  file_download{' '}
+                  file_download
                 </span>
                 <span className="fw-bold">Export</span>
               </button>

@@ -5,7 +5,11 @@ function ProductListData(props) {
     <tbody>
       <tr>
         <td>
-          <img src={props.data.Photo} height="65px" alt="kulkas aqua japan" />
+          {
+            props.data.Photo !== '' && props.data.Photo !== null?
+            <img src={props.data.Photo} height="65px" alt="kulkas aqua japan" />
+            : null
+          }
         </td>
         <td>{props.data.Barcode}</td>
         <td>{props.data.ProductID}</td>

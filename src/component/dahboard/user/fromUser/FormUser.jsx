@@ -54,11 +54,6 @@ function FormUser(props) {
   useEffect(() => {
     if (props.data !== undefined) {
       const role = props.data.roles !== null ? props.data.roles : null;
-      let newPhone
-      if(props.data.length !== 0 ) {
-        let phoneString = props.data.phone.toString();
-        newPhone = phoneString.slice(2)
-      }
       setData({
         ...data,
         first_name: props.data.first_name,
@@ -66,7 +61,7 @@ function FormUser(props) {
         username: props.data.username,
         role: role,
         email: props.data.email,
-        phone: newPhone,
+        phone: props.data.phone,
         gender: props.data.gender,
         province: props.data.province,
         city: props.data.city,
@@ -156,10 +151,22 @@ function FormUser(props) {
         });
         setFilePreview(URL.createObjectURL(e.target.files[0]));
       }
+    } else if(e.target.ariaLabel === 'phone') {
+      if(data.phone.toString().slice(0,1) === '0') {
+        const newPhone = '62' + e.target.value.slice(1)
+        setData({
+          ...data, 
+          phone: newPhone
+        })
+      } else {
+        setData({
+          ...data,
+          [e.target.ariaLabel]: e.target.value,
+        });
+      }
     } else if (e.target.ariaLabel === 'birth_date') {
       setData({
         ...data,
-        // birth_date: dateFormat(e.target.valueAsDate, 'yyyy/mm/dd'),
         birth_date: e.target.value,
       });
     } else {
@@ -302,12 +309,11 @@ function FormUser(props) {
           },
         })
         .then((res) => {
-          console.log(res.data);
+          localStorage.setItem( 'fullname', data.first_name + ' ' + data.last_name );
           if (data.photo !== '' && data.photo !== props.data.image) {
             const formDataPhoto = new FormData();
             formDataPhoto.append('file', data.photo);
             formDataPhoto.append('userId', localStorage.getItem('id'));
-            console.log(Object.fromEntries(formDataPhoto));
             axios
               .post(props.base_url + 'user/image', formDataPhoto, {
                 headers: {
@@ -363,6 +369,7 @@ function FormUser(props) {
         })
         .catch((e) => {
           let responError = e.response.data.errors;
+          console.log(responError)
           appendErrorData(responError);
         });
     }
@@ -516,7 +523,6 @@ function FormUser(props) {
                 <div className="mb-3">
                   <label className="form-label">Phone Number</label>
                   <div className="input-group">
-                    <span class="input-group-text" id="basic-addon1">+62</span>
                     <input
                       type="number"
                       className={`form-control ${
@@ -673,7 +679,7 @@ function FormUser(props) {
                   </div>
                 </div>
               </div>
-              <div className="col-lg-6 mb-3">
+              <div className={`${props.title === 'Edit User' ? 'col-lg-6' : null}  mb-3`}>
                 <label className="form-label">Status</label>
                 <select
                   className={`form-select ${

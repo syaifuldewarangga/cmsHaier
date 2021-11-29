@@ -1,7 +1,6 @@
 import React from 'react';
 
 function StoreListData(props) {
-  console.log(props.data);
   return (
     <tbody>
       <tr>
@@ -9,9 +8,6 @@ function StoreListData(props) {
           <div className="d-flex justify-content-start">
             <button className="btn d-flex btn-edit me-3 btn-sm">
               <span class="material-icons-outlined md-18"> edit </span>
-            </button>
-            <button className="btn d-flex btn-show btn-sm">
-              <span class="material-icons-outlined md-18"> visibility </span>
             </button>
           </div>
         </td>

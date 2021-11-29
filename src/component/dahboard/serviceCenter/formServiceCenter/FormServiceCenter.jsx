@@ -112,10 +112,10 @@ const FormServiceCenter = (props) => {
         if (e.target.name === 'province') {
             getCityFromAPI(e.target.value);
         }
-        if(e.target.name === 'phone_office') {
+        if(e.target.name === 'phone_office' && data.phone_office.toString().slice(0,1) === '0') {
             setData({
                 ...data,
-                [e.target.name]: parseInt(e.target.value, 10)
+                phone_office: '62' + e.target.value.toString().slice(1)
             })
         } else {
             setData({
@@ -287,7 +287,6 @@ const FormServiceCenter = (props) => {
                                 <div className="col-lg-6 mb-3">
                                     <label class="form-label">Phone Office</label>
                                     <div className="input-group">
-                                        <span class="input-group-text" id="basic-addon1">+62</span>
                                         <input 
                                             type="number" 
                                             class={`form-control ${errorData.phone_office !== '' ? 'is-invalid' : null} `}

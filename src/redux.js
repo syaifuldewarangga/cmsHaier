@@ -5,6 +5,7 @@ const initialCredential = {
   BASE_URL: 'https://e-warranty.click/api/',
   URL: 'https://images.e-warranty.click/',
   GTM_URL: 'https://openplat-sg-aws-test.haier.net/api/',
+  FRONTEND_URL: 'https://quina.e-warranty.click/',
   GTM_TOKEN: '',
   ADMIN_LOGIN: false,
   CUSTOMER_LOGIN: false,

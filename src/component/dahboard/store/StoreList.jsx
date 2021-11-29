@@ -39,13 +39,13 @@ function StoreList(props) {
         .catch((e) => {
           dispatch(getToken());
 
-          if (e.response) {
-            console.log(e.response);
-          } else if (e.request) {
-            console.log('request : ' + e.request);
-          } else {
-            console.log('message : ' + e.message);
-          }
+          // if (e.response) {
+          //   console.log(e.response);
+          // } else if (e.request) {
+          //   console.log('request : ' + e.request);
+          // } else {
+          //   console.log('message : ' + e.message);
+          // }
         });
       return request;
     }

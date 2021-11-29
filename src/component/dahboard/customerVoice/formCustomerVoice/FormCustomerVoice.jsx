@@ -76,7 +76,6 @@ const FormCustomerVoice = (props) => {
 
     const createDataToAPI = (data) => {
         const token = localStorage.getItem('access_token')
-        console.log(Object.fromEntries(data))
         axios.post(props.base_url + 'customer-voice-questions', data, {
             headers: {
                 Authorization: 'Bearer ' + token,
@@ -117,16 +116,17 @@ const FormCustomerVoice = (props) => {
 
         if(props.title === 'Edit Question') {
             formData.append('id', props.data.id)
-            answers.forEach(function(answer) {
+            answers.map((answer) => {
                 formData.append('answers', answer)
             })
             updateDataToAPI(formData)
         } else {
-            answers.forEach(function(answer) {
+            answers.map((answer) => {
                 formData.append('answer', answer)
             })
             formData.append('user_id', formQuestion.user_id)
-            createDataToAPI(formData)
+            console.log(answers)
+            // createDataToAPI(formData)
         }
     }
     

@@ -92,9 +92,11 @@ function DashboardComponent(props) {
         },
       })
       .then((res) => {
+        console.log(res.data)
         setData({
           ...data,
-          ['user']: res.data.data,
+          ['lineChart']: res.data.data,
+          ['user']: res.data.total,
         });
       })
       .catch((e) => {

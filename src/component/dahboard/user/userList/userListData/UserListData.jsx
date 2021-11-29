@@ -30,7 +30,7 @@ function UserListData(props) {
         <td>{props.data.email}</td>
         <td>{props.data.roles}</td>
         <td>{props.data.status}</td>
-        <td>{props.data.fullname}</td>
+        <td>{props.data.first_name} {props.data.last_name}</td>
         <td>{props.data.gender}</td>
         <td>{props.data.phone}</td>
         <td>{props.data.created_at}</td>

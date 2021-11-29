@@ -189,7 +189,7 @@ function UserList(props) {
                     <th>Email</th>
                     <th>Level</th>
                     <th>Status</th>
-                    <th>Name</th>
+                    <th>Fullname</th>
                     <th>Gender</th>
                     <th>Phone Number</th>
                     <th>Created At</th>

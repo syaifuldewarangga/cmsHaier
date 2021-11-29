@@ -8,14 +8,16 @@ function FormBanner(props) {
   const { id } = useParams();
   const history = useHistory();
   const [errorData, setErrorData] = useState({
-    file: "",
-    title: "",
-    link: "",
+    file: '',
+    title: '',
+    link: '',
+    status: '',
   })
   const [data, setData] = useState({
     file: '',
     title: '',
     link: '',
+    status: '',
   });
   const [filePreview, setFilePreview] = useState('');
 
@@ -36,6 +38,35 @@ function FormBanner(props) {
     }
   };
 
+  const hanleErrors = (responError) => {
+    if(responError.location === 'title') {
+      setErrorData({
+        ...errorData,
+        title: responError.reason
+      })
+    }
+
+    if(responError.location === 'file') {
+      setErrorData({
+        ...errorData,
+        file: responError.reason
+      })
+    }
+
+    if(responError.location === 'link') {
+      setErrorData({
+        ...errorData,
+        link: responError.reason
+      })
+    }
+
+    if(responError.location === 'status') {
+      setErrorData({
+        ...errorData,
+        link: responError.reason
+      })
+    }
+  }
   const fetchAPI = async () => {
     var token = localStorage.getItem('access_token');
 
@@ -45,25 +76,29 @@ function FormBanner(props) {
       formData.append('file', data.file);
       formData.append('title', data.title);
       formData.append('link', data.link);
+      formData.append('status', data.status);
       const request = await axios
         .put(props.base_url + 'banner', formData, {
           headers: {
             Authorization: 'Bearer ' + token,
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
           },
         })
         .then((res) => {
-          alert('Berhasil!');
-          history.push('/banner/list');
+          let formStatus = new FormData()
+          formStatus.append('id', id);
+          formStatus.append('status', data.status);
+          axios.put(props.base_url + 'banner/set', formStatus, {
+            headers: {
+              Authorization: 'Bearer ' + token,
+            },
+          }).then((res) => {
+            alert('Berhasil!');
+            history.push('/banner/list');
+          })
         })
         .catch((e) => {
-          if (e.response) {
-            console.log(e.response);
-          } else if (e.request) {
-            console.log('request : ' + e.request);
-          } else {
-            console.log('message : ' + e.message);
-          }
+          let responError = e.response.data.errors
+          hanleErrors(responError)
         });
       return request;
     } else {
@@ -71,6 +106,7 @@ function FormBanner(props) {
       formData.append('file', data.file);
       formData.append('title', data.title);
       formData.append('link', data.link);
+      formData.append('status', data.status);
       await axios
         .post(props.base_url + 'banner', formData, {
           headers: {
@@ -79,32 +115,21 @@ function FormBanner(props) {
           },
         })
         .then((res) => {
-          alert('Berhasil!');
-          history.push('/banner/list');
+          let formStatus = new FormData()
+          formStatus.append('id', id);
+          formStatus.append('status', data.status);
+          axios.put(props.base_url + 'banner/set', formStatus, {
+            headers: {
+              Authorization: 'Bearer ' + token,
+            },
+          }).then((res) => {
+            alert('Berhasil!');
+            history.push('/banner/list');
+          })
         })
         .catch((e) => {
           let responError = e.response.data.errors
-          console.log(responError)
-          if(responError.location === 'title') {
-            setErrorData({
-              ...errorData,
-              title: responError.reason
-            })
-          }
-
-          if(responError.location === 'file') {
-            setErrorData({
-              ...errorData,
-              file: responError.reason
-            })
-          }
-
-          if(responError.location === 'link') {
-            setErrorData({
-              ...errorData,
-              link: responError.reason
-            })
-          }
+          hanleErrors(responError)
         });
     }
   };
@@ -116,9 +141,11 @@ function FormBanner(props) {
         title: props.data.title,
         file: props.data.image,
         link: props.data.link,
+        status: props.data.status === true ? '1' : '0',
       });
     }
   }, [props.data]);
+
   return (
     <div>
       <div className="form-banner">
@@ -178,6 +205,7 @@ function FormBanner(props) {
                     </div>
                   </div>
                 </div>
+                
                 <div className="col-lg-12">
                   <div class="mb-3">
                     <label class="form-label">Redirect Url</label>
@@ -190,6 +218,23 @@ function FormBanner(props) {
                     />
                     <div class="invalid-feedback">
                       { errorData.link }
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col-lg-12">
+                  <div class="mb-3">
+                    <label class="form-label">Status</label>
+                    <select 
+                      class={`form-select ${errorData.status !== '' ? 'is-invalid': null }`} 
+                      aria-label="status"
+                      onChange={onChangeData}
+                    >
+                      <option value="1" selected= {data.status === '1' ? 'selected' : null}>Active</option>
+                      <option value="0" selected={data.status === '0' ? 'selected' : null}>Not Active</option>
+                    </select>
+                    <div class="invalid-feedback">
+                      { errorData.status }
                     </div>
                   </div>
                 </div>

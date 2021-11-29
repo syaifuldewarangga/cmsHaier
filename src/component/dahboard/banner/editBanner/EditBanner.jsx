@@ -21,7 +21,6 @@ function EditBanner(props) {
           },
         })
         .then((res) => {
-          console.log(res.data);
           setData(res.data);
         })
         .catch((e) => {

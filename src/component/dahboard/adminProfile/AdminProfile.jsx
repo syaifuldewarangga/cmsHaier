@@ -133,6 +133,11 @@ const AdminProfile = (props) => {
         });
         setFilePreview(URL.createObjectURL(e.target.files[0]));
       }
+    } else if(e.target.ariaLabel === 'phone' && data.phone.toString().slice(0,1) === '0') {
+      setData({
+        ...data,
+        phone: '62' + e.target.value.toString().slice(1),
+      });
     } else {
       setData({
         ...data,
@@ -221,6 +226,13 @@ const AdminProfile = (props) => {
     alertModal.show();
   };
 
+  const onHideModal = () => {
+    var alertModal = document.getElementById('alertModal');
+    alertModal.addEventListener('hide.bs.modal', function (event) {
+      window.location.reload();
+    });
+  };
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     let formData = new FormData();
@@ -247,6 +259,7 @@ const AdminProfile = (props) => {
         },
       })
       .then((res) => {
+        localStorage.setItem( 'fullname', data.first_name + ' ' + data.last_name );
         if (data.photo !== '') {
           const formDataPhoto = new FormData();
           formDataPhoto.append('file', data.photo);
@@ -266,6 +279,7 @@ const AdminProfile = (props) => {
             });
         }
         alertModal();
+        onHideModal()
       })
       .catch((err) => {
         console.log(err);
@@ -273,7 +287,8 @@ const AdminProfile = (props) => {
         appendErrorData(responError);
       });
   };
-  console.log(data.photo);
+
+
   return (
     <div>
       <div className="form-user">
@@ -411,16 +426,16 @@ const AdminProfile = (props) => {
                       -- Select Gender --
                     </option>
                     <option
-                      value="Male"
-                      selected={data.gender === 'Male' ? 'selected' : null}
+                      value="Pria"
+                      selected={data.gender === 'Pria' ? 'selected' : null}
                     >
-                      Male
+                      Pria
                     </option>
                     <option
-                      value="Female"
-                      selected={data.gender === 'Female' ? 'selected' : null}
+                      value="Wanita"
+                      selected={data.gender === 'Wanita' ? 'selected' : null}
                     >
-                      Female
+                      Wanita
                     </option>
                   </select>
                   <div className="invalid-feedback">{errorData.gender}</div>
@@ -509,7 +524,7 @@ const AdminProfile = (props) => {
                   />
                   <div className="invalid-feedback">{errorData.district}</div>
                 </div>
-                <div className="col-lg-6 mb-3">
+                <div className="col-lg-12 mb-3">
                   <div class="mb-3">
                     <label class="form-label">Sub District</label>
                     <input

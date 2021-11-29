@@ -49,11 +49,11 @@ function ArticleListData(props) {
             >
               <span class="material-icons-outlined md-18"> delete </span>
             </button>
-            <Link to={`/blog/detail/${props.data.slug}`} target="_blank">
+            <a href={`${props.frontend_url}blog/detail/${props.data.slug}`} target="_blank">
               <button className="btn d-flex btn-show btn-sm">
                 <span class="material-icons-outlined md-18"> visibility </span>
               </button>
-            </Link>
+            </a>
           </div>
         </td>
         <td className="align-middle">
@@ -74,6 +74,7 @@ const mapStateToProps = (state) => {
   return {
     url: state.URL,
     base_url: state.BASE_URL,
+    frontend_url: state.FRONTEND_URL,
   };
 };
 
