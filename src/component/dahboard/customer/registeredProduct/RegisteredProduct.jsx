@@ -123,7 +123,7 @@ function RegisteredProduct(props) {
                     <th>Photos</th>
                     <th>Barcode</th>
                     <th>Product ID</th>
-                    <th>Product</th>
+                    <th>Product Name</th>
                     <th>Product Model</th>
                     <th>Serial Number</th>
                     <th>Date of Purchase</th>

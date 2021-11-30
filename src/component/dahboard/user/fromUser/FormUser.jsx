@@ -282,7 +282,7 @@ function FormUser(props) {
     formData.append('nik', data.nik);
     formData.append('first_name', data.first_name);
     formData.append('last_name', data.last_name);
-    formData.append('phone', "62" + data.phone);
+    formData.append('phone', data.phone);
     formData.append('email', data.email);
     formData.append('password', data.password);
     formData.append('status', data.status);
@@ -299,7 +299,7 @@ function FormUser(props) {
     formData.append('fax', data.fax);
 
     var token = localStorage.getItem('access_token');
-    if (props.title === 'Edit User') {
+  if (props.title === 'Edit User') {
       formData.append('roles', data.role);
       axios
         .put(props.base_url + 'user', formData, {
@@ -531,6 +531,7 @@ function FormUser(props) {
                       aria-label="phone"
                       onChange={onChangeData}
                       value={data.phone}
+                      disabled={props.title === 'Edit User' ? 'disabled' : null}
                     />
                     <div className="invalid-feedback">{errorData.phone}</div>
                   </div>

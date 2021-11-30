@@ -170,7 +170,7 @@ function ProductList(props) {
                     <th>Barcode</th>
                     <th>Product ID</th>
                     <th>Brand</th>
-                    <th>Product</th>
+                    <th>Product Name</th>
                     <th>Product Model</th>
                     <th>Serial Number</th>
                     <th>Created Date</th>

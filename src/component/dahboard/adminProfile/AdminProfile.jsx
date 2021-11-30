@@ -409,6 +409,7 @@ const AdminProfile = (props) => {
                       aria-label="phone"
                       onChange={onChangeData}
                       value={data.phone}
+                      disabled="disabled"
                     />
                     <div className="invalid-feedback">{errorData.phone}</div>
                   </div>
