@@ -78,10 +78,10 @@ const FormServiceCenter = (props) => {
                 id: id
             }
         }).then((res) => {
-            let newPhone = res.data.phone_office.toString();
+            console.log(res.data)
             setData({
                 service_center_name: res.data.service_center_name,
-                phone_office: newPhone.slice(2),
+                phone_office: res.data.phone_office === null ? '' : res.data.phone_office ,
                 province: res.data.province,
                 city: res.data.city,
                 district: res.data.district,
@@ -98,6 +98,7 @@ const FormServiceCenter = (props) => {
             getCityFromAPI(res.data.province)
         }).catch((e) => {
             console.log(e.response.data)
+            // console.log(e)
         })
     }
 
@@ -109,6 +110,7 @@ const FormServiceCenter = (props) => {
     }, [])
 
     const onChangeInput = (e) => {
+        
         if (e.target.name === 'province') {
             getCityFromAPI(e.target.value);
         }
@@ -213,7 +215,7 @@ const FormServiceCenter = (props) => {
         e.preventDefault()
         let formData = new FormData()
         formData.append('service_center_name', data.service_center_name)
-        formData.append('phone_office', '62' + data.phone_office)
+        formData.append('phone_office', data.phone_office)
         formData.append('province', data.province)
         formData.append('city', data.city)
         formData.append('district', data.district)
