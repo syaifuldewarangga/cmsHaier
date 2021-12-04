@@ -92,7 +92,6 @@ const FormCustomerVoice = (props) => {
 
     const updateDataToAPI = (data) => {
         const token = localStorage.getItem('access_token')
-        console.log(Object.fromEntries(data))
         axios.put(props.base_url + 'customer-voice-questions', data, {
             headers: {
                 Authorization: 'Bearer ' + token,
@@ -103,7 +102,7 @@ const FormCustomerVoice = (props) => {
         }).catch((err) => {
             let responError = err.response.data.errors
             console.log(err.response.data.error_message)
-            // errorMessage(responError)
+            errorMessage(responError)
         })
     }
 
@@ -125,8 +124,7 @@ const FormCustomerVoice = (props) => {
                 formData.append('answer', answer)
             })
             formData.append('user_id', formQuestion.user_id)
-            console.log(answers)
-            // createDataToAPI(formData)
+            createDataToAPI(formData)
         }
     }
     

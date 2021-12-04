@@ -10,9 +10,7 @@ import FormImportServiceCenter from './formImportServiceCenter/FormImportService
 
 function ServiceCenterList(props) {
   const [dataID, setDataID] = useState('');
-  const [data, setData] = useState({
-    content: [],
-  });
+  const [data, setData] = useState([]);
   const [state, setState] = useState({
     tempSearch: '',
     search: '',
@@ -289,7 +287,7 @@ function ServiceCenterList(props) {
                         />
                       );
                     })
-                  : data.content.map((item, i) => {
+                  : data.map((item, i) => {
                       return (
                         <ServiceCenterListData
                           remove={handleModalDelete}

@@ -6,7 +6,12 @@ function StoreListData(props) {
       <tr>
         <td>
           <div className="d-flex justify-content-start">
-            <button className="btn d-flex btn-edit me-3 btn-sm">
+            <button 
+              className="btn d-flex btn-edit me-3 btn-sm" 
+              data-bs-toggle="modal" 
+              data-bs-target="#formEditStore"
+              onClick={() => props.handleStoreID(props.data.StoreID)}
+            >
               <span class="material-icons-outlined md-18"> edit </span>
           </button>
           </div>

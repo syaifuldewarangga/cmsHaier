@@ -1,22 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import StoreListData from './StoreListData/StoreListData';
 import axios from 'axios';
 import { connect, useDispatch } from 'react-redux';
 import { getToken } from '../../../action/action';
+import FormEditStore from './formEditStore/formEditStore';
 
 function StoreList(props) {
-  const [data, setData] = React.useState([]);
-  const [state, setState] = React.useState({
+  const [data, setData] = useState([]);
+  const [storeID, setStoreID] = useState('')
+  const [state, setState] = useState({
     tempSearch: '',
     search: '',
     isSearch: false,
     dataSearch: [],
   });
-  const [border, setBorder] = React.useState(10);
+  const [border, setBorder] = useState(10);
   let dataShowing;
   const dispatch = useDispatch();
 
-  React.useEffect(() => {
+  useEffect(() => {
     async function fetchData() {
       const request = await axios
         .post(
@@ -52,7 +54,7 @@ function StoreList(props) {
     fetchData();
   }, [props.token, state.search]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const timeOutId = setTimeout(
       () =>
         setState({
@@ -67,7 +69,11 @@ function StoreList(props) {
   const List = () => {
     dataShowing = data.slice(0, border);
     return dataShowing.map((item, i) => {
-      return <StoreListData data={item} key={i} />;
+      return <StoreListData 
+        data={item} 
+        key={i} 
+        handleStoreID = {(ID) => setStoreID(ID)}
+      />;
     });
   };
 
@@ -122,6 +128,9 @@ function StoreList(props) {
           </div>
         </div>
       </div>
+      <FormEditStore
+        storeID={storeID}
+      />
     </div>
   );
 }
