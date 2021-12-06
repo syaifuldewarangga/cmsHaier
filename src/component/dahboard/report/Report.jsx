@@ -13,23 +13,24 @@ function Report(props) {
   var token = localStorage.getItem('access_token');
 
   const downloadCSV = async () => {
-    const route =
-      selectReport === 'user'
-        ? 'register-customer/export'
-        : 'register-product/export';
+    // const route =
+    //   selectReport === 'user'
+    //     ? 'register-customer/export'
+    //     : 'register-product/export';
 
     const request = await axios
-      .get(props.base_url + route, {
+      .get(props.base_url + '/report', {
         headers: {
           Authorization: 'Bearer ' + token,
         },
         params: {
-          startDate: date.from,
-          endDate: date.from,
+          fromDate: date.from,
+          toDate: date.until,
         },
       })
       .then((res) => {
-        JSONToCSVConvertor(res.data, 'Data ' + selectReport, true);
+        console.log(res);
+        JSONToCSVConvertor(res.data, 'Data Total User & Total Product', true);
       })
       .catch((e) => {
         if (e.response) {
@@ -108,8 +109,7 @@ function Report(props) {
               <option value="" selected>
                 Select Report
               </option>
-              <option value="user">Total User</option>
-              <option value="product">Total Product</option>
+              <option value="user">Download Total Product & Total User</option>
             </select>
           </div>
           <div className="col-lg-7">
