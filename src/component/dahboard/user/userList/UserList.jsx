@@ -31,7 +31,6 @@ function UserList(props) {
         params: {
           page: currentPage,
           itemPerPage: 10,
-          except_id: localStorage.getItem('id')
         }
       })
       .then((res) => {

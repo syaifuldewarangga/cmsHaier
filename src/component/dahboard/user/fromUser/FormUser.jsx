@@ -329,6 +329,7 @@ function FormUser(props) {
                 console.log(e.response);
               });
           } else {
+            alert('berhasil');
             history.push('/users');
           }
         })
@@ -365,6 +366,9 @@ function FormUser(props) {
                 let responError = e.response.data.errors;
                 appendErrorData(responError);
               });
+          } else {
+            alert('berhasil');
+            history.push('/users');
           }
         })
         .catch((e) => {
@@ -429,6 +433,7 @@ function FormUser(props) {
                     onChange={onChangeData}
                     value={data.username}
                     disabled={props.title === 'Edit User' ? true : false}
+                    required
                   />
                   <div className="invalid-feedback">{errorData.username}</div>
                 </div>
@@ -444,6 +449,7 @@ function FormUser(props) {
                       }`}
                       aria-label="password"
                       onChange={onChangeData}
+                      required
                     />
                     <div className="invalid-feedback">{errorData.password}</div>
                   </div>
@@ -457,6 +463,7 @@ function FormUser(props) {
                   }`}
                   aria-label="role"
                   onChange={onChangeData}
+                  required
                 >
                   <option selected disabled>
                     -- Select Role --
@@ -486,6 +493,7 @@ function FormUser(props) {
                     aria-label="first_name"
                     onChange={onChangeData}
                     value={data.first_name}
+                    required
                   />
                   <div className="invalid-feedback">{errorData.first_name}</div>
                 </div>
@@ -501,6 +509,7 @@ function FormUser(props) {
                     aria-label="last_name"
                     onChange={onChangeData}
                     value={data.last_name}
+                    required
                   />
                   <div className="invalid-feedback">{errorData.last_name}</div>
                 </div>
@@ -516,6 +525,7 @@ function FormUser(props) {
                     aria-label="email"
                     onChange={onChangeData}
                     value={data.email}
+                    required
                   />
                 </div>
               </div>
@@ -532,6 +542,7 @@ function FormUser(props) {
                       onChange={onChangeData}
                       value={data.phone}
                       disabled={props.title === 'Edit User' ? 'disabled' : null}
+                      required
                     />
                     <div className="invalid-feedback">{errorData.phone}</div>
                   </div>
@@ -685,7 +696,7 @@ function FormUser(props) {
                 <select
                   className={`form-select ${
                     errorData.status !== '' ? 'is-invalid' : null
-                  }`}
+                  }`} 
                   aria-label="status"
                   onChange={onChangeData}
                 >

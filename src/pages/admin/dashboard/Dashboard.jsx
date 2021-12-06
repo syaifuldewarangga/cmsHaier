@@ -20,6 +20,7 @@ import RegisteredCustomer from '../../../component/dahboard/customer/registeredC
 import RegisteredProduct from '../../../component/dahboard/customer/registeredProduct/RegisteredProduct';
 import RegisteredProductListByUser from '../../../component/dahboard/customer/registeredProduct/RegisteredProductListByUser';
 import StatusService from '../../../component/dahboard/customer/statusService/StatusService';
+import StatusServiceDetail from '../../../component/dahboard/customer/statusService/statusServiceDetail/StatusServiceDetail';
 import AddCustomerVoice from '../../../component/dahboard/customerVoice/addCustomerVoice/AddCustomerVoice';
 import CustomerVoiceList from '../../../component/dahboard/customerVoice/CustomerVoiceList';
 import EditCustomerVoice from '../../../component/dahboard/customerVoice/editCustomerVoice/EditCustomerVoice';
@@ -101,6 +102,7 @@ class Dashboard extends Component {
             <AdminRoute exact path="/customer/registered-product/user/:userID" component={RegisteredProductListByUser} />
 
             <AdminRoute exact path="/customer/status-service" component={StatusService} />
+            <AdminRoute exact path="/customer/status-service/detail/:srNumber/:phone_number" component={StatusServiceDetail} />
 
             <AdminRoute exact path="/report" component={Report} />
 
