@@ -84,17 +84,17 @@ function FormBanner(props) {
           },
         })
         .then((res) => {
-          let formStatus = new FormData()
-          formStatus.append('id', id);
-          formStatus.append('status', data.status);
-          axios.put(props.base_url + 'banner/set', formStatus, {
-            headers: {
-              Authorization: 'Bearer ' + token,
-            },
-          }).then((res) => {
-            alert('Berhasil!');
-            history.push('/banner/list');
-          })
+          // let formStatus = new FormData()
+          // formStatus.append('id', id);
+          // formStatus.append('status', data.status);
+          // axios.put(props.base_url + 'banner/set', formStatus, {
+          //   headers: {
+          //     Authorization: 'Bearer ' + token,
+          //   },
+          // }).then((res) => {
+          // })
+          alert('Berhasil!');
+          history.push('/banner/list');
         })
         .catch((e) => {
           let responError = e.response.data.errors
@@ -115,17 +115,17 @@ function FormBanner(props) {
           },
         })
         .then((res) => {
-          let formStatus = new FormData()
-          formStatus.append('id', id);
-          formStatus.append('status', data.status);
-          axios.put(props.base_url + 'banner/set', formStatus, {
-            headers: {
-              Authorization: 'Bearer ' + token,
-            },
-          }).then((res) => {
-            alert('Berhasil!');
-            history.push('/banner/list');
-          })
+          // let formStatus = new FormData()
+          // formStatus.append('id', id);
+          // formStatus.append('status', data.status);
+          // axios.put(props.base_url + 'banner/set', formStatus, {
+          //   headers: {
+          //     Authorization: 'Bearer ' + token,
+          //   },
+          // }).then((res) => {
+          // })
+          alert('Berhasil!');
+          history.push('/banner/list');
         })
         .catch((e) => {
           let responError = e.response.data.errors
