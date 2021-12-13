@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import LineChart from './chart/LineChart';
 import PieChart from './chart/PieChart';
 import './DashboardComponent.css';
@@ -8,108 +8,86 @@ import dateFormat from 'dateformat';
 import { Link } from 'react-router-dom';
 
 function DashboardComponent(props) {
-  const [data, setData] = React.useState({
-    user: '0',
-    product: '0',
-    date1: '0',
-    date2: '0',
-    lineChart: [0, 0, 0, 0, 0, 0, 0],
-  });
-  React.useEffect(() => {
-    var token = localStorage.getItem('access_token');
 
-    async function fetchDataProduct(user) {
-      const requestProduct = await axios
-        .get(props.base_url + 'total-register-products', {
-          headers: {
-            Authorization: 'Bearer ' + token,
-          },
-        })
-        .then((res) => {
-          setData({
-            ...data,
-            user: user,
-            product: res.data.data,
-          });
-        })
-        .catch((e) => {
-          if (e.response) {
-            console.log(e.response);
-          } else if (e.request) {
-            console.log('request : ' + e.request);
-          } else {
-            console.log('message : ' + e.message);
-          }
-        });
-      return requestProduct;
-    }
-    async function fetchDataUser() {
-      const request = await axios
-        .get(props.base_url + 'total-registered-customer', {
-          headers: {
-            Authorization: 'Bearer ' + token,
-          },
-        })
-        .then((res) => {
-          fetchDataProduct(res.data.data);
-        })
-        .catch((e) => {
-          if (e.response) {
-            console.log(e.response);
-          } else if (e.request) {
-            console.log('request : ' + e.request);
-          } else {
-            console.log('message : ' + e.message);
-          }
-        });
-      return request;
-    }
-    fetchDataUser();
-  }, [props.base_url, props.data]);
+  const [totalUser, setTotalUser] = useState(0)
+  const [totalProduct, setTotalProduct] = useState(0)
+  const [date, setDate] = useState({
+    date1: '',
+    date2: '' 
+  })
+  const [lineChartUser, setLineChartUser] = useState([])
+  const token = localStorage.getItem('access_token');
 
-  const onChanged = (e) => {
-    e.target.ariaLabel === 'date1'
-      ? setData({
-          ...data,
-          ['date1']: dateFormat(e.target.valueAsDate, 'yyyy/mm/dd'),
-        })
-      : setData({
-          ...data,
-          ['date2']: dateFormat(e.target.valueAsDate, 'yyyy/mm/dd'),
-        });
-  };
-  const onClicked = async () => {
-    var token = localStorage.getItem('access_token');
-    const request = await axios
-      .get(props.base_url + 'total-registered-customer-date', {
+  const getUserByDate = async () => {
+    await axios.get(props.base_url + 'total-registered-customer-date', {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
           Authorization: 'Bearer ' + token,
         },
         params: {
-          startDate: data.date1,
-          endDate: data.date2,
+          startDate: date.date1,
+          endDate: date.date2,
+        },
+    })
+    .then((res) => {
+      setLineChartUser(res.data.data)
+      setTotalUser(res.data.total)
+    })
+  }
+
+  async function fetchDataProduct() {
+    await axios.get(props.base_url + 'total-register-products', {
+        headers: {
+          Authorization: 'Bearer ' + token,
         },
       })
       .then((res) => {
-        console.log(res.data)
-        setData({
-          ...data,
-          ['lineChart']: res.data.data,
-          ['user']: res.data.total,
-        });
+        setTotalProduct(res.data.data)
       })
-      .catch((e) => {
-        if (e.response) {
-          console.log(e.response);
-        } else if (e.request) {
-          console.log('request : ' + e.request);
-        } else {
-          console.log('message : ' + e.message);
-        }
-      });
-    return request;
+  }
+
+  
+
+  useEffect(() => {
+    fetchDataProduct()
+    getUserByDate();
+  }, []);
+
+  const onChanged = (e) => {
+    if(e.target.ariaLabel === 'date1') {
+      setDate({
+        ...date,
+        date1: dateFormat(e.target.valueAsDate, 'yyyy/mm/dd')
+      })
+    } else {
+      setDate({
+        ...date,
+        date2: dateFormat(e.target.valueAsDate, 'yyyy/mm/dd')
+      })
+    }
   };
+  
+  
+
+  const getProductByDate = async () => {
+      await axios.get(props.base_url + 'total-registered-product-date', {
+        headers: {
+          Authorization: 'Bearer ' + token
+        },
+        params: {
+          startDate: date.date1,
+          endDate: date.date2,
+        },
+      }).then((res) => {
+        setTotalProduct(res.data.data)
+      })
+  }
+
+  const onClicked = async () => {
+    getUserByDate()
+    getProductByDate()
+  };
+  
   return (
     <div className="dashboard-component">
       <h5 className="title">Dashboard</h5>
@@ -122,7 +100,7 @@ function DashboardComponent(props) {
                   <span class="icon material-icons-outlined"> group </span>
                 </div>
                 <div className="count text-center">
-                  <p className="total">{data.user}</p>
+                  <p className="total">{totalUser}</p>
                   <p className="description">End User Info</p>
                 </div>
               </div>
@@ -137,7 +115,7 @@ function DashboardComponent(props) {
                 <span class="icon material-icons-outlined"> store </span>
               </div>
               <div className="count text-center">
-                <p className="total">{data.product}</p>
+                <p className="total">{totalProduct}</p>
                 <p className="description">
                   Total Report of End User Prodcut Info
                 </p>
@@ -180,7 +158,7 @@ function DashboardComponent(props) {
           <div className="col-lg-6">
             <div className="card">
               <div className="card-body">
-                <LineChart data={data.lineChart} />
+                <LineChart data={lineChartUser} />
               </div>
             </div>
           </div>

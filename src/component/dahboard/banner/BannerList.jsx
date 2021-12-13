@@ -147,7 +147,7 @@ function BannerList(props) {
               <Link to="/banner/add">
                 <button className="btn d-flex justify-content-center btn-add">
                   <span class="material-icons-outlined me-3"> add </span>
-                  <span className="fw-bold">Add Article</span>
+                  <span className="fw-bold">Add Banner</span>
                 </button>
               </Link>
             </div>
