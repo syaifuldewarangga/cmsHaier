@@ -91,7 +91,36 @@ function DashboardComponent(props) {
   return (
     <div className="dashboard-component">
       <h5 className="title">Dashboard</h5>
-      <div className="row mt-3">
+
+      <div className="d-flex justify-content-end">
+        <div className="d-flex">
+          <div class="mb-3 d-flex align-items-center me-3">
+            <input
+              type="date"
+              class="form-control"
+              onChange={onChanged}
+              aria-label="date1"
+            />
+            <span className="mx-3">to</span>
+            <input
+              type="date"
+              class="form-control"
+              onChange={onChanged}
+              aria-label="date2"
+            />
+          </div>
+          <div>
+            <button
+              className="btn btn-search rounded-pill px-4 me-3"
+              onClick={onClicked}
+            >
+              <span style={{ fontWeight: '600' }}>Search</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="row mt-3 mb-4">
         <div className="col">
           <Link to="/customer/registered-customer">
             <div className="card">
@@ -121,34 +150,6 @@ function DashboardComponent(props) {
                 </p>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-5 d-flex justify-content-end">
-        <div className="d-flex">
-          <div class="mb-3 d-flex align-items-center me-3">
-            <input
-              type="date"
-              class="form-control"
-              onChange={onChanged}
-              aria-label="date1"
-            />
-            <span className="mx-3">to</span>
-            <input
-              type="date"
-              class="form-control"
-              onChange={onChanged}
-              aria-label="date2"
-            />
-          </div>
-          <div>
-            <button
-              className="btn btn-search rounded-pill px-4 me-3"
-              onClick={onClicked}
-            >
-              <span style={{ fontWeight: '600' }}>Search</span>
-            </button>
           </div>
         </div>
       </div>
