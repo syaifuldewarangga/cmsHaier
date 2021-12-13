@@ -388,76 +388,6 @@ function FormUserRole(props) {
                             {' '}
                             receipt_long{' '}
                           </span>
-                          <span>Customer</span>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="form-check">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            value={'GET_REGISTER_CUSTOMER'}
-                            onChange={(value) => {
-                              if (value.target.checked) {
-                                setData({
-                                  ...data,
-                                  ['role']: data.role.concat(
-                                    'GET_REGISTER_CUSTOMER'
-                                  ),
-                                });
-                              } else {
-                                setData({
-                                  ...data,
-                                  ['role']: data.role.filter(
-                                    (e) => e !== value.target.value
-                                  ),
-                                });
-                              }
-                            }}
-                            checked={
-                              data.role.includes('GET_REGISTER_CUSTOMER')
-                                ? 'checked'
-                                : null
-                            }
-                          />
-                        </div>
-                      </td>
-                      <td>
-                        <div class="form-check">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            disabled
-                          />
-                        </div>
-                      </td>
-                      <td>
-                        <div class="form-check">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            disabled
-                          />
-                        </div>
-                      </td>
-                      <td>
-                        <div class="form-check">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            disabled
-                          />
-                        </div>
-                      </td>
-                    </tr>
-
-                    <tr>
-                      <td className="align-middle">
-                        <div class="d-flex justify-align-items-center">
-                          <span class="material-icons me-2">
-                            {' '}
-                            receipt_long{' '}
-                          </span>
                           <span>Store</span>
                         </div>
                       </td>
@@ -569,139 +499,6 @@ function FormUserRole(props) {
                             }}
                             checked={
                               data.role.includes('DELETE_STORE')
-                                ? 'checked'
-                                : null
-                            }
-                          />
-                        </div>
-                      </td>
-                    </tr>
-
-                    <tr>
-                      <td className="align-middle">
-                        <div class="d-flex justify-align-items-center">
-                          <span class="material-icons"> receipt_long </span>
-                          <span>Registered Product</span>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="form-check">
-                          <input
-                            class="form-check-input me-2"
-                            type="checkbox"
-                            value={'GET_REGISTER_PRODUCT'}
-                            onChange={(value) => {
-                              if (value.target.checked) {
-                                setData({
-                                  ...data,
-                                  ['role']: data.role.concat(
-                                    'GET_REGISTER_PRODUCT'
-                                  ),
-                                });
-                              } else {
-                                setData({
-                                  ...data,
-                                  ['role']: data.role.filter(
-                                    (e) => e !== value.target.value
-                                  ),
-                                });
-                              }
-                            }}
-                            checked={
-                              data.role.includes('GET_REGISTER_PRODUCT')
-                                ? 'checked'
-                                : null
-                            }
-                          />
-                        </div>
-                      </td>
-                      <td>
-                        <div class="form-check">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            value={'POST_REGISTER_PRODUCT'}
-                            onChange={(value) => {
-                              if (value.target.checked) {
-                                setData({
-                                  ...data,
-                                  ['role']: data.role.concat(
-                                    'POST_REGISTER_PRODUCT'
-                                  ),
-                                });
-                              } else {
-                                setData({
-                                  ...data,
-                                  ['role']: data.role.filter(
-                                    (e) => e !== value.target.value
-                                  ),
-                                });
-                              }
-                            }}
-                            checked={
-                              data.role.includes('POST_REGISTER_PRODUCT')
-                                ? 'checked'
-                                : null
-                            }
-                          />
-                        </div>
-                      </td>
-                      <td>
-                        <div class="form-check">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            value={'UPDATE_REGISTER_PRODUCT'}
-                            onChange={(value) => {
-                              if (value.target.checked) {
-                                setData({
-                                  ...data,
-                                  ['role']: data.role.concat(
-                                    'UPDATE_REGISTER_PRODUCT'
-                                  ),
-                                });
-                              } else {
-                                setData({
-                                  ...data,
-                                  ['role']: data.role.filter(
-                                    (e) => e !== value.target.value
-                                  ),
-                                });
-                              }
-                            }}
-                            checked={
-                              data.role.includes('UPDATE_REGISTER_PRODUCT')
-                                ? 'checked'
-                                : null
-                            }
-                          />
-                        </div>
-                      </td>
-                      <td>
-                        <div class="form-check">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            value={'DELETE_REGISTER_PRODUCT'}
-                            onChange={(value) => {
-                              if (value.target.checked) {
-                                setData({
-                                  ...data,
-                                  ['role']: data.role.concat(
-                                    'DELETE_REGISTER_PRODUCT'
-                                  ),
-                                });
-                              } else {
-                                setData({
-                                  ...data,
-                                  ['role']: data.role.filter(
-                                    (e) => e !== value.target.value
-                                  ),
-                                });
-                              }
-                            }}
-                            checked={
-                              data.role.includes('DELETE_REGISTER_PRODUCT')
                                 ? 'checked'
                                 : null
                             }
@@ -844,132 +641,7 @@ function FormUserRole(props) {
                         </div>
                       </td>
                     </tr>
-
-                    <tr>
-                      <td className="align-middle">
-                        <div class="d-flex justify-align-items-center">
-                          <span class="material-icons me-2"> description </span>
-                          <span>Article</span>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="form-check">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            value={'GET_ARTICLE'}
-                            onChange={(value) => {
-                              if (value.target.checked) {
-                                setData({
-                                  ...data,
-                                  ['role']: data.role.concat('GET_ARTICLE'),
-                                });
-                              } else {
-                                setData({
-                                  ...data,
-                                  ['role']: data.role.filter(
-                                    (e) => e !== value.target.value
-                                  ),
-                                });
-                              }
-                            }}
-                            checked={
-                              data.role.includes('GET_ARTICLE')
-                                ? 'checked'
-                                : null
-                            }
-                          />
-                        </div>
-                      </td>
-                      <td>
-                        <div class="form-check">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            value={'POST_ARTICLE'}
-                            onChange={(value) => {
-                              if (value.target.checked) {
-                                setData({
-                                  ...data,
-                                  ['role']: data.role.concat('POST_ARTICLE'),
-                                });
-                              } else {
-                                setData({
-                                  ...data,
-                                  ['role']: data.role.filter(
-                                    (e) => e !== value.target.value
-                                  ),
-                                });
-                              }
-                            }}
-                            checked={
-                              data.role.includes('POST_ARTICLE')
-                                ? 'checked'
-                                : null
-                            }
-                          />
-                        </div>
-                      </td>
-                      <td>
-                        <div class="form-check">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            value={'UPDATE_ARTICLE'}
-                            onChange={(value) => {
-                              if (value.target.checked) {
-                                setData({
-                                  ...data,
-                                  ['role']: data.role.concat('UPDATE_ARTICLE'),
-                                });
-                              } else {
-                                setData({
-                                  ...data,
-                                  ['role']: data.role.filter(
-                                    (e) => e !== value.target.value
-                                  ),
-                                });
-                              }
-                            }}
-                            checked={
-                              data.role.includes('UPDATE_ARTICLE')
-                                ? 'checked'
-                                : null
-                            }
-                          />
-                        </div>
-                      </td>
-                      <td>
-                        <div class="form-check">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            value={'DELETE_ARTICLE'}
-                            onChange={(value) => {
-                              if (value.target.checked) {
-                                setData({
-                                  ...data,
-                                  ['role']: data.role.concat('DELETE_ARTICLE'),
-                                });
-                              } else {
-                                setData({
-                                  ...data,
-                                  ['role']: data.role.filter(
-                                    (e) => e !== value.target.value
-                                  ),
-                                });
-                              }
-                            }}
-                            checked={
-                              data.role.includes('DELETE_ARTICLE')
-                                ? 'checked'
-                                : null
-                            }
-                          />
-                        </div>
-                      </td>
-                    </tr>
-
+                    
                     <tr>
                       <td className="align-middle">
                         <div class="d-flex justify-align-items-center">
@@ -1101,6 +773,705 @@ function FormUserRole(props) {
                         </div>
                       </td>
                     </tr>
+              
+                    <tr>
+                      <td className="align-middle">
+                        <div class="d-flex justify-align-items-center">
+                          <span class="material-icons me-2"> headset_mic </span>
+                          <span>Category Article</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value={'GET_CATEGORY'}
+                            onChange={(value) => {
+                              if (value.target.checked) {
+                                setData({
+                                  ...data,
+                                  ['role']:
+                                    data.role.concat('GET_CATEGORY'),
+                                });
+                              } else {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.filter(
+                                    (e) => e !== value.target.value
+                                  ),
+                                });
+                              }
+                            }}
+                            checked={
+                              data.role.includes('GET_CATEGORY')
+                                ? 'checked'
+                                : null
+                            }
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value={'POST_CATEGORY'}
+                            onChange={(value) => {
+                              if (value.target.checked) {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.concat(
+                                    'POST_CATEGORY'
+                                  ),
+                                });
+                              } else {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.filter(
+                                    (e) => e !== value.target.value
+                                  ),
+                                });
+                              }
+                            }}
+                            checked={
+                              data.role.includes('POST_CATEGORY')
+                                ? 'checked'
+                                : null
+                            }
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value={'UPDATE_CATEGORY'}
+                            onChange={(value) => {
+                              if (value.target.checked) {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.concat(
+                                    'UPDATE_CATEGORY'
+                                  ),
+                                });
+                              } else {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.filter(
+                                    (e) => e !== value.target.value
+                                  ),
+                                });
+                              }
+                            }}
+                            checked={
+                              data.role.includes('UPDATE_CATEGORY')
+                                ? 'checked'
+                                : null
+                            }
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value={'DELETE_CATEGORY'}
+                            onChange={(value) => {
+                              if (value.target.checked) {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.concat(
+                                    'DELETE_CATEGORY'
+                                  ),
+                                });
+                              } else {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.filter(
+                                    (e) => e !== value.target.value
+                                  ),
+                                });
+                              }
+                            }}
+                            checked={
+                              data.role.includes('DELETE_CATEGORY')
+                                ? 'checked'
+                                : null
+                            }
+                          />
+                        </div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td className="align-middle">
+                        <div class="d-flex justify-align-items-center">
+                          <span class="material-icons me-2"> description </span>
+                          <span>Article</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value={'GET_ARTICLE'}
+                            onChange={(value) => {
+                              if (value.target.checked) {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.concat('GET_ARTICLE'),
+                                });
+                              } else {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.filter(
+                                    (e) => e !== value.target.value
+                                  ),
+                                });
+                              }
+                            }}
+                            checked={
+                              data.role.includes('GET_ARTICLE')
+                                ? 'checked'
+                                : null
+                            }
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value={'POST_ARTICLE'}
+                            onChange={(value) => {
+                              if (value.target.checked) {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.concat('POST_ARTICLE'),
+                                });
+                              } else {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.filter(
+                                    (e) => e !== value.target.value
+                                  ),
+                                });
+                              }
+                            }}
+                            checked={
+                              data.role.includes('POST_ARTICLE')
+                                ? 'checked'
+                                : null
+                            }
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value={'UPDATE_ARTICLE'}
+                            onChange={(value) => {
+                              if (value.target.checked) {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.concat('UPDATE_ARTICLE'),
+                                });
+                              } else {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.filter(
+                                    (e) => e !== value.target.value
+                                  ),
+                                });
+                              }
+                            }}
+                            checked={
+                              data.role.includes('UPDATE_ARTICLE')
+                                ? 'checked'
+                                : null
+                            }
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value={'DELETE_ARTICLE'}
+                            onChange={(value) => {
+                              if (value.target.checked) {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.concat('DELETE_ARTICLE'),
+                                });
+                              } else {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.filter(
+                                    (e) => e !== value.target.value
+                                  ),
+                                });
+                              }
+                            }}
+                            checked={
+                              data.role.includes('DELETE_ARTICLE')
+                                ? 'checked'
+                                : null
+                            }
+                          />
+                        </div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td className="align-middle">
+                        <div class="d-flex justify-align-items-center">
+                          <span class="material-icons me-2"> description </span>
+                          <span>Banner</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value={'GET_BANNER'}
+                            onChange={(value) => {
+                              if (value.target.checked) {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.concat('GET_BANNER'),
+                                });
+                              } else {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.filter(
+                                    (e) => e !== value.target.value
+                                  ),
+                                });
+                              }
+                            }}
+                            checked={
+                              data.role.includes('GET_BANNER')
+                                ? 'checked'
+                                : null
+                            }
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value={'POST_BANNER'}
+                            onChange={(value) => {
+                              if (value.target.checked) {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.concat('POST_BANNER'),
+                                });
+                              } else {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.filter(
+                                    (e) => e !== value.target.value
+                                  ),
+                                });
+                              }
+                            }}
+                            checked={
+                              data.role.includes('POST_BANNER')
+                                ? 'checked'
+                                : null
+                            }
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value={'UPDATE_BANNER'}
+                            onChange={(value) => {
+                              if (value.target.checked) {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.concat('UPDATE_BANNER'),
+                                });
+                              } else {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.filter(
+                                    (e) => e !== value.target.value
+                                  ),
+                                });
+                              }
+                            }}
+                            checked={
+                              data.role.includes('UPDATE_BANNER')
+                                ? 'checked'
+                                : null
+                            }
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value={'DELETE_BANNER'}
+                            onChange={(value) => {
+                              if (value.target.checked) {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.concat('DELETE_BANNER'),
+                                });
+                              } else {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.filter(
+                                    (e) => e !== value.target.value
+                                  ),
+                                });
+                              }
+                            }}
+                            checked={
+                              data.role.includes('DELETE_BANNER')
+                                ? 'checked'
+                                : null
+                            }
+                          />
+                        </div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td className="align-middle">
+                        <div class="d-flex justify-align-items-center">
+                          <span class="material-icons me-2">
+                            {' '}
+                            receipt_long{' '}
+                          </span>
+                          <span>Registered Customer</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value={'GET_REGISTER_CUSTOMER'}
+                            onChange={(value) => {
+                              if (value.target.checked) {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.concat(
+                                    'GET_REGISTER_CUSTOMER'
+                                  ),
+                                });
+                              } else {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.filter(
+                                    (e) => e !== value.target.value
+                                  ),
+                                });
+                              }
+                            }}
+                            checked={
+                              data.role.includes('GET_REGISTER_CUSTOMER')
+                                ? 'checked'
+                                : null
+                            }
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            disabled
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            disabled
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            disabled
+                          />
+                        </div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td className="align-middle">
+                        <div class="d-flex justify-align-items-center">
+                          <span class="material-icons me-2">
+                            {' '}
+                            receipt_long{' '}
+                          </span>
+                          <span>Registered Product</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input me-2"
+                            type="checkbox"
+                            value={'GET_REGISTER_PRODUCT'}
+                            onChange={(value) => {
+                              if (value.target.checked) {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.concat(
+                                    'GET_REGISTER_PRODUCT'
+                                  ),
+                                });
+                              } else {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.filter(
+                                    (e) => e !== value.target.value
+                                  ),
+                                });
+                              }
+                            }}
+                            checked={
+                              data.role.includes('GET_REGISTER_PRODUCT')
+                                ? 'checked'
+                                : null
+                            }
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            disabled
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            disabled
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            disabled
+                          />
+                        </div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td className="align-middle">
+                        <div class="d-flex justify-align-items-center">
+                          <span class="material-icons me-2">
+                            {' '}
+                            receipt_long{' '}
+                          </span>
+                          <span>Status Service</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input me-2"
+                            type="checkbox"
+                            value={'GET_REGISTER_SERVICE'}
+                            onChange={(value) => {
+                              if (value.target.checked) {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.concat(
+                                    'GET_REGISTER_SERVICE'
+                                  ),
+                                });
+                              } else {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.filter(
+                                    (e) => e !== value.target.value
+                                  ),
+                                });
+                              }
+                            }}
+                            checked={
+                              data.role.includes('GET_REGISTER_SERVICE')
+                                ? 'checked'
+                                : null
+                            }
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            disabled
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            disabled
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            disabled
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                    
+                    <tr>
+                      <td className="align-middle">
+                        <div class="d-flex justify-align-items-center">
+                          <span class="material-icons me-2"> description </span>
+                          <span>Message</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value={'GET_MESSAGE'}
+                            onChange={(value) => {
+                              if (value.target.checked) {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.concat('GET_MESSAGE'),
+                                });
+                              } else {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.filter(
+                                    (e) => e !== value.target.value
+                                  ),
+                                });
+                              }
+                            }}
+                            checked={
+                              data.role.includes('GET_MESSAGE')
+                                ? 'checked'
+                                : null
+                            }
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value={'POST_MESSAGE'}
+                            onChange={(value) => {
+                              if (value.target.checked) {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.concat('POST_MESSAGE'),
+                                });
+                              } else {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.filter(
+                                    (e) => e !== value.target.value
+                                  ),
+                                });
+                              }
+                            }}
+                            checked={
+                              data.role.includes('POST_MESSAGE')
+                                ? 'checked'
+                                : null
+                            }
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            disabled
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value={'DELETE_MESSAGE'}
+                            onChange={(value) => {
+                              if (value.target.checked) {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.concat('DELETE_MESSAGE'),
+                                });
+                              } else {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.filter(
+                                    (e) => e !== value.target.value
+                                  ),
+                                });
+                              }
+                            }}
+                            checked={
+                              data.role.includes('DELETE_MESSAGE')
+                                ? 'checked'
+                                : null
+                            }
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                    
+                    
                   </tbody>
                 </table>
                 <div className="text-danger" style={{ fontSize: '13px' }}>
