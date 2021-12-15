@@ -4,16 +4,18 @@ import PieChart from './chart/PieChart';
 import './DashboardComponent.css';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import dateFormat from 'dateformat';
 import { Link } from 'react-router-dom';
+import { format } from 'date-fns';
+import ProductCategoryChart from './chart/ProductCategoryChart';
 
 function DashboardComponent(props) {
 
   const [totalUser, setTotalUser] = useState(0)
   const [totalProduct, setTotalProduct] = useState(0)
+  const [totalProductCategory, setTotalProductCategory] = useState([])
   const [date, setDate] = useState({
     date1: '',
-    date2: '' 
+    date2: format(new Date(), 'yyyy-MM-dd')
   })
   const [lineChartUser, setLineChartUser] = useState([])
   const token = localStorage.getItem('access_token');
@@ -25,8 +27,8 @@ function DashboardComponent(props) {
           Authorization: 'Bearer ' + token,
         },
         params: {
-          startDate: date.date1,
-          endDate: date.date2,
+          startDate: date.date1 !== '' ? format(new Date(date.date1), 'yyyy/MM/dd') : '',
+          endDate: format(new Date(date.date2), 'yyyy/MM/dd'),
         },
     })
     .then((res) => {
@@ -37,46 +39,66 @@ function DashboardComponent(props) {
 
   async function fetchDataProduct() {
     await axios.get(props.base_url + 'total-register-products', {
-        headers: {
-          Authorization: 'Bearer ' + token,
-        },
-      })
-      .then((res) => {
-        setTotalProduct(res.data.data)
-      })
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
+    })
+    .then((res) => {
+      setTotalProduct(res.data.data)
+    })
   }
 
-  
+  const getTotalProductCategory = async () => {
+    var formData = new FormData();
+    formData.append('startDate', '2021/12/07');
+    formData.append('endDate', '2021/12/20');
+
+    await axios.get(props.base_url + 'total-register-products/category', {
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
+      params: {
+        startDate: date.date1 !== '' ? format(new Date(date.date1), 'yyyy/MM/dd') : '2021/12/07',
+        endDate: format(new Date(date.date2), 'yyyy/MM/dd')
+      }
+    })
+    .then((res) => {
+      setTotalProductCategory(res.data)
+    })
+  }
 
   useEffect(() => {
     fetchDataProduct()
-    getUserByDate();
+    getUserByDate()
+    getTotalProductCategory()
   }, []);
 
   const onChanged = (e) => {
     if(e.target.ariaLabel === 'date1') {
       setDate({
         ...date,
-        date1: dateFormat(e.target.valueAsDate, 'yyyy/mm/dd')
+        date1: e.target.value
       })
     } else {
+      // setDate({
+      //   ...date,
+      //   date2: dateFormat(e.target.valueAsDate, 'yyyy/mm/dd')
+      // })
       setDate({
         ...date,
-        date2: dateFormat(e.target.valueAsDate, 'yyyy/mm/dd')
+        date2: e.target.value
       })
     }
   };
   
-  
-
   const getProductByDate = async () => {
       await axios.get(props.base_url + 'total-registered-product-date', {
         headers: {
           Authorization: 'Bearer ' + token
         },
         params: {
-          startDate: date.date1,
-          endDate: date.date2,
+          startDate: date.date1 !== '' ? format(new Date(date.date1), 'yyyy/MM/dd') : '',
+          endDate: format(new Date(date.date2), 'yyyy/MM/dd'),
         },
       }).then((res) => {
         setTotalProduct(res.data.data)
@@ -107,6 +129,7 @@ function DashboardComponent(props) {
               class="form-control"
               onChange={onChanged}
               aria-label="date2"
+              value={date.date2}
             />
           </div>
           <div>
@@ -144,7 +167,7 @@ function DashboardComponent(props) {
                 <span class="icon material-icons-outlined"> store </span>
               </div>
               <div className="count text-center">
-                <p className="total">{totalProduct}</p>
+              <p className="total">{totalProduct}</p>
                 <p className="description">
                   Total Report of End User Prodcut Info
                 </p>
@@ -156,7 +179,7 @@ function DashboardComponent(props) {
 
       <div>
         <div className="row">
-          <div className="col-lg-6">
+          <div className="col-lg-12 mb-5">
             <div className="card">
               <div className="card-body">
                 <LineChart data={lineChartUser} />
@@ -164,10 +187,15 @@ function DashboardComponent(props) {
             </div>
           </div>
 
-          <div className="col-lg-6">
+          <div className="col-lg-12">
             <div className="card">
               <div className="card-body">
-                <PieChart />
+                <ProductCategoryChart 
+                  data={totalProductCategory}
+                />
+                {/* <PieChart 
+                  data={totalProductCategory}
+                /> */}
               </div>
             </div>
           </div>

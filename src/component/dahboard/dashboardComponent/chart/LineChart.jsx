@@ -55,7 +55,8 @@ const LineChart = (props) => {
             display: false,
           },
         },
-      }}
+      }} 
+      height={100}
     />
   );
 };

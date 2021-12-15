@@ -6,9 +6,16 @@ const PieChart = (props) => {
         <Pie 
             data={{ 
                 labels: [
-                    'Red',
-                    'Blue',
-                    'Yellow'
+                    'Refrigerator',
+                    'Freezer',
+                    'Washing Machine',
+                    'Drum Washing Machine',
+                    'Home Air Conditioner',
+                    'Commercial AC',
+                    'TV',
+                    'Water Heater',
+                    'Small Applicances',
+                    'Cooking'
                 ],
                 datasets: [{
                     label: 'My First Dataset',

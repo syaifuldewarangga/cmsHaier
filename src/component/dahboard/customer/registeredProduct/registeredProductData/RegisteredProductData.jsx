@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { ImageFunction } from '../../../../../variable/ImageFunction';
 
 function RegisteredProductData(props) {
-  console.log(props.data);
   return (
     <tbody>
       <tr>
