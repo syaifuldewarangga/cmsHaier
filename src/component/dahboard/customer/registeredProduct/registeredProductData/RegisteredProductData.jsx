@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { ImageFunction } from '../../../../../variable/ImageFunction';
 
 function RegisteredProductData(props) {
   console.log(props.data);
@@ -8,7 +9,7 @@ function RegisteredProductData(props) {
       <tr>
         <td className="align-middle">{props.data.store_name}</td>
         <td className="align-middle">
-          <img src={props.url + props.data.photos} style={{ width: '100px' }} />
+          <img src={ImageFunction(props.data.category)} style={{ width: '100px' }} />
         </td>
         <td className="align-middle">{props.data.barcode}</td>
         <td className="align-middle">{props.data.product_id}</td>

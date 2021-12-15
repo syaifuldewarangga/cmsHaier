@@ -1,14 +1,14 @@
 import React from 'react';
+import { ImageFunction } from '../../../../variable/ImageFunction';
 
 function ProductListData(props) {
-  console.log(props.data)
   return (
     <tbody>
       <tr>
         <td>
           {
             props.data.Photo !== '' && props.data.Photo !== null?
-            <img src={props.data.Photo} height="65px" alt="kulkas aqua japan" />
+            <img src={ImageFunction(props.data.Category)} height="65px" alt={props.data.Category} />
             : null
           }
         </td>

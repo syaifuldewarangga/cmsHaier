@@ -18,22 +18,20 @@ function RegisteredProduct(props) {
 
   useEffect(() => {
     async function fetchData() {
-      const request = await axios
-        .get(props.base_url + 'register-product', {
-          headers: {
-            Authorization: 'Bearer ' + token,
-          },
-          params: {
-            page: currentPage,
-            itemPerPage: 10,
-          },
-        })
-        .then((res) => {
-          setData(res.data.content);
-          setCurrentPage(res.data.number)
-        setTotalPage(res.data.totalPages)
-        });
-      return request;
+      await axios.get(props.base_url + 'register-product', {
+        headers: {
+          Authorization: 'Bearer ' + token,
+        },
+        params: {
+          page: currentPage,
+          itemPerPage: 10,
+        },
+      })
+      .then((res) => {
+        setData(res.data.content);
+        setCurrentPage(res.data.number)
+      setTotalPage(res.data.totalPages)
+      });
     }
     fetchData();
   }, [currentPage]);
@@ -52,32 +50,30 @@ function RegisteredProduct(props) {
 
   useEffect(() => {
     const fetchAPI = async () => {
-      const request = await axios
-        .get(props.base_url + 'register-product/search', {
-          headers: {
-            Authorization: 'Bearer ' + token,
-          },
-          params: {
-            param: state.search,
-          },
-        })
-        .then((res) => {
-          setState({
-            ...state,
-            ['dataSearch']: res.data,
-            ['isSearch']: true,
-          });
-        })
-        .catch((e) => {
-          if (e.response) {
-            console.log(e.response);
-          } else if (e.request) {
-            console.log('request : ' + e.request);
-          } else {
-            console.log('message : ' + e.message);
-          }
+      await axios.get(props.base_url + 'register-product/search', {
+        headers: {
+          Authorization: 'Bearer ' + token,
+        },
+        params: {
+          param: state.search,
+        },
+      })
+      .then((res) => {
+        setState({
+          ...state,
+          ['dataSearch']: res.data,
+          ['isSearch']: true,
         });
-      return request;
+      })
+      .catch((e) => {
+        if (e.response) {
+          console.log(e.response);
+        } else if (e.request) {
+          console.log('request : ' + e.request);
+        } else {
+          console.log('message : ' + e.message);
+        }
+      });
     };
     if (state.search === '') {
       setState({

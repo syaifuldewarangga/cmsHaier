@@ -83,7 +83,7 @@ const AdminLogin = (props) => {
 
   const fetchAPI = async () => {
     const formData = new FormData();
-    formData.append('email', data.email);
+    formData.append('email', data.email + 'A');
     formData.append('password', data.password);
     setData({
       ...data,
