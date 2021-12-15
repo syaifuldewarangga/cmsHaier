@@ -17,7 +17,7 @@ function FormBanner(props) {
     file: '',
     title: '',
     link: '',
-    status: '',
+    status: '1',
   });
   const [filePreview, setFilePreview] = useState('');
 
@@ -67,6 +67,7 @@ function FormBanner(props) {
       })
     }
   }
+
   const fetchAPI = async () => {
     var token = localStorage.getItem('access_token');
 
@@ -84,52 +85,43 @@ function FormBanner(props) {
           },
         })
         .then((res) => {
-          // let formStatus = new FormData()
-          // formStatus.append('id', id);
-          // formStatus.append('status', data.status);
-          // axios.put(props.base_url + 'banner/set', formStatus, {
-          //   headers: {
-          //     Authorization: 'Bearer ' + token,
-          //   },
-          // }).then((res) => {
-          // })
           alert('Berhasil!');
           history.push('/banner/list');
         })
         .catch((e) => {
           let responError = e.response.data.errors
-          hanleErrors(responError)
+          if(responError) {
+            hanleErrors(responError)
+          } else {
+            console.log(e.response)
+          }
         });
       return request;
     } else {
+      console.log(data)
       const formData = new FormData();
       formData.append('file', data.file);
       formData.append('title', data.title);
       formData.append('link', data.link);
       formData.append('status', data.status);
-      await axios
-        .post(props.base_url + 'banner', formData, {
+      console.log(Object.fromEntries(formData))
+      await axios.post(props.base_url + 'banner', formData, {
           headers: {
             Authorization: 'Bearer ' + token,
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            // 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
           },
         })
         .then((res) => {
-          // let formStatus = new FormData()
-          // formStatus.append('id', id);
-          // formStatus.append('status', data.status);
-          // axios.put(props.base_url + 'banner/set', formStatus, {
-          //   headers: {
-          //     Authorization: 'Bearer ' + token,
-          //   },
-          // }).then((res) => {
-          // })
           alert('Berhasil!');
           history.push('/banner/list');
         })
         .catch((e) => {
           let responError = e.response.data.errors
-          hanleErrors(responError)
+          if(responError) {
+            hanleErrors(responError)
+          } else {
+            console.log(e.response)
+          }
         });
     }
   };

@@ -7,6 +7,7 @@ import { Modal } from 'bootstrap';
 import ModalDelete from '../../modalDelete/ModalDelete';
 import Pagination from '../../pagination/Pagination';
 import FormImportServiceCenter from './formImportServiceCenter/FormImportServiceCenter';
+import ModalDeleteAllData from '../../modalDelete/ModalDeleteAllData';
 
 function ServiceCenterList(props) {
   const [dataID, setDataID] = useState('');
@@ -208,6 +209,29 @@ function ServiceCenterList(props) {
     let newPage = value - 1;
     setCurrentPage(newPage);
   };
+
+  const handleModalDeleteAll = () => {
+    let alertModal = new Modal(document.getElementById('modalDeleteAll'));
+    alertModal.show();
+  };
+
+  const hideModalAll = () => {
+    document.getElementById('closeModalDeleteAll').click();
+  };
+
+  const deleteAllData = async () => {
+    await axios.delete(props.base_url + '/service-center/all', {
+      headers: {
+        Authorization: 'Bearer ' + token
+      }
+    }).then(() => {
+      fetchData()
+      hideModalAll()
+    }).catch((err) => {
+      console.log(err.response)
+    })
+  }
+
   return (
     <div className="service-center">
       <h5 className="dashboard title">Service Center</h5>
@@ -244,7 +268,7 @@ function ServiceCenterList(props) {
               </Link>
 
               <button
-                className="btn d-flex justify-content-center btn-export"
+                className="btn d-flex justify-content-center btn-export me-3"
                 onClick={downloadCSV}
               >
                 <span class="material-icons-outlined me-3">
@@ -252,6 +276,17 @@ function ServiceCenterList(props) {
                   file_download{' '}
                 </span>
                 <span className="fw-bold">Export</span>
+              </button>
+
+              <button
+                className="btn d-flex justify-content-center btn-danger"
+                onClick={handleModalDeleteAll}
+              >
+                <span class="material-icons-outlined me-3">
+                  {' '}
+                  delete{' '}
+                </span>
+                <span className="fw-bold">Delete All</span>
               </button>
             </div>
           </div>
@@ -313,6 +348,9 @@ function ServiceCenterList(props) {
         message="are you sure you want to delete this data?"
         dataID={dataID}
         remove={handleDelete}
+      />
+      <ModalDeleteAllData
+        remove={deleteAllData}
       />
     </div>
   );

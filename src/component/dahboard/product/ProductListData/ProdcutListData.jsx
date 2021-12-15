@@ -1,6 +1,7 @@
 import React from 'react';
 
 function ProductListData(props) {
+  console.log(props.data)
   return (
     <tbody>
       <tr>

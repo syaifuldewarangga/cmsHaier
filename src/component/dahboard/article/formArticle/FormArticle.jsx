@@ -9,7 +9,6 @@ function FormArticle(props) {
   const fileRef = React.useRef();
   const titleRef = React.useRef();
   const categoryRef = React.useRef();
-  const contentRef = React.useRef();
 
   const history = useHistory();
   const [filePreview, setFilePreview] = useState('');
@@ -23,6 +22,7 @@ function FormArticle(props) {
     file: '',
     title: '',
     category: '',
+    content: '',
   });
   const [content, setContent] = useState('');
 
@@ -94,12 +94,6 @@ function FormArticle(props) {
       formData.append('category', data.category);
       formData.append('content', content);
       formData.append('slug', data.slug);
-
-      // console.log('dibawah');
-      // console.log(content);
-
-      // console.log(Object.fromEntries(formData));
-
       const request = await axios
         .put(props.base_url + 'article', formData, {
           headers: {
@@ -140,7 +134,6 @@ function FormArticle(props) {
               ...errorData,
               content: responError.reason,
             });
-            contentRef.current.focus();
           }
         });
       return request;
@@ -150,12 +143,11 @@ function FormArticle(props) {
       formData.append('file', data.file);
       formData.append('title', data.title);
       formData.append('category', data.category);
-      formData.append('content', data.content);
-      // console.log(formData);
-      const request = await axios
+      formData.append('content', content);
+      console.log(Object.fromEntries(formData))
+      await axios
         .post(props.base_url + 'article', formData, {
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
             Authorization: 'Bearer ' + token,
           },
         })
@@ -164,6 +156,7 @@ function FormArticle(props) {
           history.push('/article/list');
         })
         .catch((e) => {
+          console.log(e.response)
           let responError = e.response.data.errors;
           if (responError.location === 'file') {
             setErrorData({
@@ -191,10 +184,8 @@ function FormArticle(props) {
               ...errorData,
               content: responError.reason,
             });
-            contentRef.current.focus();
           }
         });
-      return request;
     }
   };
 
@@ -290,7 +281,6 @@ function FormArticle(props) {
               </div>
               <div className="col-lg-12">
                 <CKEditor
-                  ref={contentRef}
                   editor={ClassicEditor}
                   data={content}
                   // ariaLabel="content"
