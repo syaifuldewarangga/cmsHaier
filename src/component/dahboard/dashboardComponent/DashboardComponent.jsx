@@ -58,7 +58,7 @@ function DashboardComponent(props) {
         Authorization: 'Bearer ' + token,
       },
       params: {
-        startDate: date.date1 !== '' ? format(new Date(date.date1), 'yyyy/MM/dd') : '2021/12/07',
+        startDate: date.date1 !== '' ? format(new Date(date.date1), 'yyyy/MM/dd') : '',
         endDate: format(new Date(date.date2), 'yyyy/MM/dd')
       }
     })
