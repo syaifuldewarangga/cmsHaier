@@ -6,7 +6,7 @@ function RegisteredProductData(props) {
   return (
     <tbody>
       <tr>
-        <td className="align-middle">{props.data.store_name}</td>
+        <td className="align-middle">{props.data.customer_name}</td>
         <td className="align-middle">
           <img src={ImageFunction(props.data.category)} style={{ width: '100px' }} />
         </td>
