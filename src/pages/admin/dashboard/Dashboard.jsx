@@ -26,6 +26,8 @@ import CustomerVoiceList from '../../../component/dahboard/customerVoice/Custome
 import EditCustomerVoice from '../../../component/dahboard/customerVoice/editCustomerVoice/EditCustomerVoice';
 import DashboardComponent from '../../../component/dahboard/dashboardComponent/DashboardComponent';
 import Message from '../../../component/dahboard/message/Message';
+import FormPrivacyPolicy from '../../../component/dahboard/PrivacyPolicy/FormPrivacyPolicy';
+import PrivacyPolicy from '../../../component/dahboard/PrivacyPolicy/PrivacyPolicy';
 import ProductList from '../../../component/dahboard/product/ProductList';
 import Report from '../../../component/dahboard/report/Report';
 import ResetPasswordAdmin from '../../../component/dahboard/resetPasswordAdmin/ResetPasswordAdmin';
@@ -114,6 +116,8 @@ class Dashboard extends Component {
             <AdminRoute exact path="/setting/contact-footer/edit" component={FormContactFooter} />
             <AdminRoute exact path="/setting/contact-information" component={ContactInformationList} />
             <AdminRoute exact path="/setting/contact-information/edit" component={FormContactInformation} />
+            <AdminRoute exact path="/setting/privacy-policy" component={PrivacyPolicy} />
+            <AdminRoute exact path="/setting/privacy-policy/edit" component={FormPrivacyPolicy} />
             <AdminRoute exact path="/setting/web-config" component={WebConfig} />
 
             <AdminRoute exact path="/change-password-admin" component={ResetPasswordAdmin} />

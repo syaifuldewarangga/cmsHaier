@@ -104,6 +104,7 @@ class Sidebar extends Component
                             <li><Link to="/setting/about">About</Link></li>
                             <li><Link to="/setting/contact-footer">Contact Footer</Link></li>
                             <li><Link to="/setting/contact-information">Contact Information</Link></li>
+                            <li><Link to="/setting/privacy-policy">Privacy Policy</Link></li>
                             <li><Link to="/setting/web-config">Web Config</Link></li>
                         </ul>
                     </li>
