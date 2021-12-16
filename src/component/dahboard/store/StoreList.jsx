@@ -20,36 +20,33 @@ function StoreList(props) {
 
   useEffect(() => {
     async function fetchData() {
-      const request = await axios
-        .post(
-          props.gtm_url + 'pmtcommondata/GetStoreListByCondition',
-          {
-            StoreName: state.search,
-            StoreID: '',
-            StoreCode: '',
+      await axios.post(props.gtm_url + 'pmtcommondata/GetStoreListByCondition',
+        {
+          StoreName: state.search,
+          StoreID: '',
+          StoreCode: '',
+        },
+        {
+          headers: {
+            Authorization: props.token,
+            'Content-Type': 'text/plain',
           },
-          {
-            headers: {
-              Authorization: props.token,
-              'Content-Type': 'text/plain',
-            },
-          }
-        )
-        .then((res) => {
-          setData(res.data.data);
-        })
-        .catch((e) => {
-          dispatch(getToken());
+        }
+      )
+      .then((res) => {
+        setData(res.data.data);
+      })
+      .catch((e) => {
+        dispatch(getToken());
 
-          // if (e.response) {
-          //   console.log(e.response);
-          // } else if (e.request) {
-          //   console.log('request : ' + e.request);
-          // } else {
-          //   console.log('message : ' + e.message);
-          // }
-        });
-      return request;
+        // if (e.response) {
+        //   console.log(e.response);
+        // } else if (e.request) {
+        //   console.log('request : ' + e.request);
+        // } else {
+        //   console.log('message : ' + e.message);
+        // }
+      });
     }
     fetchData();
   }, [props.token, state.search]);

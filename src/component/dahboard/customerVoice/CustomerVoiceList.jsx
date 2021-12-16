@@ -56,79 +56,6 @@ const CustomerVoiceList = (props) => {
     getQuestionFromAPI();
   }, []);
 
-  const downloadCSV = async () => {
-    const request = await axios
-      .get(props.base_url + 'customer-voice-answer', {
-        headers: {
-          Authorization: 'Bearer ' + token,
-        },
-      })
-      .then((res) => {
-        JSONToCSVConvertor(res.data, 'Data Answer', true);
-      })
-      .catch((e) => {
-        if (e.response) {
-          console.log(e.response);
-        } else if (e.request) {
-          console.log('request : ' + e.request);
-        } else {
-          console.log('message : ' + e.message);
-        }
-      });
-    return request;
-  };
-
-  const JSONToCSVConvertor = (JSONData, ReportTitle, ShowLabel) => {
-    var arrData =
-      typeof JSONData !== 'object' ? JSON.parse(JSONData) : JSONData;
-
-    var CSV = '';
-
-    if (ShowLabel) {
-      var row = '';
-
-      for (var index in arrData[0]) {
-        row += index + ',';
-      }
-
-      row = row.slice(0, -1);
-
-      CSV += row + '\r\n';
-    }
-
-    for (var i = 0; i < arrData.length; i++) {
-      var row = '';
-
-      for (var index in arrData[i]) {
-        row += '"' + arrData[i][index] + '",';
-      }
-
-      row.slice(0, row.length - 1);
-
-      CSV += row + '\r\n';
-    }
-
-    if (CSV === '') {
-      alert('Invalid data');
-      return;
-    }
-
-    var fileName = 'Report_';
-    fileName += ReportTitle.replace(/ /g, '_');
-
-    var uri = 'data:text/csv;charset=utf-8,' + escape(CSV);
-
-    var link = document.createElement('a');
-    link.href = uri;
-
-    link.style = 'visibility:hidden';
-    link.download = fileName + '.csv';
-
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
   return (
     <div className="">
       <h5 className="dashboard title">Customer Voice</h5>
@@ -140,14 +67,6 @@ const CustomerVoiceList = (props) => {
               <span className="fw-bold">Add Question</span>
             </button>
           </Link>
-
-          <button
-            className="btn d-flex justify-content-center btn-show"
-            onClick={downloadCSV}
-          >
-            <span class="material-icons-outlined me-3"> download </span>
-            <span className="fw-bold">Export</span>
-          </button>
         </div>
       </div>
 

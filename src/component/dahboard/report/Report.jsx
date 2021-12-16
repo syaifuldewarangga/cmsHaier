@@ -18,8 +18,8 @@ function Report(props) {
     //     ? 'register-customer/export'
     //     : 'register-product/export';
 
-    const request = await axios
-      .get(props.base_url + '/report', {
+    if(selectReport === 'user') {
+      await axios.get(props.base_url + '/report', {
         headers: {
           Authorization: 'Bearer ' + token,
         },
@@ -41,7 +41,21 @@ function Report(props) {
           console.log('message : ' + e.message);
         }
       });
-    return request;
+    } else if (selectReport === 'customer-voice') {
+      await axios.get(props.base_url + 'customer-voice-export', {
+        headers: {
+          Authorization: 'Bearer ' + token
+        },
+        params: {
+          startDate: date.from,
+          endDate: date.until
+        }
+      }).then((res) => {
+        JSONToCSVConvertor(res.data, 'Data Customer Voice', true);
+      })
+    }
+    
+    
   };
 
   const JSONToCSVConvertor = (JSONData, ReportTitle, ShowLabel) => {
@@ -110,6 +124,7 @@ function Report(props) {
                 Select Report
               </option>
               <option value="user">Download Total Product & Total User</option>
+              <option value="customer-voice">Download Customer Voice</option>
             </select>
           </div>
           <div className="col-lg-7">
