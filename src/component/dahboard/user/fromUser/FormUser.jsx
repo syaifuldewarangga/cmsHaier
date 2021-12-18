@@ -48,8 +48,78 @@ function FormUser(props) {
   });
   const [dataFetchProvince, setDataFetchProvince] = useState([]);
   const [dataFetchCity, setDataFetchCity] = useState([]);
+  const [dataFetchDistrict, setDataFetchDistrict] = useState([]);
+  const [dataFetchSubDistrict, setDataFetchSubDistrict] = useState([]);
   const [dataFetchRole, setDataFetchRole] = useState([]);
   const [filePreview, setFilePreview] = useState('');
+  var token = localStorage.getItem('access_token');
+
+  async function fetchDataProvince() {
+    const request = await axios
+      .get(props.base_url + 'location', {
+        headers: {
+          Authorization: 'Bearer ' + token,
+        },
+      })
+      .then((res) => {
+        setDataFetchProvince(res.data);
+      });
+    return request;
+  }
+
+  async function fetchDataCity(province) {
+    const request = await axios
+      .get(props.base_url + 'location/city', {
+        headers: {
+          Authorization: 'Bearer ' + token,
+        },
+        params: {
+          prov_name: province,
+        },
+      })
+      .then((res) => {
+        setDataFetchCity(res.data);
+      });
+    return request;
+  }
+
+  const fetchDataDistrict = async (province, city) => {
+    await axios.get(props.base_url + 'location/city/districts', {
+      params: {
+        prov_name: province,
+        city_name: city,
+      }
+    })
+    .then((res) => {
+      setDataFetchDistrict(res.data);
+    })
+  }
+
+  const fetchDataSubDistrict = async (province, city, district) => {
+    await axios.get(props.base_url + 'location/city/districts/subdistricts', {
+      params: {
+        prov_name: province,
+        city_name: city,
+        dis_name: district,
+      }
+    })
+    .then((res) => {
+      setDataFetchSubDistrict(res.data);
+    });
+  }
+
+  async function fetchDataRole() {
+    const request = await axios
+      .get(props.base_url + 'role', {
+        headers: {
+          Authorization: 'Bearer ' + token,
+        },
+      })
+      .then((res) => {
+        setDataFetchRole(res.data);
+      });
+    return request;
+  }
 
   useEffect(() => {
     if (props.data !== undefined) {
@@ -72,78 +142,43 @@ function FormUser(props) {
         birth_date: props.data.birth_date,
         photo: props.data.image,
       });
+      fetchDataCity(props.data.province)
+      fetchDataDistrict(props.data.province, props.data.city)
+      fetchDataSubDistrict(props.data.province, props.data.city, props.data.district)
     }
-
-    var token = localStorage.getItem('access_token');
-
-    async function fetchDataCity() {
-      const request = await axios
-        .get(props.base_url + 'location/city', {
-          headers: {
-            Authorization: 'Bearer ' + token,
-          },
-          params: {
-            prov_name: data.province,
-          },
-        })
-        .then((res) => {
-          setDataFetchCity(res.data);
-        });
-      return request;
-    }
-
-    async function fetchDataRole() {
-      const request = await axios
-        .get(props.base_url + 'role', {
-          headers: {
-            Authorization: 'Bearer ' + token,
-          },
-        })
-        .then((res) => {
-          fetchDataCity();
-          setDataFetchRole(res.data);
-        });
-      return request;
-    }
-
-    async function fetchData() {
-      const request = await axios
-        .get(props.base_url + 'location', {
-          headers: {
-            Authorization: 'Bearer ' + token,
-          },
-        })
-        .then((res) => {
-          fetchDataRole();
-          setDataFetchProvince(res.data);
-        });
-      return request;
-    }
-    fetchData();
+    fetchDataRole()
+    fetchDataProvince()
   }, [props.base_url, props.data]);
 
-  React.useEffect(() => {
-    var token = localStorage.getItem('access_token');
-    async function fetchData() {
-      const request = await axios
-        .get(props.base_url + 'location/city', {
-          headers: {
-            Authorization: 'Bearer ' + token,
-          },
-          params: {
-            prov_name: data.province,
-          },
-        })
-        .then((res) => {
-          setDataFetchCity(res.data);
-        });
-      return request;
-    }
-    fetchData();
-  }, [data.province]);
-
   const onChangeData = (e) => {
-    if (e.target.type === 'file') {
+    if (e.target.ariaLabel === 'province') {
+      setDataFetchDistrict([])
+      setDataFetchSubDistrict([])
+      setData({
+        ...data,
+        province: e.target.value,
+        city: '',
+        district: '',
+        sub_district: ''
+      });
+      fetchDataCity(e.target.value);
+    } else if(e.target.ariaLabel === 'city') {
+      setDataFetchSubDistrict([])
+      setData({
+        ...data,
+        city: e.target.value,
+        district: '',
+        sub_district: ''
+      });
+      fetchDataDistrict(data.province, e.target.value)
+    } else if(e.target.ariaLabel === 'district') {
+      setData({
+        ...data,
+        district: e.target.value,
+        sub_district: ''
+      });
+      fetchDataSubDistrict(data.province, data.city, e.target.value)
+    } else if (e.target.type === 'file') {
       if (e.target.files['length'] !== 0) {
         setData({
           ...data,
@@ -618,16 +653,16 @@ function FormUser(props) {
                 </select>
                 <div className="invalid-feedback">{errorData.province}</div>
               </div>
+
               <div className="col-lg-6 mb-3">
-                <label className="form-label">City</label>
+                <label class="form-label">City</label>
                 <select
-                  className={`form-select ${
-                    errorData.city !== '' ? 'is-invalid' : null
-                  }`}
+                  class={`form-select ${ errorData.city !== '' ? 'is-invalid' : null }`}
                   aria-label="city"
                   onChange={onChangeData}
-                  disabled={data.province === '' ? 'disabled' : null}
+                  disabled={dataFetchCity.length === 0 ? 'disabled' : null}
                 >
+                  <option selected={data.city === '' || data.city === undefined ? 'selected' : null} disabled>-- Select your city --</option>
                   {dataFetchCity.map(function (item, i) {
                     return (
                       <option
@@ -644,36 +679,59 @@ function FormUser(props) {
                 </select>
                 <div className="invalid-feedback">{errorData.city}</div>
               </div>
+
               <div className="col-lg-6 mb-3">
-                <label className="form-label">District</label>
-                <input
-                  type="text"
-                  className={`form-control ${
-                    errorData.district !== '' ? 'is-invalid' : null
-                  }`}
-                  aria-label="district"
-                  onChange={onChangeData}
-                  value={data.district}
-                />
-                <div className="invalid-feedback">{errorData.district}</div>
-              </div>
-              <div className="col-lg-6 mb-3">
-                <div className="mb-3">
-                  <label className="form-label">Sub District</label>
-                  <input
-                    type="text"
-                    className={`form-control ${
-                      errorData.sub_district !== '' ? 'is-invalid' : null
-                    }`}
-                    aria-label="sub_district"
+                  <label class="form-label">District</label>
+                  <select
+                    class={`form-select ${ errorData.district !== '' ? 'is-invalid' : null }`}
+                    aria-label="district"
                     onChange={onChangeData}
-                    value={data.sub_district}
-                  />
-                  <div className="invalid-feedback">
-                    {errorData.sub_district}
-                  </div>
-                </div>
+                    disabled={dataFetchDistrict.length === 0 ? 'disabled' : null}
+                  >
+                    <option selected={data.district === '' || data.district === undefined ? 'selected' : null} disabled>-- Select your district --</option>
+                    {dataFetchDistrict.map(function (item, i) {
+                      return (
+                        <option
+                          value={item.dis_name}
+                          key={i}
+                          selected={
+                            data.district === item.dis_name ? 'selected' : null
+                          }
+                        >
+                          {item.dis_name}
+                        </option>
+                      );
+                    })}
+                  </select>
+                  <div className="invalid-feedback">{errorData.district}</div>
               </div>
+
+              <div className="col-lg-12 mb-3">
+                <label class="form-label">Sub District</label>
+                <select
+                  class={`form-select ${ errorData.sub_district !== '' ? 'is-invalid' : null }`}
+                  aria-label="sub_district"
+                  onChange={onChangeData}
+                  disabled={dataFetchSubDistrict.length === 0 ? 'disabled' : null}
+                >
+                  <option selected={data.sub_district === '' || data.sub_district === undefined ? 'selected' : null} disabled>-- Select your sub district --</option>
+                  {dataFetchSubDistrict.map(function (item, i) {
+                    return (
+                      <option
+                        value={item.subdis_name}
+                        key={i}
+                        selected={
+                          data.sub_district === item.subdis_name ? 'selected' : null
+                        }
+                      >
+                        {item.subdis_name}
+                      </option>
+                    );
+                  })}
+                </select>
+                <div className="invalid-feedback">{errorData.sub_district}</div>
+              </div>
+
               <div className="col-lg-6 mb-3">
                 <div className="mb-3">
                   <label className="form-label">Postal Code</label>
