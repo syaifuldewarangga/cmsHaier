@@ -15,7 +15,7 @@ const initialCredential = {
     username: '',
     photo: '',
   },
-  USER_PERMISSION: {},
+  USER_PERMISSION: [],
   DATA_SEARCH_SERVICE_CENTER: '',
 };
 
@@ -36,6 +36,11 @@ const credentialReducer = (state = initialCredential, action) => {
         ...state,
         USER: action.value,
       };
+    case 'CHANGE_USER_PERMISSION': 
+      return {
+        ...state,
+        USER_PERMISSION: action.value,
+      };
     case 'SET_TOKEN':
       return {
         ...state,
@@ -47,18 +52,12 @@ const credentialReducer = (state = initialCredential, action) => {
         DATA_SEARCH_SERVICE_CENTER: action.value,
       };
     default:
-      if (
-        localStorage.getItem('access_token') !== null &&
-        localStorage.getItem('role') !== null
-      ) {
-        const permission = localStorage.getItem('permission');
+      if ( localStorage.getItem('access_token') !== null && localStorage.getItem('role') !== null ) {
         const role = localStorage.getItem('role');
-
         if (role === 'CUSTOMER') {
           return {
             ...state,
             CUSTOMER_LOGIN: true,
-            USER_PERMISSION: JSON.parse(permission),
             USER: {
               fullname: localStorage.getItem('fullname'),
               phone_number: localStorage.getItem('phone'),
@@ -73,7 +72,6 @@ const credentialReducer = (state = initialCredential, action) => {
           return {
             ...state,
             ADMIN_LOGIN: true,
-            USER_PERMISSION: JSON.parse(permission),
             USER: {
               fullname: localStorage.getItem('fullname'),
               phone_number: localStorage.getItem('phone'),

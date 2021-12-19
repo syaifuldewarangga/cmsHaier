@@ -1,12 +1,45 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import { Redirect, Route } from 'react-router-dom'
 import { connect } from 'react-redux'
 import DashboardNavbar from '../dahboard/dasboardNavbar/DashboardNavbar'
 import Sidebar from '../dahboard/sidebar/Sidebar'
+import axios from 'axios'
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
     const adminLogin = rest.admin_login
 
+    const cekUserData = async () => {
+        const token = localStorage.getItem('access_token')
+        const email = localStorage.getItem('email')
+        if(token !== null && email) {
+            await axios.get(rest.base_url + 'user/get', {
+                headers: {
+                    Authorization: 'Bearer ' + token
+                },
+                params: {
+                    identifier: email
+                }
+            }).then((res) => {
+                rest.changeAdminLogin(true)
+                rest.changeUser(res.data)
+                var permissions = [];
+                res.data.permissions.map((item) => {
+                    permissions.push(item.permission_name)
+                })
+                rest.changeUserPermission(permissions)                
+            }).catch((err) => {
+                localStorage.clear();
+                rest.changeAdminLogin(false)
+                console.log(err.response)
+            })
+        } 
+    }
+
+    useEffect(() => {
+        cekUserData()
+    }, [])
+
+    
     return (
     <Fragment>
         <DashboardNavbar />
@@ -34,7 +67,24 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
 }
 const mapStateToProps = (state) => {
     return {
+        base_url: state.BASE_URL,
         admin_login: state.ADMIN_LOGIN
     }
 }
-export default connect(mapStateToProps, null) (PrivateRoute)
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        changeAdminLogin: (value) => dispatch({ type: 'CHANGE_ADMIN_LOGIN', value: value}),
+        changeUser: (value) => dispatch({
+            type: 'CHANGE_USER',
+            value: {
+                fullname: value.first_name + value.last_name,
+                phone_number: value.phone,
+                username: value.username,
+                photo: value.image.length !== 0 ? value.image[0].path : '',
+            }
+        }),
+        changeUserPermission: (value) => dispatch({ type: 'CHANGE_USER_PERMISSION', value: value})
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps) (PrivateRoute)

@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import ProductCategoryChart from './chart/ProductCategoryChart';
+import { permissionCek } from '../../../action/permissionCek';
 
 function DashboardComponent(props) {
 
@@ -207,7 +208,7 @@ function DashboardComponent(props) {
 
 const mapStateToProps = (state) => {
   return {
-    base_url: state.BASE_URL,
+    base_url: state.BASE_URL
   };
 };
 

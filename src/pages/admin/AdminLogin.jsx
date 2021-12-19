@@ -41,10 +41,7 @@ const AdminLogin = (props) => {
         if (res.data.roles !== 'CUSTOMER') {
           localStorage.setItem('id', res.data.id);
           localStorage.setItem('role', res.data.roles);
-          localStorage.setItem(
-            'fullname',
-            res.data.first_name + ' ' + res.data.last_name
-          );
+          localStorage.setItem( 'fullname', res.data.first_name + ' ' + res.data.last_name );
           localStorage.setItem('access_token', token);
           localStorage.setItem('email', email);
           localStorage.setItem('phone', res.data.phone);
@@ -181,8 +178,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    handleCustomerLogin: (data) =>
-      dispatch({ type: 'CHANGE_CUSTOMER_LOGIN', value: data }),
+    handleCustomerLogin: (data) => dispatch({ type: 'CHANGE_CUSTOMER_LOGIN', value: data }),
     handleUser: (data) => dispatch({ type: 'CHANGE_USER', value: data }),
   };
 };
