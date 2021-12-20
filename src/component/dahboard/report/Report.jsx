@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { Fragment, useState } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import dateFormat from 'dateformat';
+import { tableToCSV } from '../../../variable/TableToCSV';
 
 function Report(props) {
   const [selectReport, setSelectReport] = React.useState('');
@@ -9,15 +10,12 @@ function Report(props) {
     from: '',
     until: '',
   });
+  const [userProductReport, setUserProductReport] = useState([])
+  const [customerVoice, setCustomerVoice] = useState([])
 
   var token = localStorage.getItem('access_token');
 
   const downloadCSV = async () => {
-    // const route =
-    //   selectReport === 'user'
-    //     ? 'register-customer/export'
-    //     : 'register-product/export';
-
     if(selectReport === 'user') {
       await axios.get(props.base_url + '/report', {
         headers: {
@@ -29,8 +27,8 @@ function Report(props) {
         },
       })
       .then((res) => {
-        console.log(res);
-        JSONToCSVConvertor(res.data, 'Data Total User & Total Product', true);
+        setUserProductReport(res.data)
+        tableToCSV('table-user-report', 'Report Total Product dan Total User')
       })
       .catch((e) => {
         if (e.response) {
@@ -51,7 +49,8 @@ function Report(props) {
           endDate: date.until
         }
       }).then((res) => {
-        JSONToCSVConvertor(res.data, 'Data Customer Voice', true);
+        setCustomerVoice(res.data)
+        tableToCSV('table-customer-voice', 'Report Customer Voice')
       })
     }
     
@@ -179,6 +178,109 @@ function Report(props) {
           </div>
         </div>
       </div>
+
+      <table className="d-none" id="table-user-report">
+        <tr>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Username</th>
+          <th>Mobile Phone</th>
+          <th>NIK</th>
+          <th>Email</th>
+          <th>Gender</th>
+          <th>Birth Date</th>
+          <th>Province</th>
+          <th>City</th>
+          <th>District</th>
+          <th>Sub District</th>
+          <th>Postal Code</th>
+          <th>Address</th>
+          <th>Age</th>
+          <th>Phone</th>
+          <th>Fax</th>
+
+          <th>Barcode</th>
+          <th>Product ID</th>
+          <th>Product Name</th>
+          <th>Serial Number</th>
+          <th>Purchase Date</th>
+          <th>Store Location</th>
+          <th>Store Name</th>
+          <th>Product Model</th>
+          <th>Warranty Card</th>
+          <th>Invoice</th>
+          <th>Brand</th>
+          <th>Category</th>
+          <th>WA Flag</th>
+        </tr>
+        {
+          userProductReport.map((item) => {
+            return (
+              <Fragment>
+                {
+                item.products.length === 0 ? 
+                  <tr>
+                    <td>{ item.first_name }</td>
+                    <td>{ item.last_name }</td>
+                    <td>{ item.username }</td>
+                    <td>{ item.phone }</td>
+                    <td>{ item.nik }</td>
+                    <td>{ item.email }</td>
+                    <td>{ item.gender }</td>
+                    <td>{ item.birth_date }</td>
+                    <td>{ item.province }</td>
+                    <td>{ item.city }</td>
+                    <td>{ item.district }</td>
+                    <td>{ item.sub_district }</td>
+                    <td>{ item.postal_code }</td>
+                    <td>{ item.address }</td>
+                    <td>{ item.age }</td>
+                    <td>{ item.phone_office }</td>
+                    <td>{ item.fax }</td>
+                  </tr> : 
+                  item.products.map((product, productItem) => {
+                    return (
+                      <tr>
+                        <td>{ item.first_name }</td>
+                        <td>{ item.last_name }</td>
+                        <td>{ item.username }</td>
+                        <td>{ item.phone }</td>
+                        <td>{ item.nik }</td>
+                        <td>{ item.email }</td>
+                        <td>{ item.gender }</td>
+                        <td>{ item.birth_date }</td>
+                        <td>{ item.province }</td>
+                        <td>{ item.city }</td>
+                        <td>{ item.district }</td>
+                        <td>{ item.sub_district }</td>
+                        <td>{ item.postal_code }</td>
+                        <td>{ item.address }</td>
+                        <td>{ item.age }</td>
+                        <td>{ item.phone_office }</td>
+                        <td>{ item.fax }</td>
+
+                        <td>{product.barcode}</td>
+                        <td>{product.product_id}</td>
+                        <td>{product.product_name}</td>
+                        <td>{product.serial_number}</td>
+                        <td>{product.date}</td>
+                        <td>{product.store_location}</td>
+                        <td>{product.store_name}</td>
+                        <td>{product.product_model}</td>
+                        <td>{props.image_url+product.warranty_card}</td>
+                        <td>{props.image_url+product.invoice}</td>
+                        <td>{product.brand}</td>
+                        <td>{product.category}</td>
+                        <td>{product.agreements}</td>
+                      </tr>
+                    )
+                  })
+                }
+              </Fragment>
+            )
+          })
+        }
+      </table>
     </div>
   );
 }
@@ -186,6 +288,7 @@ function Report(props) {
 const mapStateToProps = (state) => {
   return {
     base_url: state.BASE_URL,
+    image_url: state.URL
   };
 };
 
