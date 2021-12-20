@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import Pagination from '../../../pagination/Pagination';
 import ModalDelete from '../../../modalDelete/ModalDelete';
 import { Modal } from 'bootstrap';
+import { permissionCek } from '../../../../action/permissionCek';
 
 function UserList(props) {
   const [dataID, setDataID] = useState('')
@@ -167,12 +168,15 @@ function UserList(props) {
               />
             </div>
             <div className="col-lg-6 d-flex justify-content-lg-end mb-3">
-              <Link to="/users/add">
-                <button className="btn d-flex justify-content-center btn-add">
-                  <span class="material-icons-outlined me-3"> add </span>
-                  <span className="fw-bold">Add User</span>
-                </button>
-              </Link>
+              {
+                permissionCek(props.user_permission, 'POST_USER') ?
+                <Link to="/users/add">
+                  <button className="btn d-flex justify-content-center btn-add">
+                    <span class="material-icons-outlined me-3"> add </span>
+                    <span className="fw-bold">Add User</span>
+                  </button>
+                </Link> : null
+              }
             </div>
           </div>
         </div>
@@ -183,7 +187,10 @@ function UserList(props) {
               <table className="dashboard table">
                 <thead>
                   <tr>
-                    <th>Action</th>
+                    {
+                      permissionCek(props.user_permission, 'DELETE USER') === true || permissionCek(props.user_permission, 'UPDATE_USER') === true ?
+                      <th>Action</th> : null
+                    }
                     <th>Username</th>
                     <th>Email</th>
                     <th>Level</th>
@@ -227,6 +234,7 @@ function UserList(props) {
 const mapStateToProps = (state) => {
   return {
     base_url: state.BASE_URL,
+    user_permission: state.USER_PERMISSION
   };
 };
 

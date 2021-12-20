@@ -3,6 +3,7 @@ import { Modal } from "bootstrap";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { permissionCek } from "../../../action/permissionCek";
 import ModalDelete from "../../modalDelete/ModalDelete";
 import Pagination from "../../pagination/Pagination";
 import MessageListData from "./MesageListData/MessageListData";
@@ -140,7 +141,10 @@ class Message extends Component
                                 <table className="dashboard table">
                                     <thead>
                                         <tr>
-                                            <th>Action</th>
+                                            {
+                                                permissionCek(this.props.user_permission, 'DELETE_MESSAGE') &&
+                                                <th>Action</th>
+                                            }
                                             <th>Name</th>
                                             <th>Email</th>
                                             <th>Subject</th>
@@ -183,6 +187,7 @@ class Message extends Component
 const mapStateToProps = (state) => {
     return {
         base_url: state.BASE_URL,
+        user_permission: state.USER_PERMISSION
     }
 }
-export default connect(mapStateToProps)(Message)
+export default connect(mapStateToProps, null)(Message)

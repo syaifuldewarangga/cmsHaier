@@ -3,6 +3,7 @@ import { Modal } from 'bootstrap';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { permissionCek } from '../../../action/permissionCek';
 import ModalDelete from '../../modalDelete/ModalDelete';
 import CustomerVoiceListData from './CustomerVoiceListData/CustomerVoiceListData';
 
@@ -60,14 +61,17 @@ const CustomerVoiceList = (props) => {
     <div className="">
       <h5 className="dashboard title">Customer Voice</h5>
       <div className="row mt-5">
-        <div className="col-lg-12 d-flex justify-content-lg-start mb-3">
-          <Link to="/customer-voice/add">
-            <button className="btn d-flex justify-content-center btn-add me-3">
-              <span class="material-icons-outlined me-3"> add </span>
-              <span className="fw-bold">Add Question</span>
-            </button>
-          </Link>
-        </div>
+        {
+          permissionCek(props.user_permission, 'POST_CUSTOMER_VOICE') &&
+          <div className="col-lg-12 d-flex justify-content-lg-start mb-3">
+            <Link to="/customer-voice/add">
+              <button className="btn d-flex justify-content-center btn-add me-3">
+                <span class="material-icons-outlined me-3"> add </span>
+                <span className="fw-bold">Add Question</span>
+              </button>
+            </Link>
+          </div>
+        }
       </div>
 
       <div>
@@ -93,6 +97,7 @@ const CustomerVoiceList = (props) => {
 const mapStateToProps = (state) => {
   return {
     base_url: state.BASE_URL,
+    user_permission: state.USER_PERMISSION
   };
 };
 

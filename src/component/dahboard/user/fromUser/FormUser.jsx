@@ -706,7 +706,7 @@ function FormUser(props) {
                   <div className="invalid-feedback">{errorData.district}</div>
               </div>
 
-              <div className="col-lg-12 mb-3">
+              <div className="col-lg-6 mb-3" >
                 <label class="form-label">Sub District</label>
                 <select
                   class={`form-select ${ errorData.sub_district !== '' ? 'is-invalid' : null }`}

@@ -4,6 +4,8 @@ import axios from 'axios';
 import { connect, useDispatch } from 'react-redux';
 import { getToken } from '../../../action/action';
 import FormEditStore from './formEditStore/formEditStore';
+import { permissionCek } from '../../../action/permissionCek';
+import { StaticRouter } from 'react-router';
 
 function StoreList(props) {
   const [data, setData] = useState([]);
@@ -100,7 +102,10 @@ function StoreList(props) {
               <table className="dashboard table">
                 <thead>
                   <tr>
-                    <th width="9%">Action</th>
+                    {
+                      permissionCek(props.user_permission, 'POST_STORE') &&
+                      <th width="9%">Action</th>
+                    }
                     <th>Store Name</th>
                     <th>Phone Office</th>
                     <th>Province</th>
@@ -135,6 +140,7 @@ const mapStateToProps = (state) => {
   return {
     gtm_url: state.GTM_URL,
     token: state.GTM_TOKEN,
+    user_permission: state.USER_PERMISSION
   };
 };
 

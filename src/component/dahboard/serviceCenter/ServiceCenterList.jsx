@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import ServiceCenterListData from './serviceCenterData/ServiceCenterListData';
 import axios from 'axios';
 import { connect } from 'react-redux';
@@ -8,6 +8,7 @@ import ModalDelete from '../../modalDelete/ModalDelete';
 import Pagination from '../../pagination/Pagination';
 import FormImportServiceCenter from './formImportServiceCenter/FormImportServiceCenter';
 import ModalDeleteAllData from '../../modalDelete/ModalDeleteAllData';
+import { permissionCek } from '../../../action/permissionCek';
 
 function ServiceCenterList(props) {
   const [dataID, setDataID] = useState('');
@@ -251,21 +252,26 @@ function ServiceCenterList(props) {
             </div>
 
             <div className="col-lg-6 d-flex justify-content-lg-end mb-3">
-              <button
-                className="btn d-flex justify-content-center btn-export me-3"
-                data-bs-toggle="modal"
-                data-bs-target="#formImportServiceCenter"
-              >
-                <span class="material-icons-outlined me-3"> file_upload </span>
-                <span className="fw-bold">Import</span>
-              </button>
+              {
+                permissionCek(props.user_permission, 'POST_SERVICE_CENTER') &&
+                <Fragment>
+                  <button
+                    className="btn d-flex justify-content-center btn-export me-3"
+                    data-bs-toggle="modal"
+                    data-bs-target="#formImportServiceCenter"
+                  >
+                    <span class="material-icons-outlined me-3"> file_upload </span>
+                    <span className="fw-bold">Import</span>
+                  </button>
+                  <Link to="/service-center/add">
+                    <button className="btn d-flex justify-content-center btn-add me-3">
+                      <span class="material-icons-outlined me-3"> add </span>
+                      <span className="fw-bold">Add Service Center</span>
+                    </button>
+                  </Link>
+                </Fragment>
+              }
 
-              <Link to="/service-center/add">
-                <button className="btn d-flex justify-content-center btn-add me-3">
-                  <span class="material-icons-outlined me-3"> add </span>
-                  <span className="fw-bold">Add Service Center</span>
-                </button>
-              </Link>
 
               <button
                 className="btn d-flex justify-content-center btn-export me-3"
@@ -278,16 +284,19 @@ function ServiceCenterList(props) {
                 <span className="fw-bold">Export</span>
               </button>
 
-              <button
-                className="btn d-flex justify-content-center btn-danger"
-                onClick={handleModalDeleteAll}
-              >
-                <span class="material-icons-outlined me-3">
-                  {' '}
-                  delete{' '}
-                </span>
-                <span className="fw-bold">Delete All</span>
-              </button>
+              {
+                permissionCek(props.user_permission, 'DELETE_SERVICE_CENTER') &&
+                <button
+                  className="btn d-flex justify-content-center btn-danger"
+                  onClick={handleModalDeleteAll}
+                >
+                  <span class="material-icons-outlined me-3">
+                    {' '}
+                    delete{' '}
+                  </span>
+                  <span className="fw-bold">Delete All</span>
+                </button>
+              }
             </div>
           </div>
         </div>
@@ -298,7 +307,10 @@ function ServiceCenterList(props) {
               <table className="dashboard table">
                 <thead>
                   <tr>
-                    <th>Action</th>
+                    {
+                      permissionCek(props.user_permission, 'DELETE_SERVICE_CENTER') && permissionCek(props.user_permission, 'UPDATE_SERVICE_CENTER') ?
+                      <th>Action</th> : null
+                    }
                     <th>Service Center Name</th>
                     <th>Phone Office</th>
                     <th>Province</th>
@@ -359,6 +371,7 @@ function ServiceCenterList(props) {
 const mapStateToProps = (state) => {
   return {
     base_url: state.BASE_URL,
+    user_permission: state.USER_PERMISSION
   };
 };
 

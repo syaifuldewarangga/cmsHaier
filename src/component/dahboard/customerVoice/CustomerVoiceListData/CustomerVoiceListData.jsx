@@ -1,5 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { permissionCek } from "../../../../action/permissionCek";
 import './CustomerVoiceListData.css';
 
 const CustomerVoiceListData = (props) => {
@@ -102,17 +104,23 @@ const CustomerVoiceListData = (props) => {
                         <div className="header">Question</div>
                     </div>
                     <div>
-                        <Link to={`/customer-voice/edit/${props.data.id}`}>
-                            <button className="btn btn-sm btn-edit me-2">
-                                <span class="material-icons-outlined"> edit </span>
+                        {
+                            permissionCek(props.user_permission, 'UPDATE_CUSTOMER_VOICE') &&
+                            <Link to={`/customer-voice/edit/${props.data.id}`}>
+                                <button className="btn btn-sm btn-edit me-2">
+                                    <span class="material-icons-outlined"> edit </span>
+                                </button>
+                            </Link>
+                        }
+                        {
+                            permissionCek(props.user_permission, 'DELETE_CUSTOMER_VOICE') &&
+                            <button 
+                                className="btn btn-sm btn-danger"
+                                onClick={() => props.remove(props.data.id)}
+                            >
+                                <span class="material-icons-outlined"> delete </span>
                             </button>
-                        </Link>
-                        <button 
-                            className="btn btn-sm btn-danger"
-                            onClick={() => props.remove(props.data.id)}
-                        >
-                            <span class="material-icons-outlined"> delete </span>
-                        </button>
+                        }
                     </div>
                 </div>
                 <div className="card-body">
@@ -128,4 +136,9 @@ const CustomerVoiceListData = (props) => {
     );
 }
 
-export default CustomerVoiceListData;
+const mapsStateToProps = (state) => {
+    return {
+        user_permission: state.USER_PERMISSION
+    }
+}
+export default connect(mapsStateToProps, null) (CustomerVoiceListData);

@@ -118,7 +118,7 @@ class Dashboard extends Component {
             <AdminRoute exact path="/setting/contact-information/edit" component={FormContactInformation} />
             <AdminRoute exact path="/setting/privacy-policy" component={PrivacyPolicy} />
             <AdminRoute exact path="/setting/privacy-policy/edit" component={FormPrivacyPolicy} />
-            <AdminRoute exact path="/setting/web-config" component={WebConfig} />
+            {/* <AdminRoute exact path="/setting/web-config" component={WebConfig} />  */}
 
             <AdminRoute exact path="/change-password-admin" component={ResetPasswordAdmin} />
             <AdminRoute exact path="/admin-profile" component={AdminProfile} />

@@ -5,6 +5,7 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import ModalDelete from '../../../modalDelete/ModalDelete';
 import { Modal } from 'bootstrap';
+import { permissionCek } from '../../../../action/permissionCek';
 
 function UserRole(props) {
   const [dataID, setDataID] = useState('')
@@ -153,12 +154,15 @@ function UserRole(props) {
               </button> */}
             </div>
             <div className="col-lg-6 d-flex justify-content-lg-end mb-3">
-              <Link to="/user-role/add">
-                <button className="btn d-flex justify-content-center btn-add">
-                  <span class="material-icons-outlined me-3"> add </span>
-                  <span className="fw-bold">Add Role</span>
-                </button>
-              </Link>
+              {
+                permissionCek(props.user_permission, 'POST_ROLE') &&
+                <Link to="/user-role/add">
+                  <button className="btn d-flex justify-content-center btn-add">
+                    <span class="material-icons-outlined me-3"> add </span>
+                    <span className="fw-bold">Add Role</span>
+                  </button>
+                </Link>
+              }
             </div>
           </div>
         </div>
@@ -169,7 +173,10 @@ function UserRole(props) {
               <table className="dashboard table">
                 <thead>
                   <tr>
-                    <th width="9%">Action</th>
+                    {
+                      permissionCek(props.user_permission, 'UPDATE_ROLE') && permissionCek(props.user_permission, 'DELETE_ROLE') ?
+                      <th width="9%">Action</th> : null
+                    }
                     <th>User Role</th>
                   </tr>
                 </thead>
@@ -197,6 +204,7 @@ function UserRole(props) {
 const mapStateToProps = (state) => {
   return {
     base_url: state.BASE_URL,
+    user_permission: state.USER_PERMISSION
   };
 };
 

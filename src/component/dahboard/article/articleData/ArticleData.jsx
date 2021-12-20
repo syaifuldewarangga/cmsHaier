@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
+import { permissionCek } from '../../../../action/permissionCek';
 
 function ArticleListData(props) {
   const history = useHistory();
@@ -38,17 +39,23 @@ function ArticleListData(props) {
       <tr>
         <td className="align-middle">
           <div className="d-flex justify-content-start">
-            <Link to={'/article/edit/' + props.data.slug}>
-              <button className="btn d-flex btn-edit me-3 btn-sm">
-                <span class="material-icons-outlined md-18"> edit </span>
+            {
+              permissionCek(props.user_permission, 'UPDATE_ARTICLE') &&
+              <Link to={'/article/edit/' + props.data.slug}>
+                <button className="btn d-flex btn-edit me-3 btn-sm">
+                  <span class="material-icons-outlined md-18"> edit </span>
+                </button>
+              </Link>
+            }
+            {
+              permissionCek(props.user_permission, 'DELETE_ARTICLE') &&
+              <button
+                className="btn d-flex btn-danger me-3 btn-sm"
+                onClick={() => props.remove(props.data.slug)}
+              >
+                <span class="material-icons-outlined md-18"> delete </span>
               </button>
-            </Link>
-            <button
-              className="btn d-flex btn-danger me-3 btn-sm"
-              onClick={() => props.remove(props.data.slug)}
-            >
-              <span class="material-icons-outlined md-18"> delete </span>
-            </button>
+            }
             <a href={`${props.frontend_url}blog/detail/${props.data.slug}`} target="_blank">
               <button className="btn d-flex btn-show btn-sm">
                 <span class="material-icons-outlined md-18"> visibility </span>
@@ -75,6 +82,7 @@ const mapStateToProps = (state) => {
     url: state.URL,
     base_url: state.BASE_URL,
     frontend_url: state.FRONTEND_URL,
+    user_permission: state.USER_PERMISSION
   };
 };
 

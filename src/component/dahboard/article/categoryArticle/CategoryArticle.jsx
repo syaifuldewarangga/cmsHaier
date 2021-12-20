@@ -5,6 +5,7 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import ModalDelete from '../../../modalDelete/ModalDelete';
 import { Modal } from 'bootstrap';
+import { permissionCek } from '../../../../action/permissionCek';
 
 const CategoryArticle = (props) => {
   const [dataID, setDataID] = useState('')
@@ -154,17 +155,20 @@ const CategoryArticle = (props) => {
                 Searchs
               </button> */}
             </div>
-            <div className="col-lg-6 d-flex justify-content-lg-end mb-3">
-              <button
-                className="btn d-flex justify-content-center btn-add"
-                onClick={() => setTittle('Add Category')}
-                data-bs-toggle="modal"
-                data-bs-target="#formCategoryArticle"
-              >
-                <span className="material-icons-outlined me-3"> add </span>
-                <span className="fw-bold">Add Category</span>
-              </button>
-            </div>
+            {
+              permissionCek(props.user_permission, 'POST_CATEGORY') &&
+              <div className="col-lg-6 d-flex justify-content-lg-end mb-3">
+                <button
+                  className="btn d-flex justify-content-center btn-add"
+                  onClick={() => setTittle('Add Category')}
+                  data-bs-toggle="modal"
+                  data-bs-target="#formCategoryArticle"
+                >
+                  <span className="material-icons-outlined me-3"> add </span>
+                  <span className="fw-bold">Add Category</span>
+                </button>
+              </div>
+            }
           </div>
         </div>
 
@@ -174,7 +178,10 @@ const CategoryArticle = (props) => {
               <table className="dashboard table">
                 <thead>
                   <tr>
-                    <th width="9%">Action</th>
+                    {
+                      permissionCek(props.user_permission, 'UPDATE_CATEGORY') && permissionCek(props.user_permission, 'DELETE_CATEGORY') ?
+                      <th width="9%">Action</th> : null
+                    }
                     <th>Category Name</th>
                   </tr>
                 </thead>
@@ -234,6 +241,7 @@ const CategoryArticle = (props) => {
 const mapStateToProps = (state) => {
   return {
     base_url: state.BASE_URL,
+    user_permission: state.USER_PERMISSION
   };
 };
 

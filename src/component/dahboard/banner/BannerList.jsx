@@ -5,6 +5,7 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import ModalDelete from '../../modalDelete/ModalDelete';
 import { Modal } from 'bootstrap';
+import { permissionCek } from '../../../action/permissionCek';
 
 function BannerList(props) {
   const history = useHistory();
@@ -143,14 +144,17 @@ function BannerList(props) {
                 }
               />
             </div>
-            <div className="col-lg-6 d-flex justify-content-lg-end mb-3">
-              <Link to="/banner/add">
-                <button className="btn d-flex justify-content-center btn-add">
-                  <span class="material-icons-outlined me-3"> add </span>
-                  <span className="fw-bold">Add Banner</span>
-                </button>
-              </Link>
-            </div>
+            {
+              permissionCek(props.user_permission, 'CREATE_BANNER') &&
+              <div className="col-lg-6 d-flex justify-content-lg-end mb-3">
+                <Link to="/banner/add">
+                  <button className="btn d-flex justify-content-center btn-add">
+                    <span class="material-icons-outlined me-3"> add </span>
+                    <span className="fw-bold">Add Banner</span>
+                  </button>
+                </Link>
+              </div>
+            }
           </div>
         </div>
 
@@ -160,7 +164,10 @@ function BannerList(props) {
               <table className="dashboard table">
                 <thead>
                   <tr>
-                    <th width="9%">Action</th>
+                    {
+                      permissionCek(props.user_permission, 'UPDATE_BANNER') && permissionCek(props.user_permission, 'DELETE_BANNER') ?
+                      <th width="9%">Action</th> : null
+                    }
                     <th>Photos</th>
                     <th>Title</th>
                     <th>Redirect URL</th>
@@ -204,6 +211,7 @@ function BannerList(props) {
 const mapStateToProps = (state) => {
   return {
     base_url: state.BASE_URL,
+    user_permission: state.USER_PERMISSION
   };
 };
 

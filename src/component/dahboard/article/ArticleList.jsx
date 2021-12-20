@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import ModalDelete from '../../modalDelete/ModalDelete';
 import { Modal } from 'bootstrap';
 import Pagination from '../../pagination/Pagination';
+import { permissionCek } from '../../../action/permissionCek';
 
 function ArticleList(props) {
   const [dataID, setDataID] = useState('')
@@ -166,14 +167,17 @@ function ArticleList(props) {
                 Search
               </button> */}
             </div>
-            <div className="col-lg-6 d-flex justify-content-lg-end mb-3">
-              <Link to="/article/add">
-                <button className="btn d-flex justify-content-center btn-add">
-                  <span class="material-icons-outlined me-3"> add </span>
-                  <span className="fw-bold">Add Article</span>
-                </button>
-              </Link>
-            </div>
+            {
+              permissionCek(props.user_permission, 'POST_ARTICLE') &&
+              <div className="col-lg-6 d-flex justify-content-lg-end mb-3">
+                <Link to="/article/add">
+                  <button className="btn d-flex justify-content-center btn-add">
+                    <span class="material-icons-outlined me-3"> add </span>
+                    <span className="fw-bold">Add Article</span>
+                  </button>
+                </Link>
+              </div>
+            }
           </div>
         </div>
 
@@ -183,6 +187,7 @@ function ArticleList(props) {
               <table className="dashboard table">
                 <thead>
                   <tr>
+                    
                     <th width="9%">Action</th>
                     <th>Photos</th>
                     <th>Title</th>
@@ -230,6 +235,7 @@ function ArticleList(props) {
 const mapStateToProps = (state) => {
   return {
     base_url: state.BASE_URL,
+    user_permission: state.USER_PERMISSION
   };
 };
 

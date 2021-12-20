@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { permissionCek } from '../../../../../action/permissionCek';
 
 function UserRoleData(props) {
   const history = useHistory();
@@ -35,21 +36,30 @@ function UserRoleData(props) {
   return (
     <tbody>
       <tr>
-        <td>
-          <div className="d-flex justify-content-start">
-            <Link to={'/user-role/edit/' + props.data.name}>
-              <button className="btn d-flex btn-edit me-3 btn-sm">
-                <span class="material-icons-outlined md-18"> edit </span>
+        {
+          permissionCek(props.user_permission, 'UPDATE_ROLE') && permissionCek(props.user_permission, 'DELETE_ROLE') ?
+          <td>
+            <div className="d-flex justify-content-start">
+            {
+              permissionCek(props.user_permission, 'UPDATE_ROLE') &&
+              <Link to={'/user-role/edit/' + props.data.name}>
+                <button className="btn d-flex btn-edit me-3 btn-sm">
+                  <span class="material-icons-outlined md-18"> edit </span>
+                </button>
+              </Link>
+            }
+            {
+              permissionCek(props.user_permission, 'DELETE_ROLE') &&
+              <button
+                className="btn d-flex btn-danger me-3 btn-sm"
+                onClick={() => props.remove(props.data.name)}
+              >
+                <span class="material-icons-outlined md-18"> delete </span>
               </button>
-            </Link>
-            <button
-              className="btn d-flex btn-danger me-3 btn-sm"
-              onClick={() => props.remove(props.data.name)}
-            >
-              <span class="material-icons-outlined md-18"> delete </span>
-            </button>
-          </div>
-        </td>
+            }
+            </div>
+          </td> : null
+        }
         <td>{props.data.name}</td>
       </tr>
       {/* <tr>
@@ -73,6 +83,7 @@ const mapStateToProps = (state) => {
   return {
     url: state.URL,
     base_url: state.BASE_URL,
+    user_permission: state.USER_PERMISSION
   };
 };
 
