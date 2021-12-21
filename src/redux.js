@@ -2,9 +2,10 @@ import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
 const initialCredential = {
-  BASE_URL: 'https://e-warranty.click/api/',
-  URL: 'https://images.e-warranty.click/',
+  BASE_URL: 'http://hsiew.haier.net:9002/api/',
+  URL: 'http://hsiew.haier.net/haier/images/',
   GTM_URL: 'https://openplat-sg-aws-test.haier.net/api/',
+  GTM_TOKEN_URL: 'https://openplat-sg-aws-test.haier.net/GTM3HSI/gateway/auth/oauth2/token',
   FRONTEND_URL: 'https://quina.e-warranty.click/',
   GTM_TOKEN: '',
   ADMIN_LOGIN: false,

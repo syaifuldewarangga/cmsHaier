@@ -57,7 +57,7 @@ class Dashboard extends Component {
   render() {
     return (
       <div>
-        <Router forceRefresh={true}>
+        <Router forceRefresh={true} basename="/cms">
           <Switch>
             <Route exact path="/forgot-password/" component={ForgotPassword} ></Route>
             <Route exact path="/otp/:userID" component={FormOtp}></Route>
