@@ -3,6 +3,7 @@ import { Link, withRouter } from "react-router-dom";
 import { Dropdown } from "react-bootstrap";
 import './DashboardNavbar.css'
 import { connect } from "react-redux";
+import { image_url } from "../../../variable/GlobalVariable";
 
 class DashboardNavbar extends Component {
     componentDidMount() {
@@ -28,7 +29,7 @@ class DashboardNavbar extends Component {
                     <div className="container-fluid">
                         <div className="d-flex align-items-center">    
                             <span class="material-icons-outlined menu"> menu </span>
-                            <img src="/assets/images/logo.png" alt="logo aqua japan" width="75px"/>
+                            <img src={`${image_url}logo.png`} alt="logo aqua japan" width="75px"/>
                         </div>
                         <Dropdown>
                             <Dropdown.Toggle as={this.CustomToggle} id="dropdown-custom-components">
@@ -44,7 +45,7 @@ class DashboardNavbar extends Component {
                             <Dropdown.Menu>
                                 <Dropdown.Item href="/admin-profile">
                                     <img 
-                                        src={this.props.user.photo !== '' ? this.props.image_url +""+ this.props.user.photo : '/assets/images/user.png'}
+                                        src={this.props.user.photo !== '' ? this.props.image_url +""+ this.props.user.photo : image_url + 'user.png'}
                                         alt="profile" 
                                         width="25px"
                                         className="rounded-circle"

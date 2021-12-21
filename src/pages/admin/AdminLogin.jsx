@@ -4,6 +4,7 @@ import './AdminLogin.css';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { image_url } from '../../variable/GlobalVariable';
 
 const AdminLogin = (props) => {
   const history = useHistory();
@@ -111,7 +112,7 @@ const AdminLogin = (props) => {
       <div className="admin-login col-lg-3 mx-auto">
         <div>
           <div className="text-center">
-            <img src="/assets/images/logo.png" alt="logo-aqua-japan" />
+            <img src={`${image_url}logo.png`} alt="logo-aqua-japan" />
           </div>
           <div className="card mt-3">
             <div className="card-header text-center py-3 title">
