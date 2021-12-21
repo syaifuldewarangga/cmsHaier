@@ -1,7 +1,7 @@
 {
   "name": "haier",
   "version": "0.1.0",
-  "homepage": "http://hsiew.haier.net/cms",
+  "homepage": "http://10.162.172.151/cms/",
   "private": true,
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^30.0.0",
