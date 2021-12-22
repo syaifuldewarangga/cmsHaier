@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 
 const StatusServiceData = (props) => {
   const newDate = props.data.purchase_date.toString().slice(0, 10);
-  console.log(props.data);
   return (
     <tbody>
       <tr>

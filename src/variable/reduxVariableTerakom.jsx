@@ -19,6 +19,6 @@ export {
     GTM_URL,
     GTM_TOKEN_URL,
     GSIS_URL,
-    FRONTEND_URL
+    FRONTEND_URL,
 }
 
