@@ -58,7 +58,7 @@ const StatusService = (props) => {
     fd.append('MobilePhone', dataService.phone_number);
 
     await axios
-      .post('https://e-warranty.click/oapi/gsis/checkhsisrstatus', fd, {
+      .post( props.gsis_url + 'checkhsisrstatus', fd, {
         headers: {
           Accept: 'application/xml',
         },
@@ -149,6 +149,7 @@ const StatusService = (props) => {
 const mapStateToProps = (state) => {
   return {
     base_url: state.BASE_URL,
+    gsis_url: state.GSIS_URL
   };
 };
 export default connect(mapStateToProps, null)(StatusService);
