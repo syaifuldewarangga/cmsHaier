@@ -17,7 +17,7 @@ function Report(props) {
 
   const downloadCSV = async () => {
     if(selectReport === 'user') {
-      await axios.get(props.base_url + '/report', {
+      await axios.get(props.base_url + 'report', {
         headers: {
           Authorization: 'Bearer ' + token,
         },
