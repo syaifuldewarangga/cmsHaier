@@ -3,7 +3,7 @@ const client_secret = 'Sn93uLgBwP'
 const grant_type = 'client_credentials'
 
 const BASE_URL = 'https://hsiew.haier.net:9002/api/'
-const URL = 'http://images.aquajapanid.com/'
+const URL = 'https://images.aquajapanid.com/'
 const GTM_URL = 'https://openplat-sg-aws-test.haier.net/api/'
 const GTM_TOKEN_URL = 'https://openplat-sg-aws-test.haier.net/GTM3HSI/gateway/auth/oauth2/token'
 const GSIS_URL = 'https://hsiew.haier.net:9002/oapi/gsis/'
