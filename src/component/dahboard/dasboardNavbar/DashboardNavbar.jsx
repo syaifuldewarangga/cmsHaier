@@ -43,22 +43,27 @@ class DashboardNavbar extends Component {
                                     <i class='bx bx-chevron-down' ></i>
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
-                                <Dropdown.Item href="/admin-profile">
-                                    <img 
-                                        src={this.props.user.photo !== '' ? this.props.image_url +""+ this.props.user.photo : image_url + 'user.png'}
-                                        alt="profile" 
-                                        width="25px"
-                                        className="rounded-circle"
-                                    />
-                                    <span class="profile-name ms-2">{localStorage.getItem('fullname')}</span>
+                                <Dropdown.Item>
+                                    <Link to="/admin-profile">
+                                        <img 
+                                            src={this.props.user.photo !== '' ? this.props.image_url +""+ this.props.user.photo : image_url + 'user.png'}
+                                            alt="profile" 
+                                            width="25px"
+                                            className="rounded-circle"
+                                        />
+                                        <span class="profile-name ms-2">{localStorage.getItem('fullname')}</span>
+                                    </Link>
                                 </Dropdown.Item>
 
                                 <hr class="dropdown-divider" />
 
-                                <Dropdown.Item href="/change-password-admin">
-                                    <i class='bx bx-lock'></i>
-                                    <span class="text">Change Password</span>
-                                </Dropdown.Item>
+                                    <Dropdown.Item>
+                                        <Link to="/change-password-admin">
+                                            <i class='bx bx-lock'></i>
+                                            <span class="text">Change Password</span>
+                                        </Link>
+                                    </Dropdown.Item>
+                                
 
                                 <Dropdown.Item 
                                     onClick={this.handleLogout}
