@@ -2,9 +2,10 @@ import React from 'react';
 import './StatusServiceDetail.css';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import { connect } from 'react-redux';
 var X2JS = require('x2js');
 
-function StatusServiceDetail() {
+function StatusServiceDetail(props) {
   const { srNumber, phone_number } = useParams();
   const xtojson = new X2JS();
   const [data, setData] = React.useState('');
@@ -16,7 +17,7 @@ function StatusServiceDetail() {
       fd.append('MobilePhone', phone_number);
 
       await axios
-        .post('https://e-warranty.click/oapi/gsis/checkhsisrstatus', fd, {
+        .post(props.gsis_url + 'checkhsisrstatus', fd, {
           headers: {
             Accept: 'application/xml',
           },
@@ -105,23 +106,33 @@ function StatusServiceDetail() {
                               </tr>
                             </thead>
                             <tbody>
-                              {data === ''
-                                ? null
-                                : data.ListOfRepair.Repair.map((item) => {
-                                    return (
-                                      <tr>
-                                        <td className="text-nowrap">
-                                          {item.ChangedNo}
-                                        </td>
-                                        <td className="text-nowrap">
-                                          {item.ChangedStatus}
-                                        </td>
-                                        <td className="text-nowrap">
-                                          {item.StatusChangeDate}
-                                        </td>
-                                      </tr>
-                                    );
-                                  })}
+                              {
+                                data === '' ? null : data.ListOfRepair === undefined ? null : Array.isArray(data.ListOfRepair) ?
+                                data.ListOfRepair.Repair.map((item) => (
+                                  <tr>
+                                    <td className="text-nowrap">
+                                      {item.ChangedNo}
+                                    </td>
+                                    <td className="text-nowrap">
+                                      {item.ChangedStatus}
+                                    </td>
+                                    <td className="text-nowrap">
+                                      {item.StatusChangeDate}
+                                    </td>
+                                  </tr>
+                                )) : 
+                                <tr>
+                                  <td className="text-nowrap">
+                                    {data.ListOfRepair.Repair.ChangedNo}
+                                  </td>
+                                  <td className="text-nowrap">
+                                    {data.ListOfRepair.Repair.ChangedStatus}
+                                  </td>
+                                  <td className="text-nowrap">
+                                    {data.ListOfRepair.Repair.StatusChangeDate}
+                                  </td>
+                                </tr>
+                              }
                             </tbody>
                           </table>
                         </div>
@@ -138,4 +149,10 @@ function StatusServiceDetail() {
   );
 }
 
-export default StatusServiceDetail;
+const mapStateToProps = (state) => {
+  return {
+    gsis_url: state.GSIS_URL
+  }
+}
+
+export default connect(mapStateToProps, null) (StatusServiceDetail);

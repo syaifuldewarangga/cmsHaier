@@ -1,132 +1,63 @@
 import React from 'react';
 import ProductListData from './ProductListData/ProdcutListData';
 import axios from 'axios';
-import { connect, useDispatch } from 'react-redux';
-import { getToken } from '../../../action/action';
+import { connect } from 'react-redux';
+import { client_id, client_secret, grant_type } from '../../../variable/GlobalVariable';
 
 function ProductList(props) {
   const [data, setData] = React.useState([]);
-  const [state, setState] = React.useState({
-    tempSearch: '',
-    search: '',
-    isSearch: false,
-    dataSearch: [],
-  });
-  const [border, setBorder] = React.useState(10);
-  let dataShowing;
-  const dispatch = useDispatch();
+  const [search, setSearch] = React.useState('');
 
-  async function fetchData(type = null) {
-    await axios
-      .post(
-        props.gtm_url + 'pmtcommondata/GetProductListByCondition',
-        {
-          Barcode: state.search,
-          ProductID: '',
-          ProductName: '',
+  async function productAPIGTM(gtmToken) {
+    await axios.post(props.gtm_url + 'pmtcommondata/GetProductListByCondition',
+      {
+        Barcode: search,
+        ProductID: '',
+        ProductName: '',
+      },
+      {
+        headers: {
+          Authorization: gtmToken,
+          'Content-Type': 'text/plain',
         },
-        {
-          headers: {
-            Authorization: props.token,
-            'Content-Type': 'text/plain',
-          },
-        }
-      )
-      .then((res) => {
-        if(type === 'download') {
-          JSONToCSVConvertor(res.data.data, 'Product', true);
-        } else {
-          setData(res.data.data);
-        }
-      })
-      .catch((e) => {
-        dispatch(getToken());
+      }
+    )
+    .then((res) => {
+      setData(res.data.data);
+    })
+    .catch((e) => {
+      console.log(e.response)
+    });
+  }
 
-        if (e.response) {
-          console.log(e.response);
-        } else if (e.request) {
-          console.log('request : ' + e.request);
-        } else {
-          console.log('message : ' + e.message);
-        }
-      });
+  const fetchDataProductGTM = async () => {
+    await axios.post(props.gtm_token_url, {
+      client_id: client_id,
+      client_secret: client_secret,
+      grant_type: grant_type,
+    }).then((res) => {
+      const token = res.data.access_token
+      productAPIGTM(token)
+    }).catch((err) => {
+      console.log(err.response)
+    })
   }
 
   React.useEffect(() => {
-    fetchData();
-  }, [props.token, state.search]);
-
-  React.useEffect(() => {
-    const timeOutId = setTimeout(
-      () =>
-        setState({
-          ...state,
-          ['search']: state.tempSearch,
-        }),
-      300
-    );
+    const timeOutId = setTimeout(() => {
+      if(search !== '') {
+        fetchDataProductGTM()
+      } else {
+        setSearch('')
+      }
+    },300);
     return () => clearTimeout(timeOutId);
-  }, [state.tempSearch]);
+  }, [search]);
 
   const List = () => {
-    dataShowing = data.slice(0, border);
-    return dataShowing.map((item, i) => {
+    return data.map((item, i) => {
       return <ProductListData key={i} data={item} />;
     });
-  };
-
-  const downloadCSV = () => {
-    fetchData('download');
-  }
-  const JSONToCSVConvertor = (JSONData, ReportTitle, ShowLabel) => {
-    var arrData =
-      typeof JSONData !== 'object' ? JSON.parse(JSONData) : JSONData;
-
-    var CSV = '';
-
-    if (ShowLabel) {
-      var row = '';
-
-      for (var index in arrData[0]) {
-        row += index + ',';
-      }
-
-      row = row.slice(0, -1);
-
-      CSV += row + '\r\n';
-    }
-
-    for (var i = 0; i < arrData.length; i++) {
-      var row = '';
-
-      for (var index in arrData[i]) {
-        row += '"' + arrData[i][index] + '",';
-      }
-
-      row.slice(0, row.length - 1);
-
-      CSV += row + '\r\n';
-    }
-
-    if (CSV === '') {
-      alert('Invalid data');
-      return;
-    }
-
-    var fileName = 'Data_';
-    fileName += ReportTitle.replace(/ /g, '_');
-
-    var uri = 'data:text/csv;charset=utf-8,' + escape(CSV);
-
-    var link = document.createElement('a');
-    link.href = uri;
-
-    link.style = 'visibility:hidden';
-    link.download = fileName + '.csv';
-
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
   };
 
   return (
@@ -142,20 +73,9 @@ function ProductList(props) {
                 placeholder="Search"
                 aria-label="Search"
                 onChange={(e) =>
-                  setState({ ...state, ['tempSearch']: e.target.value })
+                  setSearch(e.target.value)
                 }
               />
-            </div>
-            <div className="col-lg-6 d-flex justify-content-lg-end mb-3">
-              <button 
-                className="btn d-flex justify-content-center btn-export"
-                onClick={downloadCSV}
-              >
-                <span class="material-icons-outlined me-3">
-                  file_download
-                </span>
-                <span className="fw-bold">Export</span>
-              </button>
             </div>
           </div>
         </div>
@@ -176,21 +96,9 @@ function ProductList(props) {
                     <th>Created Date</th>
                   </tr>
                 </thead>
-                {/* {Array.apply(0, Array(border)).map(function (item, i) {
-                  console.log(item);
-                  return <ProductListData key={i} />;
-                })} */}
                 <List />
               </table>
             </div>
-          </div>
-          <div className="d-grid gap-2 mt-3">
-            <button
-              className="btn d-flex justify-content-center btn-export"
-              onClick={() => setBorder(border + 10)}
-            >
-              <span className="fw-bold">Load More</span>
-            </button>
           </div>
         </div>
       </div>
@@ -201,7 +109,7 @@ function ProductList(props) {
 const mapStateToProps = (state) => {
   return {
     gtm_url: state.GTM_URL,
-    token: state.GTM_TOKEN,
+    gtm_token_url: state.GTM_TOKEN_URL
   };
 };
 

@@ -36,8 +36,10 @@ function FormEditStore(props) {
       });
   };
   useEffect(() => {
-    console.log(props.storeID);
-    getStoreFromAPI();
+    // console.log(props.storeID);
+    if(props.storeID !== '') {
+      getStoreFromAPI();
+    }
   }, [props.storeID]);
 
   const [errorData, setErrorData] = useState({

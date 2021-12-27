@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import StoreListData from './StoreListData/StoreListData';
 import axios from 'axios';
-import { connect, useDispatch } from 'react-redux';
-import { getToken } from '../../../action/action';
+import { connect } from 'react-redux';
 import FormEditStore from './formEditStore/formEditStore';
 import { permissionCek } from '../../../action/permissionCek';
-import { StaticRouter } from 'react-router';
+import { client_id, client_secret, grant_type } from '../../../variable/GlobalVariable';
 
 function StoreList(props) {
   const [data, setData] = useState([]);
@@ -18,39 +17,44 @@ function StoreList(props) {
   });
   const [border, setBorder] = useState(10);
   let dataShowing;
-  const dispatch = useDispatch();
+
+  async function storeAPIGTM(gtmToken) {
+    await axios.post(props.gtm_url + 'pmtcommondata/GetStoreListByCondition',
+      {
+        StoreName: state.search,
+        StoreID: '',
+        StoreCode: '',
+      },
+      {
+        headers: {
+          Authorization: gtmToken,
+          'Content-Type': 'text/plain',
+        },
+      }
+    )
+    .then((res) => {
+      setData(res.data.data);
+    })
+    .catch((e) => {
+      console.log(e.response)
+    });
+  }
+
+  const fetchDataStoreGTM = async () => {
+    await axios.post(props.gtm_token_url, {
+      client_id: client_id,
+      client_secret: client_secret,
+      grant_type: grant_type,
+    }).then((res) => {
+      const token = res.data.access_token
+      storeAPIGTM(token)
+    }).catch((err) => {
+      console.log(err.response)
+    })
+  }
 
   useEffect(() => {
-    async function fetchData() {
-      await axios.post(props.gtm_url + 'pmtcommondata/GetStoreListByCondition',
-        {
-          StoreName: state.search,
-          StoreID: '',
-          StoreCode: '',
-        },
-        {
-          headers: {
-            Authorization: props.token,
-            'Content-Type': 'text/plain',
-          },
-        }
-      )
-      .then((res) => {
-        setData(res.data.data);
-      })
-      .catch((e) => {
-        dispatch(getToken());
-
-        // if (e.response) {
-        //   console.log(e.response);
-        // } else if (e.request) {
-        //   console.log('request : ' + e.request);
-        // } else {
-        //   console.log('message : ' + e.message);
-        // }
-      });
-    }
-    fetchData();
+    fetchDataStoreGTM();
   }, [props.token, state.search]);
 
   useEffect(() => {
@@ -139,7 +143,7 @@ function StoreList(props) {
 const mapStateToProps = (state) => {
   return {
     gtm_url: state.GTM_URL,
-    token: state.GTM_TOKEN,
+    gtm_token_url: state.GTM_TOKEN_URL,
     user_permission: state.USER_PERMISSION
   };
 };
