@@ -1,7 +1,7 @@
 const BASE_URL = 'https://ewarranty.aquajapanid.com:9003/api/'
 const URL = 'https://testimages.aquajapanid.com:8180/'
-const GTM_URL = 'https://openplat-sg-aws.haier.net/api/'
-const GTM_TOKEN_URL = 'https://openplat-sg-aws.haier.net/GTM3HSI/gateway/auth/oauth2/token'
+const GTM_URL = 'https://openplat-sg-aws-test.haier.net/api/'
+const GTM_TOKEN_URL = 'https://openplat-sg-aws-test.haier.net/GTM3HSI/gateway/auth/oauth2/token'
 const GSIS_URL = 'https://ewarranty.aquajapanid.com:9003/oapi/gsis/'
 const FRONTEND_URL = 'https://testewarranty.aquajapanid.com:8180/'
 

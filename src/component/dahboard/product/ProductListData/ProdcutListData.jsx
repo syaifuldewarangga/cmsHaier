@@ -17,8 +17,8 @@ function ProductListData(props) {
         <td>{props.data.Brand}</td>
         <td>{props.data.ProductName}</td>
         <td>{props.data.ProductModel}</td>
-        <td>{props.data.SerialNumber}</td>
-        <td>{props.data.CreatedDate}</td>
+        <td>{props.data.Barcode}</td>
+        <td>{props.data.DataOfPurchase}</td>
       </tr>
     </tbody>
   );

@@ -9,11 +9,11 @@ function ProductList(props) {
   const [search, setSearch] = React.useState('');
 
   async function productAPIGTM(gtmToken) {
-    await axios.post(props.gtm_url + 'pmtcommondata/GetProductListByCondition',
+    await axios.post(props.gtm_url + 'pmtcommondata/GetProfileUserByCondition',
       {
         Barcode: search,
         ProductID: '',
-        ProductName: '',
+        PhoneNumber: '',
       },
       {
         headers: {
