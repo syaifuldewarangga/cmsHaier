@@ -75,7 +75,7 @@ function FormEditStore(props) {
       open_hour: data.open_hour,
       close_hour: '00:00',
     });
-    console.log(body);
+    
     await axios
       .post(props.base_url + 'store', body, {
         headers: {
@@ -84,7 +84,6 @@ function FormEditStore(props) {
         },
       })
       .then((res) => {
-        console.log(res.data);
         // alert('Succes!');
         hideModal();
       })
