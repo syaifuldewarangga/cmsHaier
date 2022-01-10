@@ -145,7 +145,7 @@ function BannerList(props) {
               />
             </div>
             {
-              permissionCek(props.user_permission, 'CREATE_BANNER') &&
+              permissionCek(props.user_permission, 'POST_BANNER') &&
               <div className="col-lg-6 d-flex justify-content-lg-end mb-3">
                 <Link to="/banner/add">
                   <button className="btn d-flex justify-content-center btn-add">
