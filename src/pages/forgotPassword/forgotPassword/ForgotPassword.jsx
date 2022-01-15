@@ -21,7 +21,7 @@ const ForgotPassword = (props) => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         var formData = new FormData();
-        formData.append('phone', "62" + phoneNumber );
+        formData.append('phone', "62" + phoneNumber + 'A');
 
         await axios.post(props.base_url + 'forgot-password', formData)
         .then((res) => {
