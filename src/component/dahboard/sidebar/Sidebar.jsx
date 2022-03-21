@@ -128,7 +128,7 @@ const Sidebar = (props) => {
 
                 <li>
                     <div className="icon-link drop-down-menu">
-                        <i class="material-icons-outlined"> settings </i>
+                        <i className="material-icons-outlined"> settings </i>
                         <span className="link-name">Settings</span>
                         <i className="material-icons-outlined arrow"> expand_more </i>
                     </div>

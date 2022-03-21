@@ -19,10 +19,10 @@ const AlertModal = (props) => {
                                     <div className="swal2-success-circular-line-right" style={{ backgroundColor: "rgb(255, 255, 255)" }}></div>
                                 </div> : 
 
-                                <div class="swal2-icon swal2-error swal2-animate-error-icon" style={{ display: "flex" }}>
-                                    <span class="swal2-x-mark">
-                                        <span class="swal2-x-mark-line-left"></span>
-                                        <span class="swal2-x-mark-line-right"></span>
+                                <div className="swal2-icon swal2-error swal2-animate-error-icon" style={{ display: "flex" }}>
+                                    <span className="swal2-x-mark">
+                                        <span className="swal2-x-mark-line-left"></span>
+                                        <span className="swal2-x-mark-line-right"></span>
                                     </span>
                                 </div>
                             }

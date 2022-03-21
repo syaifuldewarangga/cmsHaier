@@ -11,7 +11,7 @@ class DashboardNavbar extends Component {
     }
 
     CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
-        <Link href="#" ref={ref} onClick={(e) => { e.preventDefault(); onClick(e); }} >
+        <Link to="#" ref={ref} onClick={(e) => { e.preventDefault(); onClick(e); }} >
             {children}
         </Link>
     ));
@@ -28,19 +28,19 @@ class DashboardNavbar extends Component {
                 <nav className="navbar fixed-top navbar-light bg-white">
                     <div className="container-fluid">
                         <div className="d-flex align-items-center">    
-                            <span class="material-icons-outlined menu"> menu </span>
+                            <span className="material-icons-outlined menu"> menu </span>
                             <img src={`${image_url}logo.png`} alt="logo aqua japan" width="75px"/>
                         </div>
                         <Dropdown>
                             <Dropdown.Toggle as={this.CustomToggle} id="dropdown-custom-components">
-                                    <span class="profile-name me-2">{localStorage.getItem('fullname')}</span>
+                                    <span className="profile-name me-2">{localStorage.getItem('fullname')}</span>
                                     <img 
                                         src={this.props.user.photo !== '' ? this.props.image_url +""+ this.props.user.photo : '/assets/images/user.png'}
                                         alt="profile" 
                                         width="25px"
                                         className="rounded-circle"
                                     />
-                                    <i class='bx bx-chevron-down' ></i>
+                                    <i className='bx bx-chevron-down' ></i>
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
                                 <Dropdown.Item>
@@ -51,16 +51,16 @@ class DashboardNavbar extends Component {
                                             width="25px"
                                             className="rounded-circle"
                                         />
-                                        <span class="profile-name ms-2">{localStorage.getItem('fullname')}</span>
+                                        <span className="profile-name ms-2">{localStorage.getItem('fullname')}</span>
                                     </Link>
                                 </Dropdown.Item>
 
-                                <hr class="dropdown-divider" />
+                                <hr className="dropdown-divider" />
 
                                     <Dropdown.Item>
                                         <Link to="/change-password-admin">
-                                            <i class='bx bx-lock'></i>
-                                            <span class="text">Change Password</span>
+                                            <i className='bx bx-lock'></i>
+                                            <span className="text">Change Password</span>
                                         </Link>
                                     </Dropdown.Item>
                                 
@@ -68,8 +68,8 @@ class DashboardNavbar extends Component {
                                 <Dropdown.Item 
                                     onClick={this.handleLogout}
                                 >
-                                    <i class='bx bx-log-out'></i>
-                                    <span class="text" > Logout </span>
+                                    <i className='bx bx-log-out'></i>
+                                    <span className="text" > Logout </span>
                                 </Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>

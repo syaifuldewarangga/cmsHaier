@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ProductListData from './ProductListData/ProdcutListData';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { client_id, client_secret, grant_type } from '../../../variable/GlobalVariable';
+import { ModelCheck } from '../../../variable/ModelCheck';
 
 function ProductList(props) {
-  const [data, setData] = React.useState([]);
-  const [search, setSearch] = React.useState('');
+  const [data, setData] = useState([]);
+  const [search, setSearch] = useState('');
+  const [isLoading, setIsLoading] = useState(false) 
 
-  async function productAPIGTM(gtmToken) {
+  const productAPIGTM = async (gtmToken) => {
     await axios.post(props.gtm_url + 'pmtcommondata/GetProfileUserByCondition',
       {
         Barcode: search,
@@ -23,11 +25,44 @@ function ProductList(props) {
       }
     )
     .then((res) => {
-      setData(res.data.data);
+      let count = res.data.data.length
+      if(count > 0) {
+        setData(res.data.data);
+      } else {
+        fetchDataProductWMS()
+      }
     })
     .catch((e) => {
       console.log(e.response)
+    }).finally(() => {
+      setIsLoading(false)
     });
+  }
+
+  const fetchDataProductWMS = async () => {
+    await axios.get(props.oapi_url + 'wms-order-out', {
+      params: {
+        barcode: search
+      }
+    }).then((res) => {
+      let dataWMS = res.data
+      console.log(dataWMS)
+      let count = Object.keys(dataWMS).length
+      let modelData = ModelCheck(dataWMS.PRODUCT_DESC_ZH.substring(0,4))
+      if(count > 0) {
+        setData([{
+          Barcode: dataWMS.BARCODE,
+          ProductName: dataWMS.PRODUCT_DESC_ZH,
+          ProductID: dataWMS.PRODUCT_CODE,
+          Brand: modelData.brand,
+          DataOfPurchase: dataWMS.CREATED_DATE
+        }])
+      } else {
+        setData([])
+      }
+    }).catch((err) => {
+      setData([])
+    })
   }
 
   const fetchDataProductGTM = async () => {
@@ -46,6 +81,7 @@ function ProductList(props) {
   React.useEffect(() => {
     const timeOutId = setTimeout(() => {
       if(search !== '') {
+        setIsLoading(true)
         fetchDataProductGTM()
       } else {
         setSearch('')
@@ -68,7 +104,7 @@ function ProductList(props) {
           <div className="row">
             <div className="d-flex col-lg-6 col-12 mb-3">
               <input
-                class="form-control me-2"
+                className="form-control me-2"
                 type="search"
                 placeholder="Search"
                 aria-label="Search"
@@ -82,23 +118,40 @@ function ProductList(props) {
 
         <div>
           <div className="card">
-            <div className="table-responsive">
-              <table className="dashboard table">
-                <thead>
-                  <tr>
-                    <th>Photo</th>
-                    <th>Barcode</th>
-                    <th>Product ID</th>
-                    <th>Brand</th>
-                    <th>Product Name</th>
-                    <th>Product Model</th>
-                    <th>Serial Number</th>
-                    <th>Created Date</th>
-                  </tr>
-                </thead>
-                <List />
-              </table>
-            </div>
+            {
+              isLoading ? 
+              <div className="text-center mt-3">
+                <div className="spinner-border text-primary" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              </div> 
+              :
+              search === '' ?
+              <div className="text-center mt-3">
+                <p>Masukkan Barcode Untuk Mencari Produk</p>
+              </div> 
+              : data.length !== 0 ?
+              <div className="table-responsive">
+                <table className="dashboard table">
+                  <thead>
+                    <tr>
+                      <th>Photo</th>
+                      <th>Barcode</th>
+                      <th>Product ID</th>
+                      <th>Brand</th>
+                      <th>Product Model</th>
+                      <th>Serial Number</th>
+                      <th>Created Date</th>
+                    </tr>
+                  </thead>
+                  <List />
+                </table>
+              </div> 
+              :
+              <div className="text-center mt-3">
+                <p>Product Tidak Ditemukan</p>
+              </div> 
+            }
           </div>
         </div>
       </div>
@@ -109,7 +162,8 @@ function ProductList(props) {
 const mapStateToProps = (state) => {
   return {
     gtm_url: state.GTM_URL,
-    gtm_token_url: state.GTM_TOKEN_URL
+    gtm_token_url: state.GTM_TOKEN_URL,
+    oapi_url: state.OAPI_URL
   };
 };
 

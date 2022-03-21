@@ -44,9 +44,9 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
     <Fragment>
         <DashboardNavbar />
         <Sidebar />
-        <section class="home-section">
-            <div class="main-content">
-                <div class="container-fluid">
+        <section className="home-section">
+            <div className="main-content">
+                <div className="container-fluid">
                     <div className="mx-3">
                         <Route
                             {...rest}
