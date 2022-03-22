@@ -4,7 +4,6 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import { client_id, client_secret, grant_type } from '../../../variable/GlobalVariable';
 import { ModelCheck } from '../../../variable/ModelCheck';
-import NumberFormat from 'react-number-format';
 import { DateFormat, TimeFormat } from '../../../variable/DateFormat';
 import { numberWithDot } from '../../../variable/NumberFormat';
 
