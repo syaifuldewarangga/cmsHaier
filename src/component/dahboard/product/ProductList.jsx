@@ -1,14 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ProductListData from './ProductListData/ProdcutListData';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { client_id, client_secret, grant_type } from '../../../variable/GlobalVariable';
 import { ModelCheck } from '../../../variable/ModelCheck';
+import NumberFormat from 'react-number-format';
+import { DateFormat, TimeFormat } from '../../../variable/DateFormat';
+import { numberWithDot } from '../../../variable/NumberFormat';
 
 function ProductList(props) {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState('');
+  const [totalProductData, setTotalProductData] = useState('')
   const [isLoading, setIsLoading] = useState(false) 
+
+  var token = localStorage.getItem('access_token');
 
   const productAPIGTM = async (gtmToken) => {
     await axios.post(props.gtm_url + 'pmtcommondata/GetProfileUserByCondition',
@@ -78,7 +84,23 @@ function ProductList(props) {
     })
   }
 
-  React.useEffect(() => {
+  const totalProduct = async() => {
+    await axios.get(props.base_url + 'wms-cron', {
+      headers: {
+        Authorization: 'Bearer ' + token,
+      }
+    }).then((res) => {
+      let dataTotal = res.data
+      const newDate = DateFormat(res.data.lastCheck, 'day') + ' ' + TimeFormat(res.data.lastCheck)
+      const newTotal = numberWithDot(dataTotal.total) 
+      setTotalProductData({
+        lastCheck: newDate,
+        total: newTotal
+      })
+    })
+  }
+
+  useEffect(() => {
     const timeOutId = setTimeout(() => {
       if(search !== '') {
         setIsLoading(true)
@@ -89,6 +111,10 @@ function ProductList(props) {
     },300);
     return () => clearTimeout(timeOutId);
   }, [search]);
+
+  useEffect(() => {
+    totalProduct()
+  }, []);
 
   const List = () => {
     return data.map((item, i) => {
@@ -101,8 +127,8 @@ function ProductList(props) {
       <h5 className="dashboard title">Product</h5>
       <div className="mt-5">
         <div>
-          <div className="row">
-            <div className="d-flex col-lg-6 col-12 mb-3">
+          <div className="d-flex">
+            <div className="col-lg-6 col-12 mb-3">
               <input
                 className="form-control me-2"
                 type="search"
@@ -112,6 +138,26 @@ function ProductList(props) {
                   setSearch(e.target.value)
                 }
               />
+            </div>
+            <div className="col-lg-6 col-12 mb-3">
+              <div className="d-flex justify-content-end">
+                <div className="text-secondary fw-bold">
+                  <table>
+                    <tr>
+                      <td>Last Update</td>
+                      <td className="px-3">:</td>
+                      <td>
+                      {totalProductData.lastCheck}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Total Product</td>
+                      <td className="px-3">:</td>
+                      <td>{totalProductData.total}</td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -161,6 +207,7 @@ function ProductList(props) {
 
 const mapStateToProps = (state) => {
   return {
+    base_url: state.BASE_URL,
     gtm_url: state.GTM_URL,
     gtm_token_url: state.GTM_TOKEN_URL,
     oapi_url: state.OAPI_URL
