@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './AdminLogin.css';
 import axios from 'axios';
@@ -8,11 +8,12 @@ import { image_url } from '../../variable/GlobalVariable';
 
 const AdminLogin = (props) => {
   const history = useHistory();
-  const [data, setData] = React.useState({
+  const [data, setData] = useState({
     email: '',
     password: '',
     salah: false,
   });
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     if (props.admin_login) {
@@ -79,7 +80,9 @@ const AdminLogin = (props) => {
       });
   };
 
-  const fetchAPI = async () => {
+  const fetchAPI = async (e) => {
+    e.preventDefault()
+    setIsLoading(true)
     const formData = new FormData();
     formData.append('email', data.email + 'A');
     formData.append('password', data.password);
@@ -105,8 +108,11 @@ const AdminLogin = (props) => {
         } else {
           console.log('message : ' + e.message);
         }
+      }).finally(() => {
+        setIsLoading(false)
       });
   };
+
   return (
     <div className="container">
       <div className="admin-login col-lg-3 mx-auto">
@@ -130,36 +136,45 @@ const AdminLogin = (props) => {
                   Login Gagal! Periksa kembali Email & Password.
                 </p>
               )}
-              <div>
-                <div class="mb-3 mt-2">
-                  <input
-                    type="email"
-                    class="form-control"
-                    placeholder="Email"
-                    onChange={onChangeData}
-                  />
+              <form onSubmit={fetchAPI}>
+                <div>
+                  <div class="mb-3 mt-2">
+                    <input
+                      type="email"
+                      class="form-control"
+                      placeholder="Email"
+                      onChange={onChangeData}
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <input
+                      type="password"
+                      class="form-control"
+                      placeholder="Password"
+                      onChange={onChangeData}
+                    />
+                  </div>
                 </div>
-                <div class="mb-3">
-                  <input
-                    type="password"
-                    class="form-control"
-                    placeholder="Password"
-                    onChange={onChangeData}
-                  />
+                <div className="forgot-password">
+                  <Link to="/forgot-password">Forgot password ?</Link>
                 </div>
-              </div>
-              <div className="forgot-password">
-                <Link to="/forgot-password">Forgot password ?</Link>
-              </div>
-              <div class="d-grid gap-2 mb-3 mt-4">
-                <button
-                  class="btn btn-color-primary"
-                  type="button"
-                  onClick={fetchAPI}
-                >
-                  SIGN IN
-                </button>
-              </div>
+                <div class="d-grid gap-2 mb-3 mt-4">
+                  <button
+                    class="btn btn-color-primary"
+                    type="submit"
+                    disabled={isLoading && 'disabled'}
+                  >
+                    {
+                      isLoading ?
+                      <Fragment>
+                          <span class="spinner-border spinner-border-sm me-1  " role="status" aria-hidden="true"></span>
+                          Loading...
+                      </Fragment> :
+                          'SIGN IN'
+                    }
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
