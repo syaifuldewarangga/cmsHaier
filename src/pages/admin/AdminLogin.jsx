@@ -15,7 +15,6 @@ const AdminLogin = (props) => {
   });
 
   useEffect(() => {
-    console.log(props.customer_login);
     if (props.admin_login) {
       props.history.push('/dashboard');
     }
@@ -35,11 +34,12 @@ const AdminLogin = (props) => {
           Authorization: 'Bearer ' + token,
         },
         params: {
-          identifier: email,
+          identifier: email + 'A',
         },
       })
       .then((res) => {
         if (res.data.roles !== 'CUSTOMER') {
+          console.log(res.data.roles)
           localStorage.setItem('id', res.data.id);
           localStorage.setItem('role', res.data.roles);
           localStorage.setItem( 'fullname', res.data.first_name + ' ' + res.data.last_name );

@@ -17,7 +17,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
                     Authorization: 'Bearer ' + token
                 },
                 params: {
-                    identifier: email
+                    identifier: email + 'A'
                 }
             }).then((res) => {
                 rest.changeAdminLogin(true)
