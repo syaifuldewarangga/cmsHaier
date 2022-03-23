@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
@@ -52,6 +52,7 @@ function FormUser(props) {
   const [dataFetchSubDistrict, setDataFetchSubDistrict] = useState([]);
   const [dataFetchRole, setDataFetchRole] = useState([]);
   const [filePreview, setFilePreview] = useState('');
+  const [isLoading, setIsLoading] = useState(false)
   var token = localStorage.getItem('access_token');
 
   async function fetchDataProvince() {
@@ -312,105 +313,118 @@ function FormUser(props) {
   };
 
   const fetchAPI = () => {
-    let formData = new FormData();
-    formData.append('username', data.username);
-    formData.append('nik', data.nik);
-    formData.append('first_name', data.first_name);
-    formData.append('last_name', data.last_name);
-    formData.append('phone', data.phone);
-    formData.append('email', data.email);
-    formData.append('password', data.password);
-    formData.append('status', data.status);
-    formData.append('gender', data.gender);
-    formData.append('birth_date', data.birth_date);
-    formData.append('province', data.province);
-    formData.append('city', data.city);
-    formData.append('district', data.district);
-    formData.append('sub_district', data.sub_district);
-    formData.append('postal_code', data.postal_code);
-    formData.append('address', data.address);
-    formData.append('age', data.age);
-    formData.append('phone_office', data.phone_office);
-    formData.append('fax', data.fax);
-
-    var token = localStorage.getItem('access_token');
-  if (props.title === 'Edit User') {
-      formData.append('roles', data.role);
-      axios
-        .put(props.base_url + 'user', formData, {
-          headers: {
-            Authorization: 'Bearer ' + token,
-            'Content-Type': 'application/json',
-          },
-        })
-        .then((res) => {
-          localStorage.setItem( 'fullname', data.first_name + ' ' + data.last_name );
-          if (data.photo !== '' && data.photo !== props.data.image) {
-            const formDataPhoto = new FormData();
-            formDataPhoto.append('file', data.photo);
-            formDataPhoto.append('userId', localStorage.getItem('id'));
-            axios
-              .post(props.base_url + 'user/image', formDataPhoto, {
-                headers: {
-                  Authorization: 'Bearer ' + token,
-                },
-              })
-              .then((res) => {
-                alert('berhasil');
-                history.push('/users');
-              })
-              .catch((e) => {
-                // let responError = e.response.data.errors;
-                console.log(e.response);
-              });
-          } else {
-            alert('berhasil');
-            history.push('/users');
-          }
-        })
-        .catch((e) => {
-          let responError = e.response.data.errors;
-          appendErrorData(responError);
-        });
+    setIsLoading(true)
+    if(data.phone.toString().slice(0, 2) !== '62' && data.phone !== '') {
+      setErrorData({
+        ...errorData,
+        phone: 'check your phone number, use 62 for phone number code',
+      });
+      setIsLoading(false)
     } else {
-      formData.append('role', data.role);
-      axios
-        .post(props.base_url + 'user/save', formData, {
-          headers: {
-            Authorization: 'Bearer ' + token,
-            'Content-Type': 'application/json',
-          },
-        })
-        .then((res) => {
-          if (data.photo !== '') {
-            const formDataPhoto = new FormData();
-            formDataPhoto.append('file', data.photo);
-            formDataPhoto.append('userId', res.data.id);
-            axios
-              .post(props.base_url + 'user/image', formDataPhoto, {
-                headers: {
-                  Authorization: 'Bearer ' + token,
-                  'Content-Type': 'application/json',
-                },
-              })
-              .then((res) => {
-                alert('berhasil');
-                history.push('/users');
-              })
-              .catch((e) => {
-                let responError = e.response.data.errors;
-                appendErrorData(responError);
-              });
-          } else {
-            alert('berhasil');
-            history.push('/users');
-          }
-        })
-        .catch((e) => {
-          let responError = e.response.data.errors;
-          console.log(responError)
-          appendErrorData(responError);
-        });
+      let formData = new FormData();
+      formData.append('username', data.username);
+      formData.append('nik', data.nik);
+      formData.append('first_name', data.first_name);
+      formData.append('last_name', data.last_name);
+      formData.append('phone', data.phone);
+      formData.append('email', data.email);
+      formData.append('password', data.password);
+      formData.append('status', data.status);
+      formData.append('gender', data.gender);
+      formData.append('birth_date', data.birth_date);
+      formData.append('province', data.province);
+      formData.append('city', data.city);
+      formData.append('district', data.district);
+      formData.append('sub_district', data.sub_district);
+      formData.append('postal_code', data.postal_code);
+      formData.append('address', data.address);
+      formData.append('age', data.age);
+      formData.append('phone_office', data.phone_office);
+      formData.append('fax', data.fax);
+  
+      var token = localStorage.getItem('access_token');
+      if (props.title === 'Edit User') {
+        formData.append('roles', data.role);
+        axios
+          .put(props.base_url + 'user', formData, {
+            headers: {
+              Authorization: 'Bearer ' + token,
+              'Content-Type': 'application/json',
+            },
+          })
+          .then((res) => {
+            localStorage.setItem( 'fullname', data.first_name + ' ' + data.last_name );
+            if (data.photo !== '' && data.photo !== props.data.image) {
+              const formDataPhoto = new FormData();
+              formDataPhoto.append('file', data.photo);
+              formDataPhoto.append('userId', localStorage.getItem('id'));
+              axios
+                .post(props.base_url + 'user/image', formDataPhoto, {
+                  headers: {
+                    Authorization: 'Bearer ' + token,
+                  },
+                })
+                .then((res) => {
+                  alert('berhasil');
+                  history.push('/users');
+                })
+                .catch((e) => {
+                  // let responError = e.response.data.errors;
+                  // console.log(e.response);
+                });
+            } else {
+              alert('berhasil');
+              history.push('/users');
+            }
+          })
+          .catch((e) => {
+            let responError = e.response.data.errors;
+            appendErrorData(responError);
+          }).finally(() => {
+            setIsLoading(false)
+          });
+      } else {
+        formData.append('role', data.role);
+        axios
+          .post(props.base_url + 'user/save', formData, {
+            headers: {
+              Authorization: 'Bearer ' + token,
+              'Content-Type': 'application/json',
+            },
+          })
+          .then((res) => {
+            if (data.photo !== '') {
+              const formDataPhoto = new FormData();
+              formDataPhoto.append('file', data.photo);
+              formDataPhoto.append('userId', res.data.id);
+              axios
+                .post(props.base_url + 'user/image', formDataPhoto, {
+                  headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json',
+                  },
+                })
+                .then((res) => {
+                  alert('berhasil');
+                  history.push('/users');
+                })
+                .catch((e) => {
+                  let responError = e.response.data.errors;
+                  appendErrorData(responError);
+                });
+            } else {
+              alert('berhasil');
+              history.push('/users');
+            }
+          })
+          .catch((e) => {
+            let responError = e.response.data.errors;
+            // console.log(responError)
+            appendErrorData(responError);
+          }).finally(() => {
+            setIsLoading(false)
+          });
+      }
     }
   };
   return (
@@ -562,6 +576,7 @@ function FormUser(props) {
                     value={data.email}
                     required
                   />
+                  <div className="invalid-feedback">{errorData.email}</div>
                 </div>
               </div>
               <div className="col-lg-6">
@@ -800,8 +815,20 @@ function FormUser(props) {
                 </Link>
               </div>
               <div className="d-grid gap-2 col-6">
-                <button className="btn btn-import" type="button" onClick={fetchAPI}>
-                  {props.title === 'Edit User' ? 'Save' : 'Create'}
+                <button 
+                  className="btn btn-import" 
+                  type="button" 
+                  disabled={isLoading && 'disabled'}
+                  onClick={fetchAPI}
+                >
+                  {
+                    isLoading ?
+                    <Fragment>
+                        <span class="spinner-border spinner-border-sm me-1  " role="status" aria-hidden="true"></span>
+                        Loading...
+                    </Fragment> :
+                    props.title === 'Edit User' ? 'Save' : 'Create'
+                  }
                 </button>
               </div>
             </div>
