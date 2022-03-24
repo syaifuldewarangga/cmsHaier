@@ -51,16 +51,16 @@ function ProductList(props) {
       }
     }).then((res) => {
       let dataWMS = res.data
-      console.log(dataWMS)
       let count = Object.keys(dataWMS).length
-      let modelData = ModelCheck(dataWMS.PRODUCT_DESC_ZH.substring(0,4))
       if(count > 0) {
+        let modelData = ModelCheck(dataWMS.PRODUCT_DESC_ZH.substring(0,4))
         setData([{
           Barcode: dataWMS.BARCODE,
           ProductName: dataWMS.PRODUCT_DESC_ZH,
           ProductID: dataWMS.PRODUCT_CODE,
           Brand: modelData.brand,
-          DataOfPurchase: dataWMS.CREATED_DATE
+          DataOfPurchase: dataWMS.CREATED_DATE,
+          Category: modelData.category
         }])
       } else {
         setData([])
