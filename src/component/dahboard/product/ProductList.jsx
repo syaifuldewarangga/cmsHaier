@@ -6,6 +6,7 @@ import { client_id, client_secret, grant_type } from '../../../variable/GlobalVa
 import { ModelCheck } from '../../../variable/ModelCheck';
 import { DateFormat, TimeFormat } from '../../../variable/DateFormat';
 import { numberWithDot } from '../../../variable/NumberFormat';
+import MultipleSearch from './MultipleSearch';
 
 function ProductList(props) {
   const [data, setData] = useState([]);
@@ -142,18 +143,20 @@ function ProductList(props) {
               <div className="d-flex justify-content-end">
                 <div className="text-secondary fw-bold">
                   <table>
-                    <tr>
-                      <td>Last Update</td>
-                      <td className="px-3">:</td>
-                      <td>
-                      {totalProductData.lastCheck}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Total Product</td>
-                      <td className="px-3">:</td>
-                      <td>{totalProductData.total}</td>
-                    </tr>
+                    <tbody>  
+                      <tr>
+                        <td>Last Update</td>
+                        <td className="px-3">:</td>
+                        <td>
+                        {totalProductData.lastCheck}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Total Product</td>
+                        <td className="px-3">:</td>
+                        <td>{totalProductData.total}</td>
+                      </tr>
+                    </tbody>
                   </table>
                 </div>
               </div>
@@ -200,6 +203,8 @@ function ProductList(props) {
           </div>
         </div>
       </div>
+
+      <MultipleSearch />
     </div>
   );
 }
