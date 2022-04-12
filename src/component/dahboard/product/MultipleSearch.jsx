@@ -37,7 +37,7 @@ function MultipleSearch(props) {
         <Fragment>
             <div className='mt-5'>
                 <div>
-                    <h6>Multiple Search Using CSV File</h6>
+                    <h6>Multiple Search Using CSV OR XLSX File</h6>
                 </div>
                 {
                     data.length === 0 ? 
@@ -97,7 +97,8 @@ function MultipleSearch(props) {
             <table className="d-none" id="table-multiple-product">
                 <thead>
                     <tr>
-                        <th>Barcode</th>
+                        <th>SR NUM</th>
+                        <th>SERIAL</th>
                         <th>Model</th>
                     </tr>
                 </thead>
@@ -106,6 +107,7 @@ function MultipleSearch(props) {
                         data.map((product, index) => {
                             return (
                                 <tr key={index}>
+                                    <td>{product.sr_NUM}</td>
                                     <td>{product.barcode}</td>
                                     <td>{product.product_DESC_ZH}</td>
                                 </tr>
