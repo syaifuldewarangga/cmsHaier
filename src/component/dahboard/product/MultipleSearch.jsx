@@ -40,7 +40,7 @@ function MultipleSearch(props) {
                     <h6>Multiple Search Using CSV OR XLSX File</h6>
                 </div>
                 {
-                    data.length === 0 ? 
+                    data.length === 0 && isLoading === false ? 
                     <div className="btn-upload-custom">
                         <div className="dropzone-wrapper">
                             <div className="dropzone-desc">
