@@ -170,12 +170,12 @@ function Report(props) {
                     <td>{ item.first_name }</td>
                     <td>{ item.last_name }</td>
                     <td>{ item.username }</td>
-                    <td>{ item.phone }</td>
-                    <td>{ item.nik }</td>
+                    <td>'{ item.phone }</td>
+                    <td>'{ item.nik }</td>
                     <td>{ item.email }</td>
                     <td>{ item.gender }</td>
                     <td>{ item.birth_date }</td>
-                    <td>{ item.province }</td>
+                    <td>'{ item.province }</td>
                     <td>{ item.city }</td>
                     <td>{ item.district }</td>
                     <td>{ item.sub_district }</td>
@@ -191,8 +191,8 @@ function Report(props) {
                         <td>{ item.first_name }</td>
                         <td>{ item.last_name }</td>
                         <td>{ item.username }</td>
-                        <td>{ item.phone }</td>
-                        <td>{ item.nik }</td>
+                        <td>'{ item.phone }</td>
+                        <td>'{ item.nik }</td>
                         <td>{ item.email }</td>
                         <td>{ item.gender }</td>
                         <td>{ item.birth_date }</td>
@@ -203,7 +203,7 @@ function Report(props) {
                         <td>{ item.postal_code }</td>
                         <td>{ item.address }</td>
                         <td>{ item.age }</td>
-                        <td>{ item.phone_office }</td>
+                        <td>'{ item.phone_office }</td>
                         <td>{ item.fax }</td>
 
                         <td>{product.barcode}</td>
