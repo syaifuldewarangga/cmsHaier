@@ -56,8 +56,7 @@ function FormUser(props) {
   var token = localStorage.getItem('access_token');
 
   async function fetchDataProvince() {
-    const request = await axios
-      .get(props.base_url + 'location', {
+    await axios.get(props.base_url + 'location', {
         headers: {
           Authorization: 'Bearer ' + token,
         },
@@ -65,12 +64,10 @@ function FormUser(props) {
       .then((res) => {
         setDataFetchProvince(res.data);
       });
-    return request;
   }
 
   async function fetchDataCity(province) {
-    const request = await axios
-      .get(props.base_url + 'location/city', {
+    await axios.get(props.base_url + 'location/city', {
         headers: {
           Authorization: 'Bearer ' + token,
         },
@@ -81,7 +78,6 @@ function FormUser(props) {
       .then((res) => {
         setDataFetchCity(res.data);
       });
-    return request;
   }
 
   const fetchDataDistrict = async (province, city) => {
@@ -110,8 +106,7 @@ function FormUser(props) {
   }
 
   async function fetchDataRole() {
-    const request = await axios
-      .get(props.base_url + 'role', {
+    await axios.get(props.base_url + 'role', {
         headers: {
           Authorization: 'Bearer ' + token,
         },
@@ -119,7 +114,6 @@ function FormUser(props) {
       .then((res) => {
         setDataFetchRole(res.data);
       });
-    return request;
   }
 
   useEffect(() => {
@@ -353,7 +347,7 @@ function FormUser(props) {
             },
           })
           .then((res) => {
-            localStorage.setItem( 'fullname', data.first_name + ' ' + data.last_name );
+            // localStorage.setItem( 'fullname', data.first_name + ' ' + data.last_name );
             if (data.photo !== '' && data.photo !== props.data.image) {
               const formDataPhoto = new FormData();
               formDataPhoto.append('file', data.photo);

@@ -10,8 +10,7 @@ function EditUser(props) {
   React.useEffect(() => {
     var token = localStorage.getItem('access_token');
     async function fetchData() {
-      const request = await axios
-        .get(props.base_url + 'user', {
+      await axios.get(props.base_url + 'user', {
           headers: {
             Authorization: 'Bearer ' + token,
           },
@@ -31,7 +30,6 @@ function EditUser(props) {
             console.log('message : ' + e.message);
           }
         });
-      return request;
     }
     fetchData();
   }, []);
