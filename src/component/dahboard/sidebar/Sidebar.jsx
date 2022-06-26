@@ -8,7 +8,11 @@ import './Sidebar.css'
 const Sidebar = (props) => {
     useEffect(() => {
         SidebarNavigation();
+
     }, [])
+
+    console.log(props.user_permission)
+
     return (
         <div className="dasboard-sidebar sidebar">
             <ul className="nav-links">
@@ -80,6 +84,19 @@ const Sidebar = (props) => {
                         </Link>
                         <ul className="sub-menu blank">
                             <li><Link className="link-name" to="#">Banner</Link></li>
+                        </ul>
+                    </li> : null
+                }
+
+                {
+                    permissionCek(props.user_permission, 'GET_BANNER') ?
+                    <li>
+                        <Link to="/promo">
+                            <i className="material-icons-outlined"> sell </i>
+                            <span className="link-name">Promo</span>
+                        </Link>
+                        <ul className="sub-menu blank">
+                            <li><Link className="link-name" to="/promo">Promo</Link></li>
                         </ul>
                     </li> : null
                 }

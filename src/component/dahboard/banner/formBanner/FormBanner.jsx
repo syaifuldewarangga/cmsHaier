@@ -102,7 +102,7 @@ function FormBanner(props) {
       const formData = new FormData();
       formData.append('file', data.file);
       formData.append('title', data.title);
-      formData.append('link', data.link);
+      formData.append('link', data.link); 
       formData.append('status', data.status);
       console.log(Object.fromEntries(formData))
       await axios.post(props.base_url + 'banner', formData, {
@@ -132,7 +132,7 @@ function FormBanner(props) {
         ...data,
         title: props.data.title,
         file: props.data.image,
-        link: props.data.link,
+        link: props.data.link === 'null' ? '': props.data.link,
         status: props.data.status === true ? '1' : '0',
       });
     }

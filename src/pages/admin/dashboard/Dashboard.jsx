@@ -29,6 +29,9 @@ import Message from '../../../component/dahboard/message/Message';
 import FormPrivacyPolicy from '../../../component/dahboard/PrivacyPolicy/FormPrivacyPolicy';
 import PrivacyPolicy from '../../../component/dahboard/PrivacyPolicy/PrivacyPolicy';
 import ProductList from '../../../component/dahboard/product/ProductList';
+import AddPromo from '../../../component/dahboard/promo/AddPromo';
+import EditPromo from '../../../component/dahboard/promo/EditPromo';
+import PromoList from '../../../component/dahboard/promo/PromoList';
 import Report from '../../../component/dahboard/report/Report';
 import ResetPasswordAdmin from '../../../component/dahboard/resetPasswordAdmin/ResetPasswordAdmin';
 import CreateServiceCenter from '../../../component/dahboard/serviceCenter/createServiceCenter/CreateServiceCenter';
@@ -122,6 +125,12 @@ class Dashboard extends Component {
 
             <AdminRoute exact path="/change-password-admin" component={ResetPasswordAdmin} />
             <AdminRoute exact path="/admin-profile" component={AdminProfile} />
+
+            {/* Promo */}
+            <AdminRoute exact path="/promo" component={PromoList} />
+            <AdminRoute exact path="/promo/add" component={AddPromo} />
+            <AdminRoute exact path="/promo/edit/:id" component={EditPromo} />
+
             
             <Route component={NotFound} />
           </Switch>
