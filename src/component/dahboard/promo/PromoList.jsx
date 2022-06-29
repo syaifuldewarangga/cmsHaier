@@ -8,6 +8,7 @@ import Pagination from '../../pagination/Pagination';
 import ModalDelete from '../../modalDelete/ModalDelete';
 import { Modal } from 'bootstrap';
 import { permissionCek } from '../../../action/permissionCek';
+import FormImportPromo from '../serviceCenter/promoServiceCenter/FormImportPromo';
 
 function PromoList(props) {
   const [dataID, setDataID] = useState('')
@@ -35,6 +36,7 @@ function PromoList(props) {
         }
       })
       .then((res) => {
+        console.log(res.data.content)
         setData(res.data.content);
         setCurrentPage(res.data.number)
         setTotalPage(res.data.totalPages)
@@ -68,11 +70,11 @@ function PromoList(props) {
     return () => clearTimeout(timeOutId);
   }, [state.tempSearch]);
 
-  React.useEffect(() => {
+  React.useEffect(() => { 
     const fetchAPI = async () => {
       var token = localStorage.getItem('access_token');
       const request = await axios
-        .get(props.base_url + 'user/search', {
+        .get(props.base_url + 'extended-warranty-promo/search', {
           headers: {
             Authorization: 'Bearer ' + token,
           },
@@ -83,7 +85,7 @@ function PromoList(props) {
         .then((res) => {
           setState({
             ...state,
-            ['dataSearch']: res.data,
+            ['dataSearch']: res.data.content,
             ['isSearch']: true,
           });
         })
@@ -156,7 +158,7 @@ function PromoList(props) {
       <h5 className="dashboard title">Promo</h5>
       <div className="mt-5">
         <div>
-          <div className="row">
+          <div className="row justify-content">
             <div className="d-flex col-lg-6 col-12 mb-3">
               <input
                 class="form-control me-2"
@@ -168,9 +170,24 @@ function PromoList(props) {
                 }
               />
             </div>
-            <div className="col-lg-6 d-flex justify-content-lg-end mb-3">
+            <div className="col-lg-3 d-flex justify-content-lg-end mb-3">
               {
-                permissionCek(props.user_permission, 'POST_USER') ?
+                permissionCek(props.user_permission, 'POST_WARRANTY_PROMO') ?
+                <>
+                  <button 
+                    className="btn d-flex justify-content-center btn-add"
+                    data-bs-toggle="modal"
+                    data-bs-target="#formImportServiceCenter"
+                  >
+                    <span class="material-icons-outlined me-3"> file_upload </span>
+                    <span className="fw-bold">Import</span>
+                  </button>
+                </> : null
+              }
+            </div>
+            <div className="col-lg-3 d-flex justify-content-lg-end mb-3">
+              {
+                permissionCek(props.user_permission, 'POST_WARRANTY_PROMO') ?
                 <Link to="/promo/add">
                   <button className="btn d-flex justify-content-center btn-add">
                     <span class="material-icons-outlined me-3"> add </span>
@@ -189,17 +206,18 @@ function PromoList(props) {
                 <thead>
                   <tr>
                     {
-                      permissionCek(props.user_permission, 'DELETE USER') === true || permissionCek(props.user_permission, 'UPDATE_USER') === true ?
+                      permissionCek(props.user_permission, 'DELETE_WARRANTY_PROMO') === true || permissionCek(props.user_permission, 'UPDATE_USER') === true ?
                       <th>Action</th> : null
                     }
+                    <th>Title</th>
+                    <th>Product Model</th>
+                    <th>Thumbnail</th>
                     <th>Start Program</th>
                     <th>End Program</th>
                     <th>Start Purchase</th>
                     <th>End Purchase</th>
                     <th>Ex Warranty</th>
-                    <th>Thumbnail</th>
-                    <th>Product Model</th>
-                    <th>Name</th>
+                    <th>Article Link</th>
                   </tr>
                 </thead>
                 {state.isSearch === true
@@ -221,7 +239,9 @@ function PromoList(props) {
             changePage = {handleChangePage}
           />
         </div>
-
+        
+        <FormImportPromo />
+        
         <ModalDelete 
           message="are you sure you want to delete this data?"
           dataID={dataID}

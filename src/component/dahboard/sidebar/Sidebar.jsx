@@ -89,7 +89,7 @@ const Sidebar = (props) => {
                 }
 
                 {
-                    permissionCek(props.user_permission, 'GET_BANNER') ?
+                    permissionCek(props.user_permission, 'GET_WARRANTY_PROMO') ?
                     <li>
                         <Link to="/promo">
                             <i className="material-icons-outlined"> sell </i>

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import dateFormat from 'dateformat';
 import { tableToCSV } from '../../../variable/TableToCSV';
+import moment from 'moment'
 
 function Report(props) {
   const [selectReport, setSelectReport] = React.useState('');
@@ -12,6 +13,7 @@ function Report(props) {
   });
   const [userProductReport, setUserProductReport] = useState([])
   const [customerVoice, setCustomerVoice] = useState([])
+  const [promoList, setPromoList] = useState([])
 
   var token = localStorage.getItem('access_token');
 
@@ -52,6 +54,17 @@ function Report(props) {
         setCustomerVoice(res.data)
         tableToCSV('table-customer-voice', 'Report Customer Voice')
       })
+    }else if (selectReport === 'promo-list'){
+      console.log('test')
+      await axios.get(props.base_url + 'extended-warranty-promo/export', {
+        headers: {
+          Authorization: 'Bearer ' + token
+        },
+      }).then((res) => {
+        console.log(res.data)
+        setPromoList(res.data)
+        tableToCSV('table-promo-list', 'Report Promo List')
+      })
     }
   };
 
@@ -71,6 +84,7 @@ function Report(props) {
               </option>
               <option value="user">Download Total Product & Total User</option>
               <option value="customer-voice">Download Customer Voice</option>
+              <option value="promo-list">Download Promo List</option>
             </select>
           </div>
           <div className="col-lg-7">
@@ -245,6 +259,52 @@ function Report(props) {
               <td>{item.created_at}</td>
             </tr>
           ))
+        }
+      </table>
+
+      <table className="d-none" id="table-promo-list">
+        <tr>
+          <th>NO</th>
+          <th>Thumbnail</th>
+          <th>Title</th>
+          <th>Product Model</th>
+          <th>Start Program</th>
+          <th>End Program</th>
+          <th>Start Purchase</th>
+          <th>End Purchase</th>
+          <th>Ex Warranty Days</th>
+          <th>Ex Warranty Days Text</th>
+          <th>Notification Text</th>
+          <th>Status</th>
+          <th>Created At</th>
+          
+        </tr>
+        {
+          promoList.map((item, i) => {
+            return (
+              <tr>
+                <td>{ i+1 }</td>
+                <td>
+                  <img
+                    src={props.image_url + item.thumbnail}
+                    alt="blog-title"
+                    style={{ width: '150px' }}
+                  />
+                </td>
+                <td>{ item.name }</td>
+                <td>{ item.product_model }</td>
+                <td>{ moment(item.start_program).format("DD/MM/YYYY")  }</td>
+                <td>{ moment(item.end_program).format("DD/MM/YYYY")  }</td>
+                <td>{ moment(item.start_purchase).format("DD/MM/YYYY")  }</td>
+                <td>{ moment(item.end_purchase).format("DD/MM/YYYY")  }</td>
+                <td>{ item.ex_warranty_days }</td>
+                <td>{ item.ex_warranty_days_text }</td>
+                <td>{ item.notification_text }</td>
+                <td>{ item.is_active ? 'Aktif' : 'Tidak Aktif' }</td>
+                <td>{ moment(item.created_at).format("DD/MM/YYYY")  }</td>
+              </tr>
+            )
+          })
         }
       </table>
     </div>

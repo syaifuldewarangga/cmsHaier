@@ -188,6 +188,40 @@ const FormPromo = (props) => {
                 </div>
               </div>
 
+               {/* Product Model & title */}
+               <div className="col-lg-6">
+                <div className="mb-3">
+                  <label className="form-label">Product Model</label>
+                  <input
+                    type="text"
+                    className={`form-control ${
+                        typeof errorsData?.product_model !== 'undefined' ? 'is-invalid' : null
+                    }`}
+                    aria-label="product_model"
+                    onChange={onChangeData}
+                    value={form.product_model}
+                    required
+                  />
+                  <div className="invalid-feedback">{errorsData.product_model}</div>
+                </div>
+              </div>
+              <div className="col-lg-6">
+                <div className="mb-3">
+                  <label className="form-label">Title</label>
+                  <input
+                    type="text"
+                    className={`form-control ${
+                        typeof errorsData?.name !== 'undefined' ? 'is-invalid' : null
+                    }`}
+                    aria-label="name"
+                    onChange={onChangeData}
+                    value={form.name}
+                    required
+                  />
+                  <div className="invalid-feedback">{errorsData.name}</div>
+                </div>
+              </div>
+
               {/* Start - End Program */}
               <div className="col-lg-6">
                 <div className="mb-3">
@@ -321,40 +355,6 @@ const FormPromo = (props) => {
                     required
                   />
                   <div className="invalid-feedback">{errorsData.link}</div>
-                </div>
-              </div>
-
-              {/* Product Model & Name */}
-              <div className="col-lg-6">
-                <div className="mb-3">
-                  <label className="form-label">Product Model</label>
-                  <input
-                    type="text"
-                    className={`form-control ${
-                        typeof errorsData?.product_model !== 'undefined' ? 'is-invalid' : null
-                    }`}
-                    aria-label="product_model"
-                    onChange={onChangeData}
-                    value={form.product_model}
-                    required
-                  />
-                  <div className="invalid-feedback">{errorsData.product_model}</div>
-                </div>
-              </div>
-              <div className="col-lg-6">
-                <div className="mb-3">
-                  <label className="form-label">Name</label>
-                  <input
-                    type="text"
-                    className={`form-control ${
-                        typeof errorsData?.name !== 'undefined' ? 'is-invalid' : null
-                    }`}
-                    aria-label="name"
-                    onChange={onChangeData}
-                    value={form.name}
-                    required
-                  />
-                  <div className="invalid-feedback">{errorsData.name}</div>
                 </div>
               </div>
 
