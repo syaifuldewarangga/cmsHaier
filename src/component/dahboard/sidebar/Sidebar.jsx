@@ -11,7 +11,6 @@ const Sidebar = (props) => {
 
     }, [])
 
-    console.log(props.user_permission)
 
     return (
         <div className="dasboard-sidebar sidebar">

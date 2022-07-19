@@ -57,7 +57,7 @@ const FormPromo = (props) => {
         formData.append('product_model', form.product_model);
         formData.append('name', form.name);
         formData.append('thumbnail', form.thumbnail);
-        console.log(Object.fromEntries(formData))
+        // console.log(Object.fromEntries(formData))
   
         var token = localStorage.getItem('access_token');
         if(props.title === 'Edit Promo'){
@@ -102,7 +102,10 @@ const FormPromo = (props) => {
                 history.push('/promo');
             })
             .catch((e) => {
-                let responError = e.response.data.errors.location;
+              let responError = '';
+              // console.log(e.response)
+              if(typeof e.response.data.errors !== 'undefined')
+                responError = e.response.data.errors.location;
                 // console.log(responError)
                 setErrorsData(responError)
                 if(typeof responError?.thumbnail !== 'undefined' ){
@@ -118,11 +121,12 @@ const FormPromo = (props) => {
     }
 
     useEffect(() => {
-      console.log(props.data)
+      // console.log(props.data)
         if(typeof props.data !== 'undefined'){
             let data = {
               ...props.data
             }
+            // console.log(data)
             setForm({
                 start_program: moment(data.start_program).format('yyyy-MM-DD'),
                 end_program: moment(data.end_program).format('yyyy-MM-DD'),
@@ -328,32 +332,34 @@ const FormPromo = (props) => {
               <div className="col-lg-6">
                 <div className="mb-3">
                   <label className="form-label">Notification Text</label>
-                  <input
-                    type="text"
+                  <textarea
+                    rows="3"
                     className={`form-control ${
                         typeof errorsData?.notification_text !== 'undefined' ? 'is-invalid' : null
                     }`}
                     aria-label="notification_text"
                     onChange={onChangeData}
-                    value={form.notification_text}
                     required
-                  />
+                    value={form.notification_text}
+                  >
+                    
+                  </textarea>
                   <div className="invalid-feedback">{errorsData.notification_text}</div>
                 </div>
               </div>
               <div className="col-lg-6">
                 <div className="mb-3">
                   <label className="form-label">Link</label>
-                  <input
-                    type="text"
+                  <textarea
+                    rows="3"
                     className={`form-control ${
                         typeof errorsData?.link !== 'undefined' ? 'is-invalid' : null
                     }`}
                     aria-label="link"
                     onChange={onChangeData}
-                    value={form.link}
                     required
-                  />
+                    value={form.link}
+                  ></textarea>
                   <div className="invalid-feedback">{errorsData.link}</div>
                 </div>
               </div>
