@@ -170,12 +170,12 @@ function PromoList(props) {
                 }
               />
             </div>
-            <div className="col-lg-3 d-flex justify-content-lg-end mb-3">
-              {
+            <div className="col-lg-6 d-flex mb-3 justify-content-lg-end">
+            {
                 permissionCek(props.user_permission, 'POST_WARRANTY_PROMO') ?
                 <>
                   <button 
-                    className="btn d-flex justify-content-center btn-add"
+                    className="btn d-flex justify-content-center btn-add me-2"
                     data-bs-toggle="modal"
                     data-bs-target="#formImportServiceCenter"
                   >
@@ -184,8 +184,6 @@ function PromoList(props) {
                   </button>
                 </> : null
               }
-            </div>
-            <div className="col-lg-3 d-flex justify-content-lg-end mb-3">
               {
                 permissionCek(props.user_permission, 'POST_WARRANTY_PROMO') ?
                 <Link to="/promo/add">
@@ -211,7 +209,7 @@ function PromoList(props) {
                     }
                     <th>Title</th>
                     <th>Product Model</th>
-                    <th>Thumbnail</th>
+                    <th>Image</th>
                     <th>Start Program</th>
                     <th>End Program</th>
                     <th>Start Purchase</th>

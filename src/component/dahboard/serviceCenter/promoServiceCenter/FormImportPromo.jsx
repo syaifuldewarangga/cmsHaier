@@ -1,9 +1,11 @@
 import React from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 const FormImportPromo = (props) => {
   var token = localStorage.getItem('access_token');
+  const history = useHistory()
   const [file, setFile] = React.useState();
 
   const uploadExcel = async (event) => {
@@ -19,6 +21,7 @@ const FormImportPromo = (props) => {
       })
       .then((res) => {
         alert('Berhasil');
+        history.push('/promo')
       })
       .catch((e) => {
         if (e.response) {
