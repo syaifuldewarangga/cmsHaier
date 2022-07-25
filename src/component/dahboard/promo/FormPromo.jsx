@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import axios from 'axios'
 import moment from 'moment';
+import { produce } from "immer";
 
 const FormPromo = (props) => {
     const [form, setForm] = useState({
@@ -24,6 +25,7 @@ const FormPromo = (props) => {
     const [errorsData, setErrorsData] = useState({})
     const [filePreview, setFilePreview] = useState('');
     const [isLoading, setIsLoading] = useState(false)
+    const [answers, setAnswers] = useState([''])
 
     const onChangeData = (e) => {
         if(e.target.type === 'file'){
@@ -54,11 +56,13 @@ const FormPromo = (props) => {
         formData.append('ex_warranty_days_text', form.ex_warranty_days_text);
         formData.append('notification_text', form.notification_text);
         formData.append('link', form.link);
-        formData.append('product_model', form.product_model);
         formData.append('name', form.name);
         formData.append('thumbnail', form.thumbnail);
-        // console.log(Object.fromEntries(formData))
-  
+        // console.log(answers)
+        answers.map(v => {
+          formData.append('product_model', v);
+        })
+        console.log(Object.fromEntries(formData))
         var token = localStorage.getItem('access_token');
         if(props.title === 'Edit Promo'){
             //Update
@@ -103,7 +107,7 @@ const FormPromo = (props) => {
             })
             .catch((e) => {
               let responError = '';
-              // console.log(e.response)
+              console.log(e.response)
               if(typeof e.response.data.errors !== 'undefined')
                 responError = e.response.data.errors.location;
                 // console.log(responError)
@@ -124,9 +128,14 @@ const FormPromo = (props) => {
       // console.log(props.data)
         if(typeof props.data !== 'undefined'){
             let data = {
-              ...props.data
+              ...props.data.extendedWarranty
             }
-            // console.log(data)
+            console.log(props.data.productModelList)
+            if(props.data.productModelList){
+              setAnswers([...props.data.productModelList])
+            }else{
+              setAnswers([])
+            }
             setForm({
                 start_program: moment(data.start_program).format('yyyy-MM-DD'),
                 end_program: moment(data.end_program).format('yyyy-MM-DD'),
@@ -192,8 +201,8 @@ const FormPromo = (props) => {
                 </div>
               </div>
 
-               {/* Product Model & title */}
-               <div className="col-lg-6">
+               {/* Product Model & title
+              <div className="col-lg-6">
                 <div className="mb-3">
                   <label className="form-label">Product Model</label>
                   <input
@@ -208,23 +217,8 @@ const FormPromo = (props) => {
                   />
                   <div className="invalid-feedback">{errorsData.product_model}</div>
                 </div>
-              </div>
-              <div className="col-lg-6">
-                <div className="mb-3">
-                  <label className="form-label">Title</label>
-                  <input
-                    type="text"
-                    className={`form-control ${
-                        typeof errorsData?.name !== 'undefined' ? 'is-invalid' : null
-                    }`}
-                    aria-label="name"
-                    onChange={onChangeData}
-                    value={form.name}
-                    required
-                  />
-                  <div className="invalid-feedback">{errorsData.name}</div>
-                </div>
-              </div>
+              </div> */}
+              
 
               {/* Start - End Program */}
               <div className="col-lg-6">
@@ -363,6 +357,82 @@ const FormPromo = (props) => {
                   <div className="invalid-feedback">{errorsData.link}</div>
                 </div>
               </div>
+
+              {/* title and product model  */}
+              <div className="col-lg-12">
+                <div className="mb-3">
+                  <label className="form-label">Title</label>
+                  <input
+                    type="text"
+                    className={`form-control ${
+                        typeof errorsData?.name !== 'undefined' ? 'is-invalid' : null
+                    }`}
+                    aria-label="name"
+                    onChange={onChangeData}
+                    value={form.name}
+                    required
+                  />
+                  <div className="invalid-feedback">{errorsData.name}</div>
+                </div>
+              </div>
+              <div className="col-lg-12">
+                <div className="mb-3">
+                  <label className="form-label">Product Model</label>
+                  {answers.map((answer, index) => {
+                      return (
+                          <div class="mb-3" key={index}>
+                              <div className="d-flex">
+                                  <input 
+                                      required
+                                      className={`form-control ${
+                                        typeof errorsData?.product_model !== 'undefined' ? 'is-invalid' : null
+                                    }`} 
+                                      type="text"  
+                                      onChange={e => {
+                                          const answer = e.target.value;
+                                          setAnswers(currentAnswers => 
+                                              produce(currentAnswers, v => {
+                                                  v[index] = answer
+                                              })
+                                          );
+                                      }}
+                                      value={answer}
+
+                                  />   
+                                { answers.length > 1 ?
+                                <button 
+                                    className="btn btn-danger ms-3" 
+                                    type="button"
+                                    onClick={() => {
+                                        setAnswers(currentAnswers => currentAnswers.filter((answer, x) => x !== index))
+                                    }}
+                                > 
+                                    <span class="material-icons"> delete </span>
+                                </button>
+                                : ""}
+                              </div>
+                              {typeof errorsData?.product_model !== 'undefined' && 
+                                    <div className="invalid-feedback d-block">{errorsData.product_model}</div>
+                              }
+                          </div>
+                      )
+                  })}
+                  <div>
+                      <button 
+                          className="btn btn-add" 
+                          type="button"
+                          onClick={() => {
+                              setAnswers(currentAnswers => [
+                                  ...currentAnswers, ""
+                              ])
+                          }}
+                      >
+                          Add Product Model
+                      </button>
+                  </div>
+                </div>
+              </div>
+              
 
               
             </div>

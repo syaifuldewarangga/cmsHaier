@@ -19,7 +19,8 @@ const EditPromo = (props) => {
                 },
             })
             .then((res) => {
-                setData(res.data.extendedWarranty);
+                console.log(res.data)
+                setData(res.data);
             })
             .catch((e) => {
                 if (e.response) {
