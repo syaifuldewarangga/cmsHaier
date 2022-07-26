@@ -157,7 +157,7 @@ const FormPromo = (props) => {
     return (
     <div>
       <div className="form-user">
-        <div className="card">
+        <div className="card ">
           <div className="card-header btn-import  ">
             <h5
               className="dashboard title"
@@ -167,6 +167,7 @@ const FormPromo = (props) => {
             </h5>
           </div>
           <div className="card-body">
+            
             {/* Form */}
             <div className="row">
               {filePreview !== '' ? (
@@ -375,11 +376,14 @@ const FormPromo = (props) => {
                   <div className="invalid-feedback">{errorsData.name}</div>
                 </div>
               </div>
+
               <div className="col-lg-12">
-                <div className="mb-3">
-                  <label className="form-label">Product Model</label>
-                  {answers.map((answer, index) => {
+                <label className="form-label">Product Model</label>
+
+              </div>
+              {answers.map((answer, index) => {
                       return (
+                        <div className="col-lg-6">
                           <div class="mb-3" key={index}>
                               <div className="d-flex">
                                   <input 
@@ -415,8 +419,11 @@ const FormPromo = (props) => {
                                     <div className="invalid-feedback d-block">{errorsData.product_model}</div>
                               }
                           </div>
+                        </div>
                       )
                   })}
+              <div className="col-lg-12">
+                <div className="mb-3">
                   <div>
                       <button 
                           className="btn btn-add" 

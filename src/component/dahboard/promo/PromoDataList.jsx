@@ -35,7 +35,6 @@ function PromoDataList(props) {
         
         
         <td className="align-middle">{props.data.name}</td>
-        <td className="align-middle">{props.data.product_model}</td>
         <td className="align-middle">
           <img
             src={props.url + props.data.thumbnail}

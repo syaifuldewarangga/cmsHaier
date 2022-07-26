@@ -7,7 +7,7 @@ class AddPromo extends Component
         return (
              <div>
                  <div className="d-flex justify-content-center">
-                    <div className="col-lg-7">
+                    <div className="col-lg-10">
                         <FormPromo 
                             title= "Add Promo" 
                         />

@@ -36,7 +36,7 @@ function PromoList(props) {
         }
       })
       .then((res) => {
-        console.log(res.data.content)
+        console.log(res.data)
         setData(res.data.content);
         setCurrentPage(res.data.number)
         setTotalPage(res.data.totalPages)
@@ -208,7 +208,6 @@ function PromoList(props) {
                       <th>Action</th> : null
                     }
                     <th>Title</th>
-                    <th>Product Model</th>
                     <th>Image</th>
                     <th>Start Program</th>
                     <th>End Program</th>
