@@ -5,8 +5,10 @@ import { Link, useHistory } from 'react-router-dom';
 import axios from 'axios'
 import moment from 'moment';
 import { produce } from "immer";
-import { readFile, read, writeFileXLSX } from 'xlsx'
 import readXlsxFile from 'read-excel-file';
+import Autocomplete from 'react-autocomplete';
+import ModalConfirm from './ModalConfirm';
+import { Modal } from 'bootstrap';
 const FormPromo = (props) => {
     const [form, setForm] = useState({
         start_program: '',
@@ -26,7 +28,18 @@ const FormPromo = (props) => {
     const [errorsData, setErrorsData] = useState({})
     const [filePreview, setFilePreview] = useState('');
     const [isLoading, setIsLoading] = useState(false)
-    const [answers, setAnswers] = useState([{}])
+    const [answers, setAnswers] = useState([{ value: '' }])
+    const [options, setOptions] = useState([])
+
+    const getOptions = async () => {
+      const res = await axios.get(`${props.base_url}extended-warranty-promo/wms?product_model=`, {
+        headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+            'Content-Type': 'application/json',
+        },
+      })
+      setOptions([...res.data])
+    }
 
     const importExcel = async (e) => {
       const data = await readXlsxFile(e.target.files[0])
@@ -41,6 +54,7 @@ const FormPromo = (props) => {
       e.target.value = '';
 
     }
+
     const onChangeData = (e) => {
         if(e.target.type === 'file'){
             if (e.target.files['length'] !== 0) {
@@ -59,8 +73,26 @@ const FormPromo = (props) => {
         
     }
 
-    const fetchAPI = (e) => {
-        // setIsLoading(true)
+    const checkProductModel = () => {
+      const cek = answers.map(v => {
+        return options.includes(v.value)
+      })
+      return cek.every((elem, index, arr) => elem == true)
+    }
+
+    const hideModal = () => {
+      let alertModal = Modal.getInstance(document.getElementById('modalConfirm'));   
+      // console.log(alertModal)
+      if(alertModal!== null) alertModal.hide();
+    }
+
+    const handleModal = () => {
+      let alertModal = new Modal(document.getElementById('modalConfirm'));
+      alertModal.show();
+    }
+
+    const fetchAPI = () => {
+        setIsLoading(true)
         const formData = new FormData();
         formData.append('start_program', moment(form.start_program).format('YYYY/MM/DD'));
         formData.append('end_program',  moment(form.end_program).format('YYYY/MM/DD'));
@@ -77,65 +109,85 @@ const FormPromo = (props) => {
           formData.append('product_model', v.value);
         })
         // console.log(Object.fromEntries(formData))
-        // var token = localStorage.getItem('access_token');
-        // if(props.title === 'Edit Promo'){
-        //     //Update
-        //     formData.append('id', form.id);
-        //     axios.post(props.base_url + 'extended-warranty-promo/edit', formData, {
-        //       headers: {
-        //           Authorization: 'Bearer ' + token,
-        //           'Content-Type': 'application/json',
-        //       },
-        //     })
-        //     .then((res) => {
-        //         alert('berhasil edit promo');
-        //         history.push('/promo');
-        //     })
-        //     .catch((e) => {
-        //         let responError = e.response.data.errors?.location;
-        //         if(typeof responError !== 'undefined'){
-        //           // console.log(responError)
-        //           setErrorsData(responError)
-        //           if(typeof responError?.thumbnail !== 'undefined' ){
-        //             window.scrollTo({
-        //               top: 0,
-        //               behavior: 'smooth'
-        //             })
-        //           }
-        //         }
-        //     }).finally(() => {
-        //         setIsLoading(false)
-        //     });
+        var token = localStorage.getItem('access_token');
+        const modalExist = document.getElementById('modalConfirm') 
+        if(props.title === 'Edit Promo'){
+            //Update
+            formData.append('id', form.id);
+            axios.post(props.base_url + 'extended-warranty-promo/edit', formData, {
+              headers: {
+                  Authorization: 'Bearer ' + token,
+                  'Content-Type': 'application/json',
+              },
+            })
+            .then((res) => {
+                alert('berhasil edit promo');
+                history.push('/promo');
+            })
+            .catch((e) => {
+                let responError = e.response.data.errors?.location;
+                if(typeof responError !== 'undefined'){
+                  // console.log(responError)
+                  setErrorsData(responError)
+                  if(typeof responError?.thumbnail !== 'undefined' ){
+                    window.scrollTo({
+                      top: 0,
+                      behavior: 'smooth'
+                    })
+                  }
+                }
+            }).finally(() => {
+                setIsLoading(false)
 
-        // }else{
-        //     //Insert
-        //     axios.post(props.base_url + 'extended-warranty-promo', formData, {
-        //         headers: {
-        //             Authorization: 'Bearer ' + token,
-        //             'Content-Type': 'application/json',
-        //         },
-        //     })
-        //     .then((res) => {
-        //         alert('berhasil');
-        //         history.push('/promo');
-        //     })
-        //     .catch((e) => {
-        //       let responError = '';
-        //       console.log(e.response)
-        //       if(typeof e.response.data.errors !== 'undefined')
-        //         responError = e.response.data.errors.location;
-        //         // console.log(responError)
-        //         setErrorsData(responError)
-        //         if(typeof responError?.thumbnail !== 'undefined' ){
-        //           window.scrollTo({
-        //             top: 0,
-        //             behavior: 'smooth'
-        //           })
-        //         }
-        //     }).finally(() => {
-        //         setIsLoading(false)
-        //     });
-        // }
+                //close modal
+                if(typeof modalExist !== null && modalExist !== 'undefined' ){
+                  hideModal()
+                }
+            });
+
+        }else{
+            //Insert
+            axios.post(props.base_url + 'extended-warranty-promo', formData, {
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then((res) => {
+                alert('berhasil');
+                history.push('/promo');
+            })
+            .catch((e) => {
+              let responError = '';
+              // console.log(e.response)
+              if(typeof e.response.data.errors !== 'undefined')
+                responError = e.response.data.errors.location;
+                // console.log(responError)
+                setErrorsData(responError)
+                if(typeof responError?.thumbnail !== 'undefined' ){
+                  window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                  })
+                }
+            }).finally(() => {
+                setIsLoading(false)
+
+                //close modal
+                if(typeof modalExist !== null && modalExist !== 'undefined' ){
+                  hideModal()
+                }
+            });
+        }
+    }
+    const onSubmit = () => {
+      const cek = checkProductModel()
+      // console.log(document.getElementById('modalConfirm'))
+      if(cek){
+        fetchAPI()
+      }else{
+        handleModal()
+      }
     }
 
     useEffect(() => {
@@ -144,9 +196,15 @@ const FormPromo = (props) => {
             let data = {
               ...props.data.extendedWarranty
             }
-            console.log(props.data.productModelList)
+            // console.log(props.data.productModelList)
             if(props.data.productModelList){
-              setAnswers([...props.data.productModelList])
+              let temp = props.data.productModelList.map(v => {
+                return {
+                  value: v,
+                  status: ''
+                }
+              })
+              setAnswers([...temp])
             }else{
               setAnswers([])
             }
@@ -167,6 +225,16 @@ const FormPromo = (props) => {
         }
 
     }, [props.base_url, props.data])
+
+    useEffect(() => {
+      let mounted = true
+      if(mounted && options.length == 0){
+        getOptions()
+      }
+
+
+      return () => mounted = false
+    }, [options.length])
 
     return (
     <div>
@@ -413,34 +481,82 @@ const FormPromo = (props) => {
                         </label>
                     </div>
               </div>
-              {answers.map((answer, index) => {
+              {options.length > 0 && answers.map((answer, index) => {
                       return (
                         <div className="col-lg-6">
-                          <div class="mb-3" key={index}>
-                              <div className="d-flex">
-                                  <input 
-                                      required
-                                      className={
-                                        `form-control 
-                                        ${typeof errorsData?.product_model !== 'undefined' ? 'is-invalid' : null }
-                                        ${answer.status === 'valid' ? 'is-valid' : null }
-                                        ${answer.status === 'not_valid' ? 'is-invalid' : null }
-                                      `} 
-                                      type="text"  
-                                      onChange={e => {
-                                          const answer = e.target.value;
-                                          setAnswers(currentAnswers => 
-                                              produce(currentAnswers, v => {
-                                                  v[index] = {
-                                                    value: answer,
-                                                    status: ''
-                                                  }
-                                              })
-                                          );
-                                      }}
-                                      value={answer.value}
+                          <div class="mb-3">
+                              <div className="d-flex w-100">
+                                <Autocomplete
+                                    wrapperStyle={{ width:'100%' }}
+                                    getItemValue={(item) => item}
+                                    items={
+                                      options.filter(v => v.includes(answer?.value?.toUpperCase()))
+                                    }
+                                    renderMenu={(items, value, style ) => {
+                                      return (
+                                        <div style={{ 
+                                          position: 'absolute', 
+                                          borderRadius: '3px',
+                                          boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
+                                          background: 'rgba(255, 255, 255, 0.9)',
+                                          padding: '2px 0',
+                                          fontSize: '90%',
+                                          overflow: 'auto',
+                                          marginTop: '5px',
+                                          maxHeight: '50%', // TODO: don't cheat, let it flow to the bottom 
+                                        }} 
+                                        children={items}
+                                        />
 
-                                  />   
+                                      )
+                                    }}
+                                    renderItem={(item, isHighlighted) =>
+                                      <div style={{ background: isHighlighted ? 'lightgray' : 'white', cursor: 'pointer', }}>
+                                        {item}
+                                      </div>
+                                    }
+                                    renderInput={(props) => {
+                                      return (
+                                        <div className="w-100">
+                                          <input 
+                                            style={{ width: '100%' }} 
+                                            className={
+                                              `form-control 
+                                              ${typeof errorsData?.product_model !== 'undefined' ? 'is-invalid' : null }
+                                              ${options.includes(answer.value) ? 'is-valid' : null }
+                                              ${!options.includes(answer.value) && answer.value != '' ? 'is-invalid' : null }
+                                            `}   
+                                          {...props}/>
+                                        </div> 
+                                      )
+                                    }
+                                    }
+                                    // open={options.filter(v => v.includes(answer?.value?.toUpperCase())).length > 0 ? true : false}
+                                    value={answer.value}
+                                    onChange={e => {
+                                        const answer = e.target.value;
+                                        setAnswers(currentAnswers => 
+                                            produce(currentAnswers, v => {
+                                                v[index] = {
+                                                    value: answer,
+                                                    status: '',
+                                                }
+                                            })
+                                        );
+                                    }}
+                                    onSelect={(val) =>{
+                                      const answer = val
+                                      setAnswers(currentAnswers => 
+                                          produce(currentAnswers, v => {
+                                              v[index] = {
+                                                  value: answer,
+                                                  status: 'valid',
+                                              }
+                                          })
+                                      );
+                                    }}
+                                  />
+                                  
                                 { answers.length > 1 ?
                                 <button 
                                     className="btn btn-danger ms-3" 
@@ -453,6 +569,7 @@ const FormPromo = (props) => {
                                 </button>
                                 : ""}
                               </div>
+                              
                               {typeof errorsData?.product_model !== 'undefined' && 
                                     <div className="invalid-feedback d-block">{errorsData.product_model}</div>
                               }
@@ -471,23 +588,14 @@ const FormPromo = (props) => {
                           type="button"
                           onClick={() => {
                               setAnswers(currentAnswers => [
-                                  ...currentAnswers, ""
+                                  ...currentAnswers, { value: '' }
                               ])
                           }}
                       >
                           Add Product Model
                       </button>
                     </div>
-                    <div className="px-1">
-                      <button 
-                          className="btn btn-primary" 
-                          type="button"
-                          onClick={() => console.log('cek')}
-                      >
-                          Check
-                      </button>
-                    </div>
-                    <div className="ms-auto">
+                    <div className="ms-2">
                       <button 
                           className="btn btn-danger" 
                           type="button"
@@ -506,7 +614,7 @@ const FormPromo = (props) => {
 
             <div className="row">
               <div className="col-6">
-                <Link to="/users">
+                <Link to="/promo">
                   <div className="d-grid gap-2">
                     <button className="btn btn-outline-import" type="button">
                       Cancel
@@ -519,7 +627,7 @@ const FormPromo = (props) => {
                   className="btn btn-import" 
                   type="button" 
                   disabled={isLoading && 'disabled'}
-                  onClick={fetchAPI}
+                  onClick={onSubmit}
                 >
                   {
                     isLoading ?
@@ -545,6 +653,7 @@ const FormPromo = (props) => {
                 <br />
               </div>
             </div>
+            <ModalConfirm fetchAPI={fetchAPI} message={"There's Product Model That Not Registered, Are you Sure ?"} />
           </div>
         </div>
       </div>
