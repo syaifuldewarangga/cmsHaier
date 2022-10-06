@@ -17,7 +17,39 @@ function Report(props) {
 
   var token = localStorage.getItem('access_token');
 
-  const downloadCSV = async () => {
+  function exportTableToExcel(tableID, filename = "") {
+    let downloadLink;
+    const dataType = "application/vnd.ms-excel";
+    const tableSelect = document.querySelector(tableID);
+    //  console.log(tableSelect);
+    const tableHTML = tableSelect.outerHTML.replace(/ /g, "%20");
+
+    // Specify file name
+    filename = filename ? filename + ".xls" : "excel_data.xls";
+
+    // Create download link element
+    downloadLink = document.createElement("a");
+
+    document.body.appendChild(downloadLink);
+
+    if (navigator.msSaveOrOpenBlob) {
+      var blob = new Blob(["\ufeff", tableHTML], {
+        type: dataType,
+      });
+      navigator.msSaveOrOpenBlob(blob, filename);
+    } else {
+      // Create a link to the file
+      downloadLink.href = "data:" + dataType + ", " + tableHTML;
+
+      // Setting the file name
+      downloadLink.download = filename;
+
+      //triggering the function
+      downloadLink.click();
+    }
+  }
+
+  const downloadReport = async (type = "csv") => {
     if(selectReport === 'user') {
       await axios.get(props.base_url + 'report', {
         headers: {
@@ -30,7 +62,7 @@ function Report(props) {
       })
       .then((res) => {
         setUserProductReport(res.data)
-        tableToCSV('table-user-report', 'Report Total Product dan Total User')
+        type === "csv" ? tableToCSV('table-user-report', 'Report Total Product dan Total User') : exportTableToExcel('#table-user-report', "Report Total Product dan Total User")
       })
       .catch((e) => {
         if (e.response) {
@@ -52,7 +84,8 @@ function Report(props) {
         }
       }).then((res) => {
         setCustomerVoice(res.data)
-        tableToCSV('table-customer-voice', 'Report Customer Voice')
+        type === "csv" ? tableToCSV('table-customer-voice', 'Report Customer Voice') : exportTableToExcel('#customer-voice', "Report Customer Voice")
+        
       })
     }else if (selectReport === 'promo-list'){
       console.log('test')
@@ -63,7 +96,7 @@ function Report(props) {
       }).then((res) => {
         console.log(res.data)
         setPromoList(res.data)
-        tableToCSV('table-promo-list', 'Report Promo List')
+        type === "csv" ? tableToCSV('table-promo-list', 'Report Promo List') : exportTableToExcel('#table-promo-list', "Report Promo List")
       })
     }
   };
@@ -116,7 +149,7 @@ function Report(props) {
                   }}
                 />
               </div>
-              <div className="ms-3">
+              <div className="ms-3 d-flex">
                 <button
                   className="btn btn-export rounded-pill px-4 me-3 d-flex"
                   onClick={() => {
@@ -125,14 +158,31 @@ function Report(props) {
                     date.until === '' ||
                     date.from > date.until
                       ? alert('Pilihan anda tidak sesuai')
-                      : downloadCSV();
+                      : downloadReport('csv');
                   }}
                 >
                   <span class="material-icons-outlined me-2">
                     {' '}
                     cloud_download{' '}
                   </span>
-                  <span style={{ fontWeight: '600' }}>Download</span>
+                  <span style={{ fontWeight: '600' }}>CSV</span>
+                </button>
+                <button
+                  className="btn btn-export rounded-pill px-4 d-flex"
+                  onClick={() => {
+                    selectReport === '' ||
+                    date.from === '' ||
+                    date.until === '' ||
+                    date.from > date.until
+                      ? alert('Pilihan anda tidak sesuai')
+                      : downloadReport('excel');
+                  }}
+                >
+                  <span class="material-icons-outlined me-2">
+                    {' '}
+                    cloud_download{' '}
+                  </span>
+                  <span style={{ fontWeight: '600' }}>Excel</span>
                 </button>
               </div>
             </div>
@@ -285,11 +335,7 @@ function Report(props) {
               <tr>
                 <td>{ i+1 }</td>
                 <td>
-                  <img
-                    src={props.image_url + item.thumbnail}
-                    alt="blog-title"
-                    style={{ width: '150px' }}
-                  />
+                  {item.thumbnail !== null ? <a href={props.image_url + item.thumbnail} target="_blank" >{props.image_url + item.thumbnail}</a> : '-'}
                 </td>
                 <td>{ item.name }</td>
                 <td>{ item.product_model }</td>
