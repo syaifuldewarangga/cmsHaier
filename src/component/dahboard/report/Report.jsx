@@ -84,8 +84,7 @@ function Report(props) {
         }
       }).then((res) => {
         setCustomerVoice(res.data)
-        type === "csv" ? tableToCSV('table-customer-voice', 'Report Customer Voice') : exportTableToExcel('#customer-voice', "Report Customer Voice")
-        
+        type === "csv" ? tableToCSV('table-customer-voice', 'Report Customer Voice') : exportTableToExcel('#table-customer-voice', "Report Customer Voice")
       })
     }else if (selectReport === 'promo-list'){
       console.log('test')
