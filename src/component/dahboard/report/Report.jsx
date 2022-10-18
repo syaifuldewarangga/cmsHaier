@@ -222,6 +222,7 @@ function Report(props) {
           <th>Brand</th>
           <th>Category</th>
           <th>WA Flag</th>
+          <th>Registration Date</th>
         </tr>
         {
           userProductReport.map((item) => {
@@ -247,6 +248,20 @@ function Report(props) {
                     <td>{ item.age }</td>
                     <td>{ item.phone_office }</td>
                     <td>{ item.fax }</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>{moment(item.created_at).format('DD/MM/YYYY')}</td>
                   </tr> : 
                   item.products.map((product, productItem) => {
                     return (
@@ -282,6 +297,8 @@ function Report(props) {
                         <td>{product.brand}</td>
                         <td>{product.category}</td>
                         <td>{product.agreements}</td>
+                        <td>{moment(product.created_at).format('DD/MM/YYYY')}</td>
+                        
                       </tr>
                     )
                   })
