@@ -60,6 +60,18 @@ const Sidebar = (props) => {
                         }
                     </ul>
                 </li>
+                {
+                    permissionCek(props.user_permission, 'GET_ARTICLE') ?
+                    <li>
+                        <Link to="/product-validate/list">
+                            <i className="material-icons-outlined"> check </i>
+                            <span className="link-name">Product Validate</span>
+                        </Link>
+                        <ul className="sub-menu blank">
+                            <li><Link className="link-name" to="#">Article</Link></li>
+                        </ul>
+                    </li> : null
+                }
 
                 {
                     permissionCek(props.user_permission, 'GET_ARTICLE') ?

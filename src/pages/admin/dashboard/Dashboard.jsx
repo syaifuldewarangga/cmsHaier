@@ -53,6 +53,9 @@ import FormOtp from '../../forgotPassword/formOtp/FormOtp';
 import AdminLogin from '../AdminLogin';
 import './Dashboard.css';
 
+//product validate
+import ProductValidateList from '../../../component/dahboard/product_validate/ProductValidateList'
+
 class Dashboard extends Component {
   componentDidMount() {
     document.body.style = 'background: #f5f5f5;';
@@ -91,6 +94,9 @@ class Dashboard extends Component {
             <AdminRoute exact path="/customer-voice/edit/:id" component={EditCustomerVoice} />
 
             <AdminRoute exact path="/category-article/list" component={CategoryArticle} />
+
+            {/* product validate */}
+            <AdminRoute exact path="/product-validate/list" component={ProductValidateList} />
 
             <AdminRoute exact path="/article/list" component={ArticleList} />
             <AdminRoute exact path="/article/add" component={AddArticle} />
