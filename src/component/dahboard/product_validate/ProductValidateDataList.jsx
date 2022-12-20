@@ -14,7 +14,7 @@ function ProductValidateDataList(props) {
             <div className="d-flex justify-content-start">
               {
                 permissionCek(props.user_permission, 'UPDATE_WARRANTY_PROMO') &&
-                <Link to={'/product-validate/edit/:id' + props.data.id}>
+                <Link to={'/product-validate/edit/' + props.data.id}>
                   <button className="btn d-flex btn-edit me-3 btn-sm">
                     <span class="material-icons-outlined md-18"> edit </span>
                   </button>
