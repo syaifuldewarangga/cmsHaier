@@ -55,6 +55,7 @@ import './Dashboard.css';
 
 //product validate
 import ProductValidateList from '../../../component/dahboard/product_validate/ProductValidateList'
+import EditProductValidateList from '../../../component/dahboard/product_validate/EditProductValidate'
 
 class Dashboard extends Component {
   componentDidMount() {
@@ -97,6 +98,7 @@ class Dashboard extends Component {
 
             {/* product validate */}
             <AdminRoute exact path="/product-validate/list" component={ProductValidateList} />
+            <AdminRoute exact path="/product-validate/edit/:id" component={EditProductValidateList} />
 
             <AdminRoute exact path="/article/list" component={ArticleList} />
             <AdminRoute exact path="/article/add" component={AddArticle} />
