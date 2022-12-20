@@ -3,6 +3,7 @@ import FormProductValidate from "./FormProductValidate";
 import { useParams } from 'react-router-dom';
 import axios from 'axios'
 import { connect } from 'react-redux';
+import { format } from "date-fns";
 
 const EditProductValidate = (props) => {
     const { id } = useParams();
@@ -11,8 +12,11 @@ const EditProductValidate = (props) => {
         warranty: 'https://testimages.aquajapanid.com:8180/invoice/INVgoyydqkdxpLE32AQT6600G.png',
         barcode: 'ADSDASDASDASD',
         category: 'Aqua',
+        date: format(new Date(), 'yyyy-MM-dd'),
         brand: 'Aqua',
-        product_model: 'AQA-KNCSD',
+        product_model: 'AQA-KR9ANC',
+        store: 'MITRA UTAMA',
+        store_location: 'JL. Dummy',
         id: id,
     });
     
