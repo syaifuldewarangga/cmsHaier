@@ -11,6 +11,7 @@ import ModalConfirm from './ModalConfirm';
 import { Modal } from 'bootstrap';
 const FormPromo = (props) => {
     const [form, setForm] = useState({
+        promo_code: '',
         start_program: '',
         end_program: '',
         start_purchase: '',
@@ -209,6 +210,7 @@ const FormPromo = (props) => {
               setAnswers([])
             }
             setForm({
+                ...form,
                 start_program: moment(data.start_program).format('yyyy-MM-DD'),
                 end_program: moment(data.end_program).format('yyyy-MM-DD'),
                 start_purchase: moment(data.start_purchase).format('yyyy-MM-DD'),
@@ -301,7 +303,23 @@ const FormPromo = (props) => {
                   <div className="invalid-feedback">{errorsData.product_model}</div>
                 </div>
               </div> */}
-              
+              {/* Promo Code */}
+              <div className="col-lg-12">
+                <div className="mb-3">
+                  <label className="form-label">Promo Code</label>
+                  <input
+                    type="text"
+                    className={`form-control ${
+                      typeof errorsData?.promo_code !== 'undefined' ? 'is-invalid' : null
+                     }`}
+                    aria-label="promo_code"
+                    onChange={onChangeData}
+                    value={form.promo_code}
+                    required
+                  />
+                  <div className="invalid-feedback">{errorsData.promo_code}</div>
+                </div>
+              </div> 
 
               {/* Start - End Program */}
               <div className="col-lg-6">

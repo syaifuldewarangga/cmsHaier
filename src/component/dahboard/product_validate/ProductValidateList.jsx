@@ -211,11 +211,13 @@ function ProductValidateList(props) {
                         }
                         <th>Barcode</th>
                         <th>Product ID</th>
+                        <th>Email User</th>
                         <th>Brand</th>
                         <th>Product Model</th>
                         <th>Serial Number</th>
                         <th>Invoice</th>
                         <th>Warranty Card</th>
+                        <th>Serial Number Image</th>
                     </tr>
                 </thead>
                 {state.isSearch === true

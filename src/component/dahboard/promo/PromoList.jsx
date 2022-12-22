@@ -207,6 +207,7 @@ function PromoList(props) {
                       permissionCek(props.user_permission, 'DELETE_WARRANTY_PROMO') === true || permissionCek(props.user_permission, 'UPDATE_USER') === true ?
                       <th>Action</th> : null
                     }
+                    <th>Promo Code</th>
                     <th>Title</th>
                     <th>Image</th>
                     <th>Start Program</th>

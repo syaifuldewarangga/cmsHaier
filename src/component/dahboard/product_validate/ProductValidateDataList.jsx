@@ -43,6 +43,7 @@ function ProductValidateDataList(props) {
         }
         <td>{props.data.barcode}</td>
         <td>{props.data.product_id}</td>
+        <td>erlanggariansyah0@gmail.com</td>
         <td>{props.data.brand}</td>
         <td>{props.data.product_name}</td>
         <td>{props.data.barcode}</td>
@@ -56,7 +57,14 @@ function ProductValidateDataList(props) {
         <td>
           {
             props.data.warranty_card !== '' && props.data.warranty_card !== null ?
-            <a className='badge bg-primary' href={`${props.url}${props.data.warranty_card}`} target='_blank'>View Warranty Card/Serial Number</a>
+            <a className='badge bg-primary' href={`${props.url}${props.data.warranty_card}`} target='_blank'>View Warranty Card</a>
+            : null
+          }
+        </td>
+        <td>
+          {
+            props.data.warranty_card !== '' && props.data.warranty_card !== null ?
+            <a className='badge bg-primary' href={`${props.url}${props.data.warranty_card}`} target='_blank'>View Serial Number</a>
             : null
           }
         </td>

@@ -337,17 +337,7 @@ const FormProductValidate = (props) => {
                   </div>
                 </div>
 
-                {/* Invoice dan warranty card */}
-                <div className="col-lg-6">
-                    <div className="mb-3">
-                        <p className="form-label">Invoice</p>
-                        <a href={form.invoice} target='_blank'>
-                            <button className='btn btn-primary btn-sm'>
-                                View Invoice
-                            </button>
-                        </a>
-                    </div>
-                </div>
+                {/* warranty card and invoice */}
                 <div className="col-lg-6">
                     <div className="mb-3">
                         <p className="form-label">Warranty Card/Serial Number</p>
@@ -358,7 +348,16 @@ const FormProductValidate = (props) => {
                         </a>
                     </div>
                 </div>
-
+                <div className="col-lg-6">
+                    <div className="mb-3">
+                        <p className="form-label">Invoice</p>
+                        <a href={form.invoice} target='_blank'>
+                            <button className='btn btn-primary btn-sm'>
+                                View Invoice
+                            </button>
+                        </a>
+                    </div>
+                </div>      
             </div>
 
             <div className="row">
