@@ -160,10 +160,10 @@ function ProductValidateList(props) {
       <h5 className="dashboard title">Product Validate</h5>
       <div className="mt-5">
         <div>
-          <div className="row justify-content">
-            <div className="d-flex col-lg-6 col-12 mb-3">
+          <div className="row justify-content mb-3">
+            <div className="col-md-4">
               <input
-                class="form-control me-2"
+                class="form-control flex-grow-2"
                 type="search"
                 placeholder="Search"
                 aria-label="search"
@@ -171,6 +171,25 @@ function ProductValidateList(props) {
                   setState({ ...state, ['tempSearch']: e.target.value })
                 }
               />
+            </div>
+            <div className="col-md-2">
+              <select className='form-control flex-grow-1' name="by">
+                <option value="serial_number">Serial Number</option>
+                <option value="email">Email</option>
+              </select>
+            </div>
+            <div className="col-md-2">
+              <select className='form-control flex-grow-1' name="status">
+                <option value="approved">Approved</option>
+                <option value="pending">pending</option>
+                <option value="reject">Reject</option>
+              </select>
+            </div>
+            <div className="col-md-2">
+              <button className='btn btn-outline-primary d-flex align-items-center gap-2'>
+                <span class="material-icons-outlined md-18"> search </span>
+                Search
+              </button>
             </div>
             {/* <div className="col-lg-6 d-flex mb-3 justify-content-lg-end">
             {

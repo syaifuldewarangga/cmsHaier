@@ -24,6 +24,12 @@ const FormPromo = (props) => {
         product_model: '',
         name: '',
         id: '',
+
+        // promo card
+        card_title1: '',
+        card_title2: '',
+        content_1: '',
+        content_2: '',
     })
     const history = useHistory();
     const [errorsData, setErrorsData] = useState({})
@@ -31,6 +37,18 @@ const FormPromo = (props) => {
     const [isLoading, setIsLoading] = useState(false)
     const [answers, setAnswers] = useState([{ value: '' }])
     const [options, setOptions] = useState([])
+    const [cardImage, setCardImage] = useState({
+      card_header: {
+        file: '',
+        file_url: '',
+        file_name: ''
+      },
+      card_footer: {
+        file: '',
+        file_url: '',
+        file_name: ''
+      }
+    })
 
     const getOptions = async () => {
       const res = await axios.get(`${props.base_url}extended-warranty-promo/wms?product_model=`, {
@@ -72,6 +90,20 @@ const FormPromo = (props) => {
             })
         }
         
+    }
+
+    const CardImageHandle = (e) => {
+      const file = e.target.files[0]
+      const file_name = file.name
+      const file_url = URL.createObjectURL(file)
+      setCardImage({
+        ...cardImage,
+        [e.target.name]: {
+            file,
+            file_name,
+            file_url
+        }
+      })
     }
 
     const checkProductModel = () => {
@@ -500,102 +532,101 @@ const FormPromo = (props) => {
                     </div>
               </div>
               {options.length > 0 && answers.map((answer, index) => {
-                      return (
-                        <div className="col-lg-6">
-                          <div class="mb-3">
-                              <div className="d-flex w-100">
-                                <Autocomplete
-                                    wrapperStyle={{ width:'100%' }}
-                                    getItemValue={(item) => item}
-                                    items={
-                                      options.filter(v => v.includes(answer?.value?.toUpperCase()))
-                                    }
-                                    renderMenu={(items, value, style ) => {
-                                      return (
-                                        <div style={{ 
-                                          position: 'absolute', 
-                                          borderRadius: '3px',
-                                          boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
-                                          background: 'rgba(255, 255, 255, 0.9)',
-                                          padding: '2px 0',
-                                          fontSize: '90%',
-                                          overflow: 'auto',
-                                          marginTop: '5px',
-                                          maxHeight: '50%', // TODO: don't cheat, let it flow to the bottom 
-                                        }} 
-                                        children={items}
-                                        />
+                  return (
+                    <div className="col-lg-6">
+                      <div class="mb-3">
+                          <div className="d-flex w-100">
+                            <Autocomplete
+                                wrapperStyle={{ width:'100%' }}
+                                getItemValue={(item) => item}
+                                items={
+                                  options.filter(v => v.includes(answer?.value?.toUpperCase()))
+                                }
+                                renderMenu={(items, value, style ) => {
+                                  return (
+                                    <div style={{ 
+                                      position: 'absolute', 
+                                      borderRadius: '3px',
+                                      boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
+                                      background: 'rgba(255, 255, 255, 0.9)',
+                                      padding: '2px 0',
+                                      fontSize: '90%',
+                                      overflow: 'auto',
+                                      marginTop: '5px',
+                                      maxHeight: '50%', // TODO: don't cheat, let it flow to the bottom 
+                                    }} 
+                                    children={items}
+                                    />
 
-                                      )
-                                    }}
-                                    renderItem={(item, isHighlighted) =>
-                                      <div style={{ background: isHighlighted ? 'lightgray' : 'white', cursor: 'pointer', }}>
-                                        {item}
-                                      </div>
-                                    }
-                                    renderInput={(props) => {
-                                      return (
-                                        <div className="w-100">
-                                          <input 
-                                            style={{ width: '100%' }} 
-                                            className={
-                                              `form-control 
-                                              ${typeof errorsData?.product_model !== 'undefined' ? 'is-invalid' : null }
-                                              ${options.includes(answer.value) ? 'is-valid' : null }
-                                              ${!options.includes(answer.value) && answer.value != '' ? 'is-invalid' : null }
-                                            `}   
-                                          {...props}/>
-                                        </div> 
-                                      )
-                                    }
-                                    }
-                                    // open={options.filter(v => v.includes(answer?.value?.toUpperCase())).length > 0 ? true : false}
-                                    value={answer.value}
-                                    onChange={e => {
-                                        const answer = e.target.value;
-                                        setAnswers(currentAnswers => 
-                                            produce(currentAnswers, v => {
-                                                v[index] = {
-                                                    value: answer,
-                                                    status: '',
-                                                }
-                                            })
-                                        );
-                                    }}
-                                    onSelect={(val) =>{
-                                      const answer = val
-                                      setAnswers(currentAnswers => 
-                                          produce(currentAnswers, v => {
-                                              v[index] = {
-                                                  value: answer,
-                                                  status: 'valid',
-                                              }
-                                          })
-                                      );
-                                    }}
-                                  />
-                                  
-                                { answers.length > 1 ?
-                                <button 
-                                    className="btn btn-danger ms-3" 
-                                    type="button"
-                                    onClick={() => {
-                                        setAnswers(currentAnswers => currentAnswers.filter((answer, x) => x !== index))
-                                    }}
-                                > 
-                                    <span class="material-icons"> delete </span>
-                                </button>
-                                : ""}
-                              </div>
+                                  )
+                                }}
+                                renderItem={(item, isHighlighted) =>
+                                  <div style={{ background: isHighlighted ? 'lightgray' : 'white', cursor: 'pointer', }}>
+                                    {item}
+                                  </div>
+                                }
+                                renderInput={(props) => {
+                                  return (
+                                    <div className="w-100">
+                                      <input 
+                                        style={{ width: '100%' }} 
+                                        className={
+                                          `form-control 
+                                          ${typeof errorsData?.product_model !== 'undefined' ? 'is-invalid' : null }
+                                          ${options.includes(answer.value) ? 'is-valid' : null }
+                                          ${!options.includes(answer.value) && answer.value != '' ? 'is-invalid' : null }
+                                        `}   
+                                      {...props}/>
+                                    </div> 
+                                  )
+                                }
+                                }
+                                // open={options.filter(v => v.includes(answer?.value?.toUpperCase())).length > 0 ? true : false}
+                                value={answer.value}
+                                onChange={e => {
+                                    const answer = e.target.value;
+                                    setAnswers(currentAnswers => 
+                                        produce(currentAnswers, v => {
+                                            v[index] = {
+                                                value: answer,
+                                                status: '',
+                                            }
+                                        })
+                                    );
+                                }}
+                                onSelect={(val) =>{
+                                  const answer = val
+                                  setAnswers(currentAnswers => 
+                                      produce(currentAnswers, v => {
+                                          v[index] = {
+                                              value: answer,
+                                              status: 'valid',
+                                          }
+                                      })
+                                  );
+                                }}
+                              />
                               
-                              {typeof errorsData?.product_model !== 'undefined' && 
-                                    <div className="invalid-feedback d-block">{errorsData.product_model}</div>
-                              }
+                            { answers.length > 1 ?
+                            <button 
+                                className="btn btn-danger ms-3" 
+                                type="button"
+                                onClick={() => {
+                                    setAnswers(currentAnswers => currentAnswers.filter((answer, x) => x !== index))
+                                }}
+                            > 
+                                <span class="material-icons"> delete </span>
+                            </button>
+                            : ""}
                           </div>
-                        </div>
-                      )
-                  })}
-
+                          
+                          {typeof errorsData?.product_model !== 'undefined' && 
+                                <div className="invalid-feedback d-block">{errorsData.product_model}</div>
+                          }
+                      </div>
+                    </div>
+                  )
+              })}
               <div className="col-lg-12">
                 <div className="mb-3">
                   <div className="d-flex flex-lg-row">
@@ -627,7 +658,181 @@ const FormPromo = (props) => {
                   </div>
                 </div>
               </div>
-              
+
+              {/* Promo Card Field */}
+              <div className="col-12 my-2">
+                <h5>Promo Card Field</h5>
+              </div>
+
+              {/* Card Header */}
+              <div className="col-12">
+                <div className="row">
+                  <div className="col-md-3 col-xs-12">
+                    <div className="mb-3 d-flex flex-column">
+                      <label className="form-label">Card Header</label>
+                      <input
+                        type="file"
+                        hidden
+                        name='card_header'
+                        id='card_header'
+                        accept="image/*"
+                        onChange={CardImageHandle}
+                      />
+                      {cardImage.card_header.file == '' ? 
+                      <label className='btn btn-small btn-add cursor-pointer' for='card_header'>
+                        Upload Card Header
+                      </label>
+                      :
+                      <div className="d-flex flex-column">
+                        <p className='text-bold'>{cardImage.card_header.file_name}</p>
+                        <div className="d-flex gap-2">
+                          <span className='text-success'>
+                            <a target='_blank' href={cardImage.card_header.file_url}>
+                              view
+                            </a>
+                          </span>
+                          <span className='text-danger cursor-pointer' onClick={() => {
+                            setCardImage({
+                              ...cardImage,
+                              card_header: {
+                                file: '',
+                                file_name: '',
+                                file_url: ''
+                              }
+                            })
+
+                          }}>delete</span>
+                        </div>
+
+                      </div>
+                      }
+                      
+                      {/* <div className="invalid-feedback">{errorsData.promo_code}</div> */}
+                    </div>
+                  </div>
+                </div>
+              </div> 
+
+              {/* Card Tittle */}
+              <div className="col-md-6">
+                <div className="mb-3">
+                  <label className="form-label">Card Title 1</label>
+                  <input
+                    type="text"
+                    className={`form-control ${
+                        typeof errorsData?.card_title1 !== 'undefined' ? 'is-invalid' : null
+                    }`}
+                    aria-label="card_title1"
+                    onChange={onChangeData}
+                    value={form.card_title1}
+                    required
+                  />
+                  <div className="invalid-feedback">{errorsData.card_title1}</div>
+                </div>
+
+              </div>
+              <div className="col-md-6">
+                <div className="mb-3">
+                  <label className="form-label">Card Title 2</label>
+                  <input
+                    type="text"
+                    className={`form-control ${
+                        typeof errorsData?.card_title2 !== 'undefined' ? 'is-invalid' : null
+                    }`}
+                    aria-label="card_title2"
+                    onChange={onChangeData}
+                    value={form.card_title2}
+                    required
+                  />
+                  <div className="invalid-feedback">{errorsData.card_title2}</div>
+                </div>
+
+              </div>
+
+              {/* Card Content*/}
+              <div className="col-md-6">
+                <div className="mb-3">
+                  <label className="form-label">Card Content 1</label>
+                  <input
+                    type="text"
+                    className={`form-control ${
+                        typeof errorsData?.content_1 !== 'undefined' ? 'is-invalid' : null
+                    }`}
+                    aria-label="content_1"
+                    onChange={onChangeData}
+                    value={form.content_1}
+                    required
+                  />
+                  <div className="invalid-feedback">{errorsData.content_1}</div>
+                </div>
+
+              </div>
+              <div className="col-md-6">
+                <div className="mb-3">
+                  <label className="form-label">Card Content 2</label>
+                  <input
+                    type="text"
+                    className={`form-control ${
+                        typeof errorsData?.content_2 !== 'undefined' ? 'is-invalid' : null
+                    }`}
+                    aria-label="content_2"
+                    onChange={onChangeData}
+                    value={form.content_2}
+                    required
+                  />
+                  <div className="invalid-feedback">{errorsData.content_2}</div>
+                </div>
+
+              </div>
+
+              {/* Card footer */}
+              <div className="col-12">
+                <div className="row">
+                  <div className="col-md-3 col-xs-12">
+                    <div className="mb-3 d-flex flex-column">
+                      <label className="form-label">Card Footer</label>
+                      <input
+                        type="file"
+                        name='card_footer'
+                        hidden
+                        id='card_footer'
+                        accept="image/*"
+                        onChange={CardImageHandle}
+                      />
+                      {cardImage.card_footer.file == '' ? 
+                      <label className='btn btn-small btn-add cursor-pointer' for='card_footer'>
+                        Upload Card footer
+                      </label>
+                      :
+                      <div className="d-flex flex-column">
+                        <p className='text-bold'>{cardImage.card_footer.file_name}</p>
+                        <div className="d-flex gap-2">
+                          <span className='text-success'>
+                            <a target='_blank' href={cardImage.card_footer.file_url}>
+                              view
+                            </a>
+                          </span>
+                          <span className='text-danger cursor-pointer' onClick={() => {
+                            setCardImage({
+                              ...cardImage,
+                              card_footer: {
+                                file: '',
+                                file_name: '',
+                                file_url: ''
+                              }
+                            })
+                          }}>delete</span>
+                        </div>
+
+                      </div>
+                      }
+                      
+                      {/* <div className="invalid-feedback">{errorsData.promo_code}</div> */}
+                    </div>
+                  </div>
+                </div>
+              </div> 
+
             </div>
 
             <div className="row">
@@ -671,6 +876,7 @@ const FormPromo = (props) => {
                 <br />
               </div>
             </div>
+
             <ModalConfirm fetchAPI={fetchAPI} message={"There's Product Model That Not Registered, Are you Sure ?"} />
           </div>
         </div>
