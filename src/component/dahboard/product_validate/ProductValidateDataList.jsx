@@ -42,8 +42,12 @@ function ProductValidateDataList(props) {
           </td> : null
         }
         <td>{props.data.barcode}</td>
-        <td>{props.data.product_id}</td>
-        <td>erlanggariansyah0@gmail.com</td>
+        <td>
+          {props.data.status_checking === 'PENDING' && <p className='bg-warning p-1 text-light text-center' style={{ borderRadius: '6px' }}>Pending</p>}
+          {props.data.status_checking === 'APPROVED' && <p className='bg-success p-1 text-light text-center' style={{ borderRadius: '6px' }}>Approved</p>}
+          {props.data.status_checking === 'REJECTED' && <p className='bg-danger p-1 text-light text-center' style={{ borderRadius: '6px' }}>Rejected</p>}
+        </td>
+        <td>{props.data.email}</td>
         <td>{props.data.brand}</td>
         <td>{props.data.product_name}</td>
         <td>{props.data.barcode}</td>
@@ -63,9 +67,9 @@ function ProductValidateDataList(props) {
         </td>
         <td>
           {
-            props.data.warranty_card !== '' && props.data.warranty_card !== null ?
-            <a className='badge bg-primary' href={`${props.url}${props.data.warranty_card}`} target='_blank'>View Serial Number</a>
-            : null
+            props.data.serial !== '' && props.data.serial !== null ?
+            <a className='badge bg-primary' href={`${props.url}${props.data.serial}`} target='_blank'>View Serial Number</a>
+            : '-'
           }
         </td>
       </tr>

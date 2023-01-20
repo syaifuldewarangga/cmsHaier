@@ -10,20 +10,28 @@ import { Modal } from 'bootstrap';
 import { permissionCek } from '../../../action/permissionCek';
 import FormImportPromo from '../serviceCenter/promoServiceCenter/FormImportPromo';
 import ModalConfirm from './ModalConfirm';
+import { format } from 'date-fns';
 
 function ProductValidateList(props) {
   const [dataID, setDataID] = useState('')
   const [data, setData] = useState([]);
   const [state, setState] = useState({
     tempSearch: '',
-    search: '',
     isSearch: false,
     dataSearch: [],
+    status: 'PENDING',
+    search: '',
+    filter: 'SERIAL_NUMBER',
   });
   const [currentPage, setCurrentPage] = useState(0)
   const [totalPage, setTotalPage] = useState(0)
 
-
+  const handleChange = (e) => {
+    setState({
+      ...state,
+      [e.target.name]: e.target.value
+    })
+  }
   async function fetchData() {
     var token = localStorage.getItem('access_token');
     const request = await axios
@@ -33,7 +41,10 @@ function ProductValidateList(props) {
         },
         params: {
           page: currentPage,
-          itemPerPage: 1,
+          itemPerPage: 5,
+          status: state.status,
+          param: state.search,
+          filter: state.filter,
         }
       })
       .then((res) => {
@@ -42,15 +53,15 @@ function ProductValidateList(props) {
         setTotalPage(res.data.totalPages)
       })
 
-      // .catch((e) => {
-      //   if (e.response) {
-      //     console.log(e.response);
-      //   } else if (e.request) {
-      //     console.log('request : ' + e.request);
-      //   } else {
-      //     console.log('message : ' + e.message);
-      //   }
-      // });
+      .catch((e) => {
+        if (e.response) {
+          // console.log(e.response);
+        } else if (e.request) {
+          // console.log('request : ' + e.request);
+        } else {
+          // console.log('message : ' + e.message);
+        }
+      });
     return request;
   }
 
@@ -70,45 +81,45 @@ function ProductValidateList(props) {
     return () => clearTimeout(timeOutId);
   }, [state.tempSearch]);
 
-  React.useEffect(() => { 
-    const fetchAPI = async () => {
-      var token = localStorage.getItem('access_token');
-      const request = await axios
-        .get(props.base_url + 'register-product/search', {
-          headers: {
-            Authorization: 'Bearer ' + token,
-          },
-          params: {
-            param: state.search,
-          },
-        })
-        .then((res) => {
-          setState({
-            ...state,
-            ['dataSearch']: res.data,
-            ['isSearch']: true,
-          });
-        })
-        .catch((e) => {
-          if (e.response) {
-            console.log(e.response);
-          } else if (e.request) {
-            console.log('request : ' + e.request);
-          } else {
-            console.log('message : ' + e.message);
-          }
-        });
-      return request;
-    };
-    if (state.search === '') {
-      setState({
-        ...state,
-        ['isSearch']: false,
-      });
-    } else {
-      fetchAPI();
-    }
-  }, [state.search]);
+  // React.useEffect(() => { 
+  //   const fetchAPI = async () => {
+  //     var token = localStorage.getItem('access_token');
+  //     const request = await axios
+  //       .get(props.base_url + 'register-product/search', {
+  //         headers: {
+  //           Authorization: 'Bearer ' + token,
+  //         },
+  //         params: {
+  //           param: state.search,
+  //         },
+  //       })
+  //       .then((res) => {
+  //         setState({
+  //           ...state,
+  //           ['dataSearch']: res.data,
+  //           ['isSearch']: true,
+  //         });
+  //       })
+  //       .catch((e) => {
+  //         if (e.response) {
+  //           console.log(e.response);
+  //         } else if (e.request) {
+  //           console.log('request : ' + e.request);
+  //         } else {
+  //           console.log('message : ' + e.message);
+  //         }
+  //       });
+  //     return request;
+  //   };
+  //   if (state.search === '') {
+  //     setState({
+  //       ...state,
+  //       ['isSearch']: false,
+  //     });
+  //   } else {
+  //     fetchAPI();
+  //   }
+  // }, [state.search]);
 
   const handleChangePage = (value) => {
     let newPage = value - 1
@@ -142,7 +153,7 @@ function ProductValidateList(props) {
     setTimeout(() => {
         fetchData()
         hideModal()
-        console.log(dataID)
+        // console.log(dataID)
     }, 500);
   }
 
@@ -151,8 +162,13 @@ function ProductValidateList(props) {
     setTimeout(() => {
         fetchData()
         hideModalConfirm()
-        console.log(dataID)
+        // console.log(dataID)
     }, 500)
+  }
+
+  const handleSearch = () => {
+    // console.log(state)
+    fetchData();
   }
 
   return (
@@ -160,7 +176,7 @@ function ProductValidateList(props) {
       <h5 className="dashboard title">Product Validate</h5>
       <div className="mt-5">
         <div>
-          <div className="row justify-content mb-3">
+          <div className="row justify-content mb-3 gap-1">
             <div className="col-md-4">
               <input
                 class="form-control flex-grow-2"
@@ -173,20 +189,20 @@ function ProductValidateList(props) {
               />
             </div>
             <div className="col-md-2">
-              <select className='form-control flex-grow-1' name="by">
-                <option value="serial_number">Serial Number</option>
-                <option value="email">Email</option>
+              <select name='filter' value={state.filter} onChange={handleChange} className='form-control flex-grow-1'>
+                <option value="SERIAL_NUMBER">Serial Number</option>
+                <option value="EMAIL">Email</option>
               </select>
             </div>
             <div className="col-md-2">
-              <select className='form-control flex-grow-1' name="status">
-                <option value="approved">Approved</option>
-                <option value="pending">pending</option>
-                <option value="reject">Reject</option>
+              <select value={state.status} onChange={handleChange} className='form-control flex-grow-1' name="status">
+                <option value="APPROVED">Approved</option>
+                <option value="PENDING">Pending</option>
+                <option value="REJECTED">Rejected</option>
               </select>
             </div>
             <div className="col-md-2">
-              <button className='btn btn-outline-primary d-flex align-items-center gap-2'>
+              <button onClick={handleSearch} className='btn btn-outline-primary d-flex align-items-center gap-2'>
                 <span class="material-icons-outlined md-18"> search </span>
                 Search
               </button>
@@ -229,7 +245,7 @@ function ProductValidateList(props) {
                             <th>Action</th> : null
                         }
                         <th>Barcode</th>
-                        <th>Product ID</th>
+                        <th>Status</th>
                         <th>Email User</th>
                         <th>Brand</th>
                         <th>Product Model</th>

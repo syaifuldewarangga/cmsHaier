@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import axios from 'axios'
 import moment from 'moment';
 import { produce } from "immer";
@@ -10,10 +10,12 @@ import Autocomplete from 'react-autocomplete';
 import ModalConfirm from './ModalConfirm';
 import { Modal } from 'bootstrap';
 import { format } from 'date-fns';
+import { client_id, client_secret, grant_type } from '../../../variable/GlobalVariable';
 const FormProductValidate = (props) => {
     const [form, setForm] = useState({
         invoice: '',
         warranty: '',
+        serial: '',
         barcode: '',
         brand: '',
         product_model: '',
@@ -29,6 +31,7 @@ const FormProductValidate = (props) => {
     const [isLoading, setIsLoading] = useState(false)
     const [answers, setAnswers] = useState([{ value: '' }])
     const [options, setOptions] = useState([])
+    const { id } = useParams();
 
     const getOptions = async () => {
       const res = await axios.get(`${props.base_url}extended-warranty-promo/wms?product_model=`, {
@@ -59,10 +62,7 @@ const FormProductValidate = (props) => {
     }
 
     const checkProductModel = () => {
-      const cek = answers.map(v => {
-        return options.includes(v.value)
-      })
-      return cek.every((elem, index, arr) => elem == true)
+      return options.includes(form.product_model)
     }
 
     const hideModal = () => {
@@ -88,10 +88,13 @@ const FormProductValidate = (props) => {
         const modalExist = document.getElementById('modalConfirm') 
         if(props.title === 'Edit Product Validate'){
             //Update
-            formData.append('id', form.id);
+            formData.append('id',id);
             
 
         }
+        console.log(Object.fromEntries(formData))
+        setIsLoading(false)
+
     }
     const onSubmit = () => {
       const cek = checkProductModel()
@@ -104,27 +107,6 @@ const FormProductValidate = (props) => {
     }
 
     useEffect(() => {
-      // console.log(props.data)
-        if(typeof props.data !== 'undefined'){
-            let { data } = props
-            setForm({
-                ...form,
-                invoice: data.invoice,
-                warranty: data.warranty,
-                barcode: data.barcode,
-                category: data.category,
-                brand: data.brand,
-                product_model: data.product_model,
-                store:  data.store,
-                store_location: data.store_location,
-                date: data.date,
-                id: data.id,
-            })
-        }
-
-    }, [props.base_url, props.data])
-
-    useEffect(() => {
       let mounted = true
       if(mounted && options.length == 0){
         getOptions()
@@ -134,278 +116,417 @@ const FormProductValidate = (props) => {
       return () => mounted = false
     }, [options.length])
 
+    const [dataStore, setDataStore] = useState([]);
+    const [errorStore, setErrorStore] = useState('');
+    async function fetchDataStore(gtmToken) {
+      try{
+        const res = await axios.post(props.gtm_url + 'pmtcommondata/GetStoreListByCondition',
+            {
+              StoreID: '',
+              StoreName: '',
+              StoreCode: '',
+            },
+            {
+              headers: {
+                Authorization: "Bearer " + gtmToken,
+              },
+            }
+        )
+        setDataStore(res.data.data);
+        return res
+      }catch(e){
+          if (e.response) {
+            // console.log(e.response);
+          } else if (e.request) {
+            // console.log('request : ' + e.request);
+          } else {
+            // console.log('message : ' + e.message);
+          }
+      }
+    }
+    const getTokenGTM = async () => {
+      const { data: { access_token } } = await axios.post(props.gtm_token_url, {
+        client_id: client_id,
+        client_secret: client_secret,
+        grant_type: grant_type,
+      })
+      const temp =  await fetchDataStore(access_token)
+      // console.log(temp)
+      return temp
+    }
+
+    let newDataStore = useMemo(() => {
+      return dataStore.map(({ StoreName }) => StoreName)
+    }, [dataStore]);
+
+    useEffect(() => {
+        // console.log(props.data)
+        let m = true
+        if(m){
+          getTokenGTM().then(res => {
+            if(props.data){
+              let { data } = props
+              setForm({
+                  ...form,
+                  invoice: props.image_url + data.invoice,
+                  warranty: props.image_url + data.warranty_card,
+                  serial: props.image_url + data.serial,
+                  barcode: data.barcode,
+                  category: data.category,
+                  date: moment(data.date).format('yyyy-MM-DD'),
+                  brand: data.brand,
+                  product_model: data.product_model,
+                  store: data.store_name,
+                  store_location: data.store_location,
+              })
+            }
+          })
+        }
+    }, [id])
+
     return (
-    <div>
-      <div className="form-user">
-        <div className="card vh-100">
-          <div className="card-header btn-import">
-            <h5
-              className="dashboard title"
-              style={{ margin: '0', padding: '7px 0' }}
-            >
-              {props.title}
-            </h5>
-          </div>
-          <div className="card-body">
-            
-            {/* Form */}
-            <div className="row">
+      <div>
+        <div className="form-user">
+          <div className="card vh-100">
+            <div className="card-header btn-import">
+              <h5
+                className="dashboard title"
+                style={{ margin: '0', padding: '7px 0' }}
+              >
+                {props.title}
+              </h5>
+            </div>
+            <div className="card-body">
+              
+              {/* Form */}
+              <div className="row">
 
-                {/* Barcode - brand */}
-                <div className="col-lg-6">
-                  <div className="mb-3">
-                    <label className="form-label">Barcode</label>
-                    <input
-                      type="text"
-                      className={`form-control ${
-                          typeof errorsData?.barcode !== 'undefined' ? 'is-invalid' : null
-                      }`}
-                      aria-label="barcode"
-                      onChange={onChangeData}
-                      value={form.barcode}
-                      required
-                    />
-                    <div className="invalid-feedback">{errorsData.barcode}</div>
+                  {/* Barcode - brand */}
+                  <div className="col-lg-6">
+                    <div className="mb-3">
+                      <label className="form-label">Barcode</label>
+                      <input
+                        type="text"
+                        className={`form-control ${
+                            typeof errorsData?.barcode !== 'undefined' ? 'is-invalid' : null
+                        }`}
+                        aria-label="barcode"
+                        onChange={onChangeData}
+                        value={form.barcode}
+                        required
+                      />
+                      <div className="invalid-feedback">{errorsData.barcode}</div>
+                    </div>
                   </div>
-                </div>
-                <div className="col-lg-6">
-                  <div className="mb-3">
-                    <label className="form-label">Brand</label>
-                    <input
-                      type="text"
-                      className={`form-control ${
-                          typeof errorsData?.brand !== 'undefined' ? 'is-invalid' : null
-                      }`}
-                      aria-label="barcde"
-                      onChange={onChangeData}
-                      value={form.brand}
-                      required
-                    />
-                    <div className="invalid-feedback">{errorsData.brand}</div>
+                  <div className="col-lg-6">
+                    <div className="mb-3">
+                      <label className="form-label">Brand</label>
+                      <input
+                        type="text"
+                        className={`form-control ${
+                            typeof errorsData?.brand !== 'undefined' ? 'is-invalid' : null
+                        }`}
+                        aria-label="barcde"
+                        onChange={onChangeData}
+                        value={form.brand}
+                        required
+                      />
+                      <div className="invalid-feedback">{errorsData.brand}</div>
+                    </div>
                   </div>
-                </div>
 
-                {/* product model - serial number */}
-                <div className="col-lg-6">
-                  <label className="form-label">Product Model</label>
-                  <Autocomplete
-                      wrapperStyle={{ width:'100%' }}
-                      getItemValue={(item) => item}
-                      items={
-                          options.filter(v => v.includes(form.product_model.toUpperCase()))
-                      }
-                      renderMenu={(items, value, style ) => {
-                          return (
-                          <div style={{ 
-                              position: 'absolute', 
-                              borderRadius: '3px',
-                              boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
-                              background: 'rgba(255, 255, 255, 0.9)',
-                              padding: '2px 0',
-                              fontSize: '90%',
-                              overflow: 'auto',
-                              marginTop: '5px',
-                              maxHeight: '50%', // TODO: don't cheat, let it flow to the bottom 
-                          }} 
-                          children={items}
-                          />
+                  {/* product model - serial number */}
+                  <div className="col-lg-6">
+                    <label className="form-label">Product Model</label>
+                    <Autocomplete
+                        wrapperStyle={{ width:'100%' }}
+                        getItemValue={(item) => item}
+                        items={
+                            options.filter(v => v.includes(form.product_model.toUpperCase()))
+                        }
+                        renderMenu={(items, value, style ) => {
+                            return (
+                            <div style={{ 
+                                position: 'absolute', 
+                                borderRadius: '3px',
+                                boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
+                                background: 'rgba(255, 255, 255, 0.9)',
+                                padding: '2px 0',
+                                fontSize: '90%',
+                                overflow: 'auto',
+                                marginTop: '5px',
+                                maxHeight: '50%', // TODO: don't cheat, let it flow to the bottom 
+                            }} 
+                            children={items}
+                            />
 
-                          )
-                      }}
-                      renderItem={(item, isHighlighted) =>
-                          <div style={{ background: isHighlighted ? 'lightgray' : 'white', cursor: 'pointer', }}>
-                              {item}
-                          </div>
-                      }
-                      renderInput={(props) => {
-                          return (
+                            )
+                        }}
+                        renderItem={(item, isHighlighted) =>
+                            <div style={{ background: isHighlighted ? 'lightgray' : 'white', cursor: 'pointer', }}>
+                                {item}
+                            </div>
+                        }
+                        renderInput={(props) => {
+                            return (
+                                <div className="w-100">
+                                    <input 
+                                    style={{ width: '100%' }} 
+                                    className={
+                                        `form-control 
+                                        ${typeof errorsData?.product_model !== 'undefined' ? 'is-invalid' : null }
+                                        ${options.length !== 0 && options.includes(form.product_model) ? 'is-valid' : null }
+                                        ${options.length !== 0 && !options.includes(form.product_model) && form.product_model != '' ? 'is-invalid' : null }
+                                    `}   
+                                    {...props}/>
+                                </div> 
+                            )
+                        }
+                        }
+                        // open={options.filter(v => v.includes(answer?.value?.toUpperCase())).length > 0 ? true : false}
+                        value={form.product_model}
+                        onChange={e => {
+                            const product_model = e.target.value;
+                            setForm({
+                                ...form,
+                                product_model
+                            })
+                        }}
+                        onSelect={(val) =>{
+                            const product_model = val
+                            setForm({
+                                ...form,
+                                product_model
+                            })
+                        }}
+                    />
+                  </div>
+                  <div className="col-lg-6">
+                    <div className="mb-3">
+                      <label className="form-label">Serial Number</label>
+                      <input
+                        type="text"
+                        className={`form-control ${
+                            typeof errorsData?.barcode !== 'undefined' ? 'is-invalid' : null
+                        }`}
+                        aria-label="barcde"
+                        onChange={onChangeData}
+                        value={form.barcode}
+                        required
+                      />
+                      <div className="invalid-feedback">{errorsData.barcode}</div>
+                    </div>
+                  </div>
+
+                  {/* category - date */} 
+                  <div className="col-lg-6">
+                    <div className="mb-3">
+                      <label className="form-label">Category</label>
+                      <input
+                        type="text"
+                        className={`form-control ${
+                            typeof errorsData?.category !== 'undefined' ? 'is-invalid' : null
+                        }`}
+                        aria-label="category"
+                        onChange={onChangeData}
+                        value={form.category}
+                        required
+                      />
+                      <div className="invalid-feedback">{errorsData.category}</div>
+                    </div>
+                  </div>
+                  <div className="col-lg-6">
+                    <div className="mb-3">
+                      <label className="form-label">Date of Purchase</label>
+                      <input
+                        type="date"
+                        max={format(new Date(), 'yyyy-MM-dd')}
+                        className={`form-control ${
+                            typeof errorsData?.date !== 'undefined' ? 'is-invalid' : null
+                        }`}
+                        aria-label="date"
+                        onChange={onChangeData}
+                        value={form.date}
+                        required
+                      />
+                      <div className="invalid-feedback">{errorsData.date}</div>
+                    </div>
+                  </div>
+
+                  {/* Store - Store Location */}
+                  <div className="col-lg-6">
+                    <div className="mb-lg-5 mb-4">
+                      <label htmlFor="store-location" className="form-label">
+                        Store Name
+                      </label>
+                        <Autocomplete
+                          wrapperStyle={{ width:'100%' }}
+                          getItemValue={(item) => item}
+                          items={
+                              newDataStore.filter(v => v.includes(form.store.toLocaleUpperCase()))
+                          }
+                          renderMenu={(items, value, style ) => {
+                              return (
+                              <div style={{ 
+                                  position: 'absolute', 
+                                  borderRadius: '3px',
+                                  boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
+                                  background: 'rgba(255, 255, 255, 0.9)',
+                                  padding: '2px 0',
+                                  fontSize: '90%',
+                                  overflow: 'auto',
+                                  marginTop: '5px',
+                                  maxHeight: '50%', // TODO: don't cheat, let it flow to the bottom 
+                              }} 
+                              children={items}
+                              />
+
+                              )
+                          }}
+                          renderItem={(item, isHighlighted) =>
+                              <div style={{ background: isHighlighted ? 'lightgray' : 'white', cursor: 'pointer', padding: '1px' }}>
+                                  {item}
+                              </div>
+                          }
+                          renderInput={(props) => {
+                            return (
                               <div className="w-100">
-                                  <input 
+                                <input 
                                   style={{ width: '100%' }} 
                                   className={
-                                      `form-control 
-                                      ${typeof errorsData?.product_model !== 'undefined' ? 'is-invalid' : null }
-                                      ${options.length !== 0 && options.includes(form.product_model) ? 'is-valid' : null }
-                                      ${options.length !== 0 && !options.includes(form.product_model) && form.product_model != '' ? 'is-invalid' : null }
-                                  `}   
-                                  {...props}/>
+                                    `form-control`}   
+                                {...props}
+                                />
                               </div> 
-                          )
-                      }
-                      }
-                      // open={options.filter(v => v.includes(answer?.value?.toUpperCase())).length > 0 ? true : false}
-                      value={form.product_model}
-                      onChange={e => {
-                          const product_model = e.target.value;
-                          setForm({
-                              ...form,
-                              product_model
-                          })
-                      }}
-                      onSelect={(val) =>{
-                          const product_model = val
-                          setForm({
-                              ...form,
-                              product_model
-                          })
-                      }}
-                  />
-                </div>
-                <div className="col-lg-6">
-                  <div className="mb-3">
-                    <label className="form-label">Serial Number</label>
-                    <input
-                      type="text"
-                      className={`form-control ${
-                          typeof errorsData?.barcode !== 'undefined' ? 'is-invalid' : null
-                      }`}
-                      aria-label="barcde"
-                      onChange={onChangeData}
-                      value={form.barcode}
-                      required
-                    />
-                    <div className="invalid-feedback">{errorsData.barcode}</div>
-                  </div>
-                </div>
-
-                {/* category - date */} 
-                <div className="col-lg-6">
-                  <div className="mb-3">
-                    <label className="form-label">Category</label>
-                    <input
-                      type="text"
-                      className={`form-control ${
-                          typeof errorsData?.category !== 'undefined' ? 'is-invalid' : null
-                      }`}
-                      aria-label="category"
-                      onChange={onChangeData}
-                      value={form.category}
-                      required
-                    />
-                    <div className="invalid-feedback">{errorsData.category}</div>
-                  </div>
-                </div>
-                <div className="col-lg-6">
-                  <div className="mb-3">
-                    <label className="form-label">Date of Purchase</label>
-                    <input
-                      type="date"
-                      max={format(new Date(), 'yyyy-MM-dd')}
-                      className={`form-control ${
-                          typeof errorsData?.date !== 'undefined' ? 'is-invalid' : null
-                      }`}
-                      aria-label="date"
-                      onChange={onChangeData}
-                      value={form.date}
-                      required
-                    />
-                    <div className="invalid-feedback">{errorsData.date}</div>
-                  </div>
-                </div>
-
-                {/* Store - Store Location */}
-                <div className="col-lg-6">
-                  <div className="mb-3">
-                    <label className="form-label">Store</label>
-                    <input
-                      type="text"
-                      className={`form-control ${
-                          typeof errorsData?.store !== 'undefined' ? 'is-invalid' : null
-                      }`}
-                      aria-label="store"
-                      onChange={onChangeData}
-                      value={form.store}
-                      required
-                    />
-                    <div className="invalid-feedback">{errorsData.store}</div>
-                  </div>
-                </div>
-                <div className="col-lg-6">
-                  <div className="mb-3">
-                    <label className="form-label">Store Location</label>
-                    <input
-                      type="text"
-                      className={`form-control ${
-                          typeof errorsData?.store_location !== 'undefined' ? 'is-invalid' : null
-                      }`}
-                      aria-label="store_location"
-                      onChange={onChangeData}
-                      value={form.store_location}
-                      required
-                    />
-                    <div className="invalid-feedback">{errorsData.store_location}</div>
-                  </div>
-                </div>
-
-                {/* warranty card and invoice */}
-                <div className="col-lg-6">
-                    <div className="mb-3">
-                        <p className="form-label">Warranty Card/Serial Number</p>
-                        <a href={form.warranty} target='_blank'>
-                            <button className='btn btn-primary btn-sm'>
-                                View Warranty/Serial Number
-                            </button>
-                        </a>
+                            )
+                          }
+                          }
+                          
+                          value={form.store}
+                          onChange={e => {
+                              const store = e.target.value;
+                              setForm({
+                                  ...form,
+                                  store
+                              })
+                          }}
+                          onSelect={(val) =>{
+                              const store = val
+                              let isi = dataStore.filter((word) => word.StoreName === store);
+                              if(isi.length > 0){
+                                setForm({
+                                  ...form,
+                                  store: store,
+                                  store_location: isi[0].Street
+                                })
+                              }
+                              // setForm({
+                              //     ...form,
+                              //     store,
+                              //     store_location,
+                              // })
+                          }}
+                        />
+                      <div className="text-danger" style={{ fontSize: 14 }}>
+                        {errorStore}
+                      </div>
                     </div>
-                </div>
-                <div className="col-lg-6">
-                    <div className="mb-3">
-                        <p className="form-label">Invoice</p>
-                        <a href={form.invoice} target='_blank'>
-                            <button className='btn btn-primary btn-sm'>
-                                View Invoice
-                            </button>
-                        </a>
-                    </div>
-                </div>      
-            </div>
-
-            <div className="row">
-              <div className="col-6">
-                <Link to="/promo">
-                  <div className="d-grid gap-2">
-                    <button className="btn btn-outline-import" type="button">
-                      Cancel
-                    </button>
                   </div>
-                </Link>
+
+                  <div className="col-lg-6">
+                    <div className="mb-lg-5 mb-4">
+                      <label htmlFor="store-location" className="form-label">
+                        Store Location
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="store-location"
+                        value={form.store_location}
+                        disabled
+                      />
+                    </div>
+                  </div>
+
+                  {/* warranty card invoice serial */}
+                  <div className="col-lg-6">
+                      <div className="mb-3">
+                          <p className="form-label">Warranty Card</p>
+                          <a href={form.warranty} target='_blank'>
+                              <button className='btn btn-primary btn-sm'>
+                                  View Warranty
+                              </button>
+                          </a>
+                      </div>
+                  </div>
+                  <div className="col-lg-6">
+                      <div className="mb-3">
+                          <p className="form-label">Invoice</p>
+                          <a href={form.invoice} target='_blank'>
+                              <button className='btn btn-primary btn-sm'>
+                                  View Invoice
+                              </button>
+                          </a>
+                      </div>
+                  </div>      
+                  <div className="col-lg-6">
+                      <div className="mb-3">
+                          <p className="form-label">Serial</p>
+                          <a href={form.serial} target='_blank'>
+                              <button className='btn btn-primary btn-sm'>
+                                  View Serial Number
+                              </button>
+                          </a>
+                      </div>
+                  </div>  
               </div>
-              <div className="d-grid gap-2 col-6">
-                <button 
-                  className="btn btn-import" 
-                  type="button" 
-                  disabled={isLoading && 'disabled'}
-                  onClick={onSubmit}
-                >
-                  {
-                    isLoading ?
-                    <Fragment>
-                        <span class="spinner-border spinner-border-sm me-1  " role="status" aria-hidden="true"></span>
-                        Loading...
-                    </Fragment> :
-                    props.title === 'Edit Product Validate' ? 'Save' : 'Create'
-                  }
-                </button>
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
+
+              <div className="row">
+                <div className="col-6">
+                  <Link to="/promo">
+                    <div className="d-grid gap-2">
+                      <button className="btn btn-outline-import" type="button">
+                        Cancel
+                      </button>
+                    </div>
+                  </Link>
+                </div>
+                <div className="d-grid gap-2 col-6">
+                  <button 
+                    className="btn btn-import" 
+                    type="button" 
+                    disabled={isLoading && 'disabled'}
+                    onClick={onSubmit}
+                  >
+                    {
+                      isLoading ?
+                      <Fragment>
+                          <span class="spinner-border spinner-border-sm me-1  " role="status" aria-hidden="true"></span>
+                          Loading...
+                      </Fragment> :
+                      props.title === 'Edit Product Validate' ? 'Save' : 'Create'
+                    }
+                  </button>
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                </div>
               </div>
+              <ModalConfirm fetchAPI={fetchAPI} message={"There's Product Model That Not Registered, Are you Sure ?"} />
             </div>
-            <ModalConfirm fetchAPI={fetchAPI} message={"There's Product Model That Not Registered, Are you Sure ?"} />
           </div>
         </div>
       </div>
-    </div>
     );
 };
 
@@ -413,6 +534,11 @@ const mapStateToProps = (state) => {
     return {
       base_url: state.BASE_URL,
       image_url: state.URL,
+      gtm_url: state.GTM_URL,
+      token: state.GTM_TOKEN,
+      gsis_url: state.GSIS_URL,
+      gtm_token_url: state.GTM_TOKEN_URL,
+      oapi_url: state.OAPI_URL
     };
   };
   

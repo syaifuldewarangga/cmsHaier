@@ -753,16 +753,17 @@ const FormPromo = (props) => {
               <div className="col-md-6">
                 <div className="mb-3">
                   <label className="form-label">Card Content 1</label>
-                  <input
-                    type="text"
+                  <textarea
+                    rows="3"
                     className={`form-control ${
-                        typeof errorsData?.content_1 !== 'undefined' ? 'is-invalid' : null
+                      typeof errorsData?.content_1 !== 'undefined' ? 'is-invalid' : null
                     }`}
                     aria-label="content_1"
                     onChange={onChangeData}
                     value={form.content_1}
                     required
-                  />
+                  >
+                  </textarea>
                   <div className="invalid-feedback">{errorsData.content_1}</div>
                 </div>
 
@@ -770,16 +771,17 @@ const FormPromo = (props) => {
               <div className="col-md-6">
                 <div className="mb-3">
                   <label className="form-label">Card Content 2</label>
-                  <input
-                    type="text"
+                  <textarea
+                    rows="3"
                     className={`form-control ${
-                        typeof errorsData?.content_2 !== 'undefined' ? 'is-invalid' : null
+                      typeof errorsData?.content_2 !== 'undefined' ? 'is-invalid' : null
                     }`}
                     aria-label="content_2"
                     onChange={onChangeData}
                     value={form.content_2}
                     required
-                  />
+                  >
+                  </textarea>
                   <div className="invalid-feedback">{errorsData.content_2}</div>
                 </div>
 
