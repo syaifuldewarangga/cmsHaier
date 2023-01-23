@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import axios from 'axios'
 import moment from 'moment';
 import { produce } from "immer";
@@ -31,6 +31,7 @@ const FormPromo = (props) => {
         content_1: '',
         content_2: '',
     })
+    const { id } = useParams()
     const history = useHistory();
     const [errorsData, setErrorsData] = useState({})
     const [filePreview, setFilePreview] = useState('');
@@ -127,6 +128,7 @@ const FormPromo = (props) => {
     const fetchAPI = () => {
         setIsLoading(true)
         const formData = new FormData();
+        formData.append('promo_code', form.promo_code);
         formData.append('start_program', moment(form.start_program).format('YYYY/MM/DD'));
         formData.append('end_program',  moment(form.end_program).format('YYYY/MM/DD'));
         formData.append('start_purchase', moment(form.start_purchase).format('YYYY/MM/DD'));
@@ -141,10 +143,20 @@ const FormPromo = (props) => {
         answers.map(v => {
           formData.append('product_model', v.value);
         })
-        // console.log(Object.fromEntries(formData))
+        
+        // Card
+        if(form.card_title1 !== '') formData.append('title_primary', form.card_title1 );
+        if(form.card_title2 !== '') formData.append('title_secondary', form.card_title2 );
+        if(form.content_1 !== '') formData.append('content_primary', form.content_1 );
+        if(form.content_2 !== '') formData.append('content_secondary', form.content_2 );
+        if(cardImage.card_header.file !== '') formData.append('card_header', cardImage.card_header.file);
+        if(cardImage.card_footer.file !== '') formData.append('card_footer', cardImage.card_footer.file);
+ 
         var token = localStorage.getItem('access_token');
         const modalExist = document.getElementById('modalConfirm') 
         if(props.title === 'Edit Promo'){
+            // console.table(Object.fromEntries(formData))
+            // setIsLoading(false)
             //Update
             formData.append('id', form.id);
             axios.post(props.base_url + 'extended-warranty-promo/edit', formData, {
@@ -160,7 +172,7 @@ const FormPromo = (props) => {
             .catch((e) => {
                 let responError = e.response.data.errors?.location;
                 if(typeof responError !== 'undefined'){
-                  // console.log(responError)
+                  // console.log(e.response)
                   setErrorsData(responError)
                   if(typeof responError?.thumbnail !== 'undefined' ){
                     window.scrollTo({
@@ -180,6 +192,8 @@ const FormPromo = (props) => {
 
         }else{
             //Insert
+            // console.table(Object.fromEntries(formData))
+            // setIsLoading(false)
             axios.post(props.base_url + 'extended-warranty-promo', formData, {
                 headers: {
                     Authorization: 'Bearer ' + token,
@@ -225,11 +239,11 @@ const FormPromo = (props) => {
 
     useEffect(() => {
       // console.log(props.data)
-        if(typeof props.data !== 'undefined'){
-            let data = {
+        if(props.data){
+            const data = {
               ...props.data.extendedWarranty
             }
-            // console.log(props.data.productModelList)
+            // console.log(data)
             if(props.data.productModelList){
               let temp = props.data.productModelList.map(v => {
                 return {
@@ -241,8 +255,41 @@ const FormPromo = (props) => {
             }else{
               setAnswers([])
             }
+            let cardImageTemp = {
+              card_header: {
+                file: '',
+                file_url: '',
+                file_name: ''
+              },
+              card_footer: {
+                file: '',
+                file_url: '',
+                file_name: ''
+              }
+            }
+            if(data.card_header !== null) {
+              cardImageTemp = {
+                ...cardImageTemp,
+                card_header: {
+                  file: '',
+                  file_url: props.image_url + data.card_header,
+                  file_name: data.card_header
+                }
+              }
+            }
+            if(data.card_footer !== null) {
+              cardImageTemp = {
+                ...cardImageTemp,
+                card_footer: {
+                  file: '',
+                  file_url: props.image_url + data.card_footer,
+                  file_name: data.card_footer
+                }
+              }
+            }
             setForm({
                 ...form,
+                promo_code: data.promo_code,
                 start_program: moment(data.start_program).format('yyyy-MM-DD'),
                 end_program: moment(data.end_program).format('yyyy-MM-DD'),
                 start_purchase: moment(data.start_purchase).format('yyyy-MM-DD'),
@@ -255,10 +302,19 @@ const FormPromo = (props) => {
                 product_model: data.product_model,
                 name: data.name,
                 id: data.id,
+
+                //card 
+                card_title1: data.title_primary == null ? "" : data.title_primary,
+                card_title2: data.title_secondary == null ? "" : data.title_secondary,
+                content_1: data.content_primary == null ? "" : data.content_primary,
+                content_2: data.content_secondary == null ? "" : data.content_secondary,
+            })
+            setCardImage({
+              ...cardImageTemp
             })
         }
 
-    }, [props.base_url, props.data])
+    }, [id])
 
     useEffect(() => {
       let mounted = true
@@ -532,6 +588,8 @@ const FormPromo = (props) => {
                     </div>
               </div>
               {options.length > 0 && answers.map((answer, index) => {
+                const isValid = !!options.find(v => answer.value)
+
                   return (
                     <div className="col-lg-6">
                       <div class="mb-3">
@@ -573,7 +631,7 @@ const FormPromo = (props) => {
                                         className={
                                           `form-control 
                                           ${typeof errorsData?.product_model !== 'undefined' ? 'is-invalid' : null }
-                                          ${options.includes(answer.value) ? 'is-valid' : null }
+                                          ${isValid ? 'is-valid' : null }
                                           ${!options.includes(answer.value) && answer.value != '' ? 'is-invalid' : null }
                                         `}   
                                       {...props}/>
@@ -667,7 +725,7 @@ const FormPromo = (props) => {
               {/* Card Header */}
               <div className="col-12">
                 <div className="row">
-                  <div className="col-md-3 col-xs-12">
+                  <div className="col-md-6 col-xs-12">
                     <div className="mb-3 d-flex flex-column">
                       <label className="form-label">Card Header</label>
                       <input
@@ -678,13 +736,13 @@ const FormPromo = (props) => {
                         accept="image/*"
                         onChange={CardImageHandle}
                       />
-                      {cardImage.card_header.file == '' ? 
+                      {cardImage.card_header.file_url == '' ? 
                       <label className='btn btn-small btn-add cursor-pointer' for='card_header'>
                         Upload Card Header
                       </label>
                       :
                       <div className="d-flex flex-column">
-                        <p className='text-bold'>{cardImage.card_header.file_name}</p>
+                        <img src={cardImage.card_header.file_url} className='img-fluid' />
                         <div className="d-flex gap-2">
                           <span className='text-success'>
                             <a target='_blank' href={cardImage.card_header.file_url}>
@@ -790,7 +848,7 @@ const FormPromo = (props) => {
               {/* Card footer */}
               <div className="col-12">
                 <div className="row">
-                  <div className="col-md-3 col-xs-12">
+                  <div className="col-md-6 col-xs-12">
                     <div className="mb-3 d-flex flex-column">
                       <label className="form-label">Card Footer</label>
                       <input
@@ -801,13 +859,13 @@ const FormPromo = (props) => {
                         accept="image/*"
                         onChange={CardImageHandle}
                       />
-                      {cardImage.card_footer.file == '' ? 
+                      {cardImage.card_footer.file_url == '' ? 
                       <label className='btn btn-small btn-add cursor-pointer' for='card_footer'>
                         Upload Card footer
                       </label>
                       :
                       <div className="d-flex flex-column">
-                        <p className='text-bold'>{cardImage.card_footer.file_name}</p>
+                        <img src={cardImage.card_footer.file_url} className='img-fluid' />
                         <div className="d-flex gap-2">
                           <span className='text-success'>
                             <a target='_blank' href={cardImage.card_footer.file_url}>

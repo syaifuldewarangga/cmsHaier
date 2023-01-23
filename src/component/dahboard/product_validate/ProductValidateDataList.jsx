@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { permissionCek } from '../../../action/permissionCek';
 import { ImageFunction } from '../../../variable/ImageFunction';
 
+const statusCheck = ['PENDING']
+
 function ProductValidateDataList(props) {
   return (
     <tbody>
@@ -13,7 +15,7 @@ function ProductValidateDataList(props) {
           <td className="align-middle">
             <div className="d-flex justify-content-start">
               {
-                permissionCek(props.user_permission, 'UPDATE_WARRANTY_PROMO') &&
+                permissionCek(props.user_permission, 'UPDATE_WARRANTY_PROMO') && statusCheck.includes(props.data.status_checking) &&
                 <Link to={'/product-validate/edit/' + props.data.id}>
                   <button className="btn d-flex btn-edit me-3 btn-sm">
                     <span class="material-icons-outlined md-18"> edit </span>
@@ -21,7 +23,7 @@ function ProductValidateDataList(props) {
                 </Link>
               }
               {
-                permissionCek(props.user_permission, 'DELETE_WARRANTY_PROMO') &&
+                permissionCek(props.user_permission, 'DELETE_WARRANTY_PROMO') && statusCheck.includes(props.data.status_checking) &&
                 <button
                   className="btn d-flex btn-danger me-3 btn-sm"
                   onClick={() => props.remove(props.data.id)}
@@ -29,14 +31,18 @@ function ProductValidateDataList(props) {
                   <span class="material-icons-outlined md-18"> close </span>
                 </button>
               }
-              {
-                permissionCek(props.user_permission, 'DELETE_WARRANTY_PROMO') &&
+              {/* {
+                permissionCek(props.user_permission, 'DELETE_WARRANTY_PROMO') && statusCheck.includes(props.data.status_checking) &&
                 <button
                   className="btn d-flex btn-success me-3 btn-sm"
                   onClick={() => props.approve(props.data.id)}
                 >
                   <span class="material-icons-outlined md-18"> check </span>
                 </button>
+              } */}
+              {
+                !statusCheck.includes(props.data.status_checking) && 
+                <p className='text-center'>-</p>
               }
             </div>
           </td> : null

@@ -36,7 +36,7 @@ function PromoList(props) {
         }
       })
       .then((res) => {
-        console.log(res.data)
+        // console.log(res.data)
         setData(res.data.content);
         setCurrentPage(res.data.number)
         setTotalPage(res.data.totalPages)
@@ -91,11 +91,11 @@ function PromoList(props) {
         })
         .catch((e) => {
           if (e.response) {
-            console.log(e.response);
+            // console.log(e.response);
           } else if (e.request) {
-            console.log('request : ' + e.request);
+            // console.log('request : ' + e.request);
           } else {
-            console.log('message : ' + e.message);
+            // console.log('message : ' + e.message);
           }
         });
       return request;
@@ -116,7 +116,7 @@ function PromoList(props) {
   }
 
   const handleModalDelete = (dataID) => {
-    console.log(dataID)
+    // console.log(dataID)
     setDataID(dataID)
     let alertModal = new Modal(document.getElementById('modalDelete'));
     alertModal.show();
@@ -144,11 +144,11 @@ function PromoList(props) {
     })
     .catch((e) => {
       if (e.response) {
-        console.log(e.response);
+        // console.log(e.response);
       } else if (e.request) {
-        console.log('request : ' + e.request);
+        // console.log('request : ' + e.request);
       } else {
-        console.log('message : ' + e.message);
+        // console.log('message : ' + e.message);
       }
     });
   }

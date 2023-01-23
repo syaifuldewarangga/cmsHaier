@@ -48,6 +48,8 @@ function ProductValidateList(props) {
         }
       })
       .then((res) => {
+        // console.log(res.data.content)
+        // console.log(state)
         setData(res.data.content);
         setCurrentPage(res.data.number)
         setTotalPage(res.data.totalPages)
@@ -148,22 +150,40 @@ function ProductValidateList(props) {
     alertModal.hide();
   }
 
-  const handleDelete = async (dataID) => {
+  const handleReject = async (dataID) => {
     var token = localStorage.getItem('access_token');
-    setTimeout(() => {
-        fetchData()
-        hideModal()
-        // console.log(dataID)
-    }, 500);
+    const res = await axios.patch(props.base_url + 'register-product/plain/status', {}, {
+          headers: {
+            Authorization: 'Bearer ' + token,
+          },
+          params: {
+            registered_product_id: dataID,
+            status: 'REJECTED',
+        }
+    })
+    // console.log(res.data)
+    alert('Success Reject Registered!')
+    hideModal()
+    fetchData()
+    // setTimeout(() => {
+    //     hideModal()
+    // }, 500);
   }
 
-  const handleApprove = async () => {
+  const handleApprove = async (dataId) => {
     var token = localStorage.getItem('access_token');
-    setTimeout(() => {
-        fetchData()
-        hideModalConfirm()
-        // console.log(dataID)
-    }, 500)
+    const res = await axios.patch(props.base_url + 'register-product/plain/status', {}, {
+          headers: {
+            Authorization: 'Bearer ' + token,
+          },
+          params: {
+            registered_product_id: dataId,
+            status: 'APPROVED',
+        }
+    })
+    // console.log(res.data)
+    hideModal()
+    fetchData()
   }
 
   const handleSearch = () => {
@@ -280,7 +300,7 @@ function ProductValidateList(props) {
         <ModalDelete 
             message="are you sure you want to reject this product?"
             dataID={dataID}
-            remove = {handleDelete}
+            remove = {handleReject}
         />
         <ModalConfirm 
             fetchAPI={handleApprove} 

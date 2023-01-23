@@ -34,7 +34,7 @@ function PromoDataList(props) {
         }
         
         
-        <td className="align-middle">PRM1</td>
+        <td className="align-middle">{props.data.promo_code}</td>
         <td className="align-middle">{props.data.name}</td>
         <td className="align-middle">
           <img

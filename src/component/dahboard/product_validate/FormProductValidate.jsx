@@ -11,7 +11,9 @@ import ModalConfirm from './ModalConfirm';
 import { Modal } from 'bootstrap';
 import { format } from 'date-fns';
 import { client_id, client_secret, grant_type } from '../../../variable/GlobalVariable';
+var X2JS = require('x2js');
 const FormProductValidate = (props) => {
+    const xtojson = new X2JS();
     const [form, setForm] = useState({
         invoice: '',
         warranty: '',
@@ -29,9 +31,15 @@ const FormProductValidate = (props) => {
     const [errorsData, setErrorsData] = useState({})
     const [filePreview, setFilePreview] = useState('');
     const [isLoading, setIsLoading] = useState(false)
-    const [answers, setAnswers] = useState([{ value: '' }])
+    const [isLoading2, setIsLoading2] = useState(false)
     const [options, setOptions] = useState([])
     const { id } = useParams();
+    const [image, setImage] = useState({
+      warranty : '',
+      invoice : '', 
+      serial : '' 
+    })
+    
 
     const getOptions = async () => {
       const res = await axios.get(`${props.base_url}extended-warranty-promo/wms?product_model=`, {
@@ -55,7 +63,7 @@ const FormProductValidate = (props) => {
         }else{
             setForm({
                 ...form,
-                [e.target.ariaLabel]: e.target.value
+                [e.target.name]: e.target.value
             })
         }
         
@@ -76,24 +84,73 @@ const FormProductValidate = (props) => {
       alertModal.show();
     }
 
+    const handleImage = (e) => {
+      const file =  e.target.files[0];
+      if(!!file){
+        const fileUrl = URL.createObjectURL(file)
+        setImage({
+          ...image,
+          [e.target.name]: file
+        })
+        setForm({
+          ...form,
+          [e.target.name]: fileUrl
+        })
+      }
+    }
+
     const fetchAPI = () => {
         setIsLoading(true)
-        const formData = new FormData();
-        formData.append('barcode', form.barcode);
-        formData.append('category', form.category);
-        formData.append('brand', form.brand);
-        formData.append('product_model', form.product_model);
+        const userData = props.data.customer
+        // console.log(userData)
+        const formdata = new FormData();
+        formdata.append('customer_id', id);
+        formdata.append('serial_number', form.barcode);
+        formdata.append('barcode', form.barcode);
+        formdata.append('product_name', form.product_model);
+        formdata.append('date', format(new Date(form.date), 'MM/dd/yyyy'));
+        formdata.append('store_location', form.store_location);
+        formdata.append('store_name', form.store);
+        formdata.append('email', userData.email);
+        formdata.append('phone', userData.phone);
+        formdata.append('product_model', form.product_model);
+        if(image.warranty !== ''){
+          formdata.append( 'warranty_card', image.warranty);
+        }
+        if(image.invoice !== ''){
+          formdata.append('invoice', image.invoice);
+        }
+        if(image.serial !== ''){
+          formdata.append('serial', image.serial);
+        }
+        formdata.append('brand', form.brand);
+        formdata.append('category', form.category);
+
         // console.log(Object.fromEntries(formData))
         var token = localStorage.getItem('access_token');
         const modalExist = document.getElementById('modalConfirm') 
         if(props.title === 'Edit Product Validate'){
             //Update
-            formData.append('id',id);
-            
+            formdata.append('id', id);
+            axios.put(props.base_url + 'register-product/plain', formdata, {
+              headers: {
+                Authorization: 'Bearer ' + token,
+              },
+            }).then(res => {
+              // console.log(res.data)
+              setIsLoading(false)
+              if(res.data.code == 200){
+                alert('Berhasil Edit')
+                
+              }
+            }).catch(err => {
+              // console.log(err.response)
+            }).finally(() => {
+              setIsLoading(false)
+            })
 
         }
-        console.log(Object.fromEntries(formData))
-        setIsLoading(false)
+        // console.log(Object.fromEntries(formdata))
 
     }
     const onSubmit = () => {
@@ -166,6 +223,7 @@ const FormProductValidate = (props) => {
           getTokenGTM().then(res => {
             if(props.data){
               let { data } = props
+              // console.log(data)
               setForm({
                   ...form,
                   invoice: props.image_url + data.invoice,
@@ -184,10 +242,100 @@ const FormProductValidate = (props) => {
         }
     }, [id])
 
+    const handleApprove = async (dataId) => {
+      var token = localStorage.getItem('access_token');
+      const res = await axios.patch(props.base_url + 'register-product/plain/status', {}, {
+            headers: {
+              Authorization: 'Bearer ' + token,
+            },
+            params: {
+              registered_product_id: dataId,
+              status: 'APPROVED',
+          }
+      })
+      // console.log(res.data)
+      if(res.data.code == 200){
+        alert('Berhasil Approve Data');
+        history.push('/product-validate/list');
+      }
+      // hideModal()
+      // fetchData()
+    }
+
+    const deleteProduct = async (productID) => {
+      var token = localStorage.getItem('access_token');
+      await axios.delete(props.base_url + 'register-product/product', {
+        headers: {
+          Authorization: 'Bearer ' + token,
+        },
+        params: {
+          id: productID
+        }
+      }).then(() => {
+        // console.log('success delete')
+        alert('Failed Send to Gsis')
+      }).catch((error) => {
+        // console.log(error.response)
+      }).finally(() => {
+        setIsLoading2(false)
+      })
+    }
+    
+    const [errorGsis, setErrorGSIS] = useState('')
+    const postToGSIS = async () => {
+      setIsLoading2(true)
+      let formGSIS = new FormData()
+      const dataUser = props.data.customer
+      formGSIS.append('id', id)
+      formGSIS.append('country', 'Indonesia')
+      formGSIS.append('firstName', dataUser.first_name)
+      formGSIS.append('lastName', dataUser.last_name)
+      formGSIS.append('mobilePhone', dataUser.phone)
+      formGSIS.append('email', dataUser.email)
+      formGSIS.append('address', dataUser.address)
+      formGSIS.append('AddressId', "")
+      formGSIS.append('City', dataUser.city)
+      formGSIS.append('State', dataUser.district)
+      formGSIS.append('Street', dataUser.sub_district)
+      formGSIS.append('brand', form.brand)
+      formGSIS.append('category', form.category);
+      formGSIS.append('productModel', form.product_model);
+      formGSIS.append('serialNum', form.barcode);
+      formGSIS.append('purchaseDate', format(new Date(form.date), 'MM/dd/yyyy'));
+      let invoiceURL = props.image_url + form.invoice
+      formGSIS.append('Invoiceattachment', invoiceURL);
+      let attachmentURL = props.image_url + form.warranty
+      formGSIS.append('Warrantyattachment', attachmentURL);
+      formGSIS.append('whatsappflag', props.data.agreements === 'Y' ? 'Y' : 'N');
+      // console.table(Object.fromEntries(formGSIS))
+
+      await axios.post(props.gsis_url + 'hatprodreg', formGSIS, {
+        headers: {
+          Accept: 'application/xml',
+        }
+      }).then((res) => {
+        let response = xtojson.xml2js(res.data)
+        let errorCode = response.Envelope.Body.HESAProdRegResponse.Error_spcCode
+        // console.log(errorCode)
+        if(errorCode === '0') {
+          handleApprove(id)
+        } else {
+          alert('Failed Send to GSIS')
+          setIsLoading2(false)
+          setErrorGSIS(response.Envelope.Body.HESAProdRegResponse.Error_spcMessage)
+          // console.log(response.Envelope.Body.HESAProdRegResponse.Error_spcMessage)
+        } 
+      }).catch((err) => {
+        // deleteProduct(id)
+        // console.log(err.response)
+      }).finally(() => {
+      });
+    }
+
     return (
       <div>
         <div className="form-user">
-          <div className="card vh-100">
+          <div className="card ">
             <div className="card-header btn-import">
               <h5
                 className="dashboard title"
@@ -210,7 +358,7 @@ const FormProductValidate = (props) => {
                         className={`form-control ${
                             typeof errorsData?.barcode !== 'undefined' ? 'is-invalid' : null
                         }`}
-                        aria-label="barcode"
+                        name="barcode"
                         onChange={onChangeData}
                         value={form.barcode}
                         required
@@ -226,7 +374,7 @@ const FormProductValidate = (props) => {
                         className={`form-control ${
                             typeof errorsData?.brand !== 'undefined' ? 'is-invalid' : null
                         }`}
-                        aria-label="barcde"
+                        disabled
                         onChange={onChangeData}
                         value={form.brand}
                         required
@@ -306,10 +454,10 @@ const FormProductValidate = (props) => {
                       <label className="form-label">Serial Number</label>
                       <input
                         type="text"
+                        name='barcode'
                         className={`form-control ${
                             typeof errorsData?.barcode !== 'undefined' ? 'is-invalid' : null
                         }`}
-                        aria-label="barcde"
                         onChange={onChangeData}
                         value={form.barcode}
                         required
@@ -322,16 +470,21 @@ const FormProductValidate = (props) => {
                   <div className="col-lg-6">
                     <div className="mb-3">
                       <label className="form-label">Category</label>
-                      <input
-                        type="text"
-                        className={`form-control ${
-                            typeof errorsData?.category !== 'undefined' ? 'is-invalid' : null
-                        }`}
-                        aria-label="category"
+                      <select 
                         onChange={onChangeData}
                         value={form.category}
-                        required
-                      />
+                        required className="form-select" name="category" placeholder='choose brand'
+                      >
+                        <option value='' disabled>Choose One Category</option>
+                        <option value="Refrigerator">Kulkas (REF)</option>
+                        <option value="Freezer">Freezer (CC)</option>
+                        <option value="showcase">Showcase (CC)</option>
+                        <option value="Washing Machine">Mesin Cuci (WM)</option>
+                        <option value="Drum Washing Machine">Mesin Cuci Pintu Depan (DWM)</option>
+                        <option value="TV">LED TV (TV)</option>
+                        <option value="Home Air Conditioner">Air Conditioner (HAC)</option>
+                        <option value="ka">Kitchen Appliances (SDA)</option>
+                      </select>  
                       <div className="invalid-feedback">{errorsData.category}</div>
                     </div>
                   </div>
@@ -344,7 +497,7 @@ const FormProductValidate = (props) => {
                         className={`form-control ${
                             typeof errorsData?.date !== 'undefined' ? 'is-invalid' : null
                         }`}
-                        aria-label="date"
+                        name="date"
                         onChange={onChangeData}
                         value={form.date}
                         required
@@ -449,49 +602,85 @@ const FormProductValidate = (props) => {
                   </div>
 
                   {/* warranty card invoice serial */}
-                  <div className="col-lg-6">
-                      <div className="mb-3">
-                          <p className="form-label">Warranty Card</p>
-                          <a href={form.warranty} target='_blank'>
-                              <button className='btn btn-primary btn-sm'>
-                                  View Warranty
-                              </button>
-                          </a>
+                  <div className="col-lg-12 mb-5">
+                    <div className="row mb-5">
+                      <div className="col-lg-4 mb-5">
+                          <div className="h-100">
+                              <p className="form-label">Warranty Card</p>
+                              <div className="d-flex flex-column h-100">
+                                <img src={form.warranty} className="img-fluid mb-auto" />
+                                <div className="gap-2 w-100 align-items-center d-flex justify-content-between ">
+                                  <label
+                                    className="btn btn-sm btn-success flex-grow-1"
+                                    htmlFor='warranty'
+                                  >
+                                    <span class="material-icons-outlined md-18">edit</span>
+                                  </label>
+                                  <a href={form.warranty} target='_blank' className='flex-grow-1 btn btn-sm btn-outline-success'>
+                                      View Image
+                                  </a>
+                                </div>
+                                <input onChange={handleImage} type="file" name="warranty" id="warranty" hidden />
+                              </div>
+                          </div>
                       </div>
+                      <div className="col-lg-4  mb-5">
+                          <div className="h-100">
+                              <p className="form-label">Invoice</p>
+                              <div className="d-flex flex-column h-100">
+                                <img src={form.invoice} className="img-fluid mb-auto" />
+                                <div className="gap-2 w-100 align-items-center d-flex justify-content-between ">
+                                  <label
+                                    className="btn btn-sm btn-success flex-grow-1"
+                                    htmlFor='invoice'
+                                  >
+                                    <span class="material-icons-outlined md-18">edit</span>
+                                  </label>
+                                  <a href={form.invoice} target='_blank' className='flex-grow-1 btn btn-sm btn-outline-success'>
+                                      View Image
+                                  </a>
+                                </div>
+                                <input onChange={handleImage} type="file" name="invoice" id="invoice" hidden />
+                              </div>
+                          </div>
+                      </div>      
+                      <div className="col-lg-4 mb-5">
+                          <div className="h-100">
+                              <p className="form-label">Serial</p>
+                              <div className="d-flex flex-column h-100">
+                                <img src={form.serial} className="img-fluid mb-auto" />
+                                <div className="gap-2 w-100 align-items-center d-flex justify-content-between ">
+                                  <label
+                                    className="btn btn-sm btn-success flex-grow-1"
+                                    htmlFor='serial'
+                                  >
+                                    <span class="material-icons-outlined md-18">edit</span>
+                                  </label>
+                                  <a href={form.serial} target='_blank' className='flex-grow-1 btn btn-sm btn-outline-success'>
+                                      View Image
+                                  </a>
+                                </div> 
+                                
+                                <input onChange={handleImage} type="file" name="serial" id="serial" hidden />
+                              </div>
+                          </div>
+                      </div>  
+                    </div>
+
                   </div>
-                  <div className="col-lg-6">
-                      <div className="mb-3">
-                          <p className="form-label">Invoice</p>
-                          <a href={form.invoice} target='_blank'>
-                              <button className='btn btn-primary btn-sm'>
-                                  View Invoice
-                              </button>
-                          </a>
-                      </div>
-                  </div>      
-                  <div className="col-lg-6">
-                      <div className="mb-3">
-                          <p className="form-label">Serial</p>
-                          <a href={form.serial} target='_blank'>
-                              <button className='btn btn-primary btn-sm'>
-                                  View Serial Number
-                              </button>
-                          </a>
-                      </div>
-                  </div>  
               </div>
 
               <div className="row">
-                <div className="col-6">
+                <div className="col-4">
                   <Link to="/promo">
                     <div className="d-grid gap-2">
-                      <button className="btn btn-outline-import" type="button">
+                      <button className="btn btn-outline-danger" type="button">
                         Cancel
                       </button>
                     </div>
                   </Link>
                 </div>
-                <div className="d-grid gap-2 col-6">
+                <div className="d-grid gap-2 col-4">
                   <button 
                     className="btn btn-import" 
                     type="button" 
@@ -507,22 +696,26 @@ const FormProductValidate = (props) => {
                       props.title === 'Edit Product Validate' ? 'Save' : 'Create'
                     }
                   </button>
-                  <br />
-                  <br />
-                  <br />
-                  <br />
-                  <br />
-                  <br />
-                  <br />
-                  <br />
-                  <br />
-                  <br />
-                  <br />
-                  <br />
-                  <br />
+                </div>
+                <div className="d-grid gap-2 col-4">
+                  <button 
+                    className="btn btn-outline-import " 
+                    type="button" 
+                    disabled={isLoading2 && 'disabled'}
+                    onClick={postToGSIS}
+                  >
+                    {
+                      isLoading2 ?
+                      <Fragment>
+                          <span class="spinner-border spinner-border-sm me-1  " role="status" aria-hidden="true"></span>
+                          Loading...
+                      </Fragment> :
+                      props.title === 'Edit Product Validate' ? 'Approve' : 'Create'
+                    }
+                  </button>
                 </div>
               </div>
-              <ModalConfirm fetchAPI={fetchAPI} message={"There's Product Model That Not Registered, Are you Sure ?"} />
+              <ModalConfirm fetchAPI={postToGSIS} message={"There's Product Model That Not Registered, Are you Sure ?"} />
             </div>
           </div>
         </div>
