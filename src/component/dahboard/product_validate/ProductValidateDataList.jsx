@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { permissionCek } from '../../../action/permissionCek';
-import { ImageFunction } from '../../../variable/ImageFunction';
 
 const statusCheck = ['PENDING']
 
@@ -53,6 +52,7 @@ function ProductValidateDataList(props) {
           {props.data.status_checking === 'APPROVED' && <p className='bg-success p-1 text-light text-center' style={{ borderRadius: '6px' }}>Approved</p>}
           {props.data.status_checking === 'REJECTED' && <p className='bg-danger p-1 text-light text-center' style={{ borderRadius: '6px' }}>Rejected</p>}
         </td>
+        <td>{props.data.promo_name === null ? '-' : props.data.promo_name}</td>
         <td>{props.data.email}</td>
         <td>{props.data.brand}</td>
         <td>{props.data.product_name}</td>

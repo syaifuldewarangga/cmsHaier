@@ -266,6 +266,7 @@ function ProductValidateList(props) {
                         }
                         <th>Barcode</th>
                         <th>Status</th>
+                        <th>Promo Name</th>
                         <th>Email User</th>
                         <th>Brand</th>
                         <th>Product Model</th>
