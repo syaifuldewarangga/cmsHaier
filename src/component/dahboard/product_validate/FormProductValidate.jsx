@@ -42,13 +42,17 @@ const FormProductValidate = (props) => {
     
 
     const getOptions = async () => {
-      const res = await axios.get(`${props.base_url}extended-warranty-promo/wms?product_model=`, {
+      // const url = `${props.base_url}extended-warranty-promo/wms?product_model=`
+      const url = `${props.base_url}product-model-all`
+      const res = await axios.get(url, {
         headers: {
             Authorization: 'Bearer ' + localStorage.getItem('access_token'),
             'Content-Type': 'application/json',
         },
       })
-      setOptions([...res.data])
+      const { data } = res;
+      // console.log(data.product_model_list)
+      setOptions(data.product_model_list)
     }
 
     const onChangeData = (e) => {
@@ -390,7 +394,7 @@ const FormProductValidate = (props) => {
                         wrapperStyle={{ width:'100%' }}
                         getItemValue={(item) => item}
                         items={
-                            options.filter(v => v.includes(form.product_model.toUpperCase()))
+                            options.filter(opt => opt).filter(v => v.includes(form.product_model.toUpperCase()))
                         }
                         renderMenu={(items, value, style ) => {
                             return (
