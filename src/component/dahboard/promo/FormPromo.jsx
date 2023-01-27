@@ -9,6 +9,9 @@ import readXlsxFile from 'read-excel-file';
 import Autocomplete from 'react-autocomplete';
 import ModalConfirm from './ModalConfirm';
 import { Modal } from 'bootstrap';
+const regexCheck = (string) => {
+  return /^[a-zA-Z0-9]+$/.test(string)
+}
 const FormPromo = (props) => {
     const [form, setForm] = useState({
         promo_code: '',
@@ -85,10 +88,21 @@ const FormPromo = (props) => {
                 setFilePreview(URL.createObjectURL(e.target.files[0]));
               }
         }else{
-            setForm({
-                ...form,
-                [e.target.ariaLabel]: e.target.value
-            })
+            if(e.target.ariaLabel === 'promo_code'){
+              if(e.target.value.split('').length <= 4){
+                if(regexCheck(e.target.value) || e.target.value === ''){
+                  setForm({
+                    ...form,
+                    promo_code: e.target.value.toUpperCase()
+                  })
+                }
+              }
+            }else{
+              setForm({
+                  ...form,
+                  [e.target.ariaLabel]: e.target.value
+              })
+            }
         }
         
     }
