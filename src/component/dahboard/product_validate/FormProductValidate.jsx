@@ -12,6 +12,17 @@ import { Modal } from 'bootstrap';
 import { format } from 'date-fns';
 import { client_id, client_secret, grant_type } from '../../../variable/GlobalVariable';
 var X2JS = require('x2js');
+
+const convertCategoryGSIS = (value) => {
+  const Freezer = ['Showcase', 'Freezer']
+  const Washing_Machine = ['Mesin Cuci Twin Tube', 'Mesin Cuci Top Load']
+  const Small_Appliances = ['Blender and Juicer', 'Electric Kettle', 'Microwave', 'Rice Cooker', 'Vacuum Cleaner', 'Travel Cooker', 'Electric Fan', 'Cooker Hood', 'Kompor']
+  if(Freezer.includes(value)) return 'Freezer'
+  if(Washing_Machine.includes(value)) return 'Washing Machine'
+  if(Small_Appliances.includes(value)) return 'Small Appliances'
+  return value
+}
+
 const FormProductValidate = (props) => {
     const xtojson = new X2JS();
     const [form, setForm] = useState({
@@ -302,7 +313,7 @@ const FormProductValidate = (props) => {
       formGSIS.append('State', dataUser.district)
       formGSIS.append('Street', dataUser.sub_district)
       formGSIS.append('brand', form.brand)
-      formGSIS.append('category', form.category);
+      formGSIS.append('category', convertCategoryGSIS(form.category));
       formGSIS.append('productModel', form.product_model);
       formGSIS.append('serialNum', form.barcode);
       formGSIS.append('purchaseDate', format(new Date(form.date), 'MM/dd/yyyy'));
@@ -312,6 +323,7 @@ const FormProductValidate = (props) => {
       formGSIS.append('Warrantyattachment', attachmentURL);
       formGSIS.append('whatsappflag', props.data.agreements === 'Y' ? 'Y' : 'N');
       // console.table(Object.fromEntries(formGSIS))
+      // setIsLoading2(false)
 
       await axios.post(props.gsis_url + 'hatprodreg', formGSIS, {
         headers: {
@@ -480,14 +492,25 @@ const FormProductValidate = (props) => {
                         required className="form-select" name="category" placeholder='choose brand'
                       >
                         <option value='' disabled>Choose One Category</option>
-                        <option value="Refrigerator">Kulkas (REF)</option>
-                        <option value="Freezer">Freezer (CC)</option>
-                        <option value="showcase">Showcase (CC)</option>
-                        <option value="Washing Machine">Mesin Cuci (WM)</option>
-                        <option value="Drum Washing Machine">Mesin Cuci Pintu Depan (DWM)</option>
-                        <option value="TV">LED TV (TV)</option>
-                        <option value="Home Air Conditioner">Air Conditioner (HAC)</option>
-                        <option value="ka">Kitchen Appliances (SDA)</option>
+                        <option value="Refrigerator">Kulkas</option>
+                        <option value="Freezer">Freezer</option>
+                        <option value="Showcase">Showcase</option>
+                        <option value="Mesin Cuci Twin Tube">Mesin Cuci Twin Tube</option>
+                        <option value="Mesin Cuci Top Load">Mesin Cuci Top Load</option>
+                        <option value="Drum Washing Machine">Mesin Cuci Front Load</option>
+                        <option value="TV">LED TV</option>
+                        <option value="Home Air Conditioner">Air Conditioner</option>
+                        <option value="Blender and Juicer">Blender and Juicer</option>
+                        <option value="Electric Kettle">Electric Kettle</option>
+                        <option value="Microwave">Microwave</option>
+                        <option value="Rice Cooker">Rice Cooker</option>
+                        <option value="Vacuum Cleaner">Vacuum Cleaner</option>
+                        <option value="Travel Cooker">Travel Cooker</option>
+                        <option value="Electric Fan">Electric Fan</option>
+                        <option value="Commercial Air Conditioner">Commercial Air Conditioner</option>
+                        <option value="Water Heater">Water Heater</option>
+                        <option value="Cooker Hood">Cooker Hood</option>
+                        <option value="Kompor">Kompor</option>
                       </select>  
                       <div className="invalid-feedback">{errorsData.category}</div>
                     </div>

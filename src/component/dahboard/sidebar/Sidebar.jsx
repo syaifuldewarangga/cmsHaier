@@ -61,17 +61,34 @@ const Sidebar = (props) => {
                     </ul>
                 </li>
                 {
-                    permissionCek(props.user_permission, 'GET_ARTICLE') ?
+                    permissionCek(props.user_permission, 'GET_WARRANTY_PROMO') ?
                     <li>
                         <Link to="/product-validate/list">
                             <i className="material-icons-outlined"> check </i>
                             <span className="link-name">Product Validate</span>
                         </Link>
                         <ul className="sub-menu blank">
-                            <li><Link className="link-name" to="#">Article</Link></li>
+                            <li><Link className="link-name" to="/product-validate/list">Product Validate</Link></li>
                         </ul>
                     </li> : null
                 }
+
+                
+                <li>
+                    <div className="icon-link drop-down-menu">
+                        <i className="material-icons-outlined"> sell </i>
+                        <span className="link-name">Promo</span>
+                        <i className="material-icons-outlined arrow"> expand_more </i>
+                    </div>
+                    {
+                    permissionCek(props.user_permission, 'GET_WARRANTY_PROMO') ?
+                    <ul className="sub-menu">
+                        <li><Link className="link-name" to="#">Promo</Link></li>
+                        <li><Link to="/promo">Promo List</Link></li>
+                        <li><Link to="/history-promo">Promo History</Link></li>
+                    </ul> : null
+                    }    
+                </li> 
 
                 {
                     permissionCek(props.user_permission, 'GET_ARTICLE') ?
@@ -95,19 +112,6 @@ const Sidebar = (props) => {
                         </Link>
                         <ul className="sub-menu blank">
                             <li><Link className="link-name" to="#">Banner</Link></li>
-                        </ul>
-                    </li> : null
-                }
-
-                {
-                    permissionCek(props.user_permission, 'GET_WARRANTY_PROMO') ?
-                    <li>
-                        <Link to="/promo">
-                            <i className="material-icons-outlined"> sell </i>
-                            <span className="link-name">Promo</span>
-                        </Link>
-                        <ul className="sub-menu blank">
-                            <li><Link className="link-name" to="/promo">Promo</Link></li>
                         </ul>
                     </li> : null
                 }

@@ -57,6 +57,9 @@ import './Dashboard.css';
 import ProductValidateList from '../../../component/dahboard/product_validate/ProductValidateList'
 import EditProductValidateList from '../../../component/dahboard/product_validate/EditProductValidate'
 
+// history promo
+import HistoryPromoList from '../../../component/dahboard/promo/history_promo/HistoryPromoList';
+
 class Dashboard extends Component {
   componentDidMount() {
     document.body.style = 'background: #f5f5f5;';
@@ -138,6 +141,9 @@ class Dashboard extends Component {
             <AdminRoute exact path="/promo" component={PromoList} />
             <AdminRoute exact path="/promo/add" component={AddPromo} />
             <AdminRoute exact path="/promo/edit/:id" component={EditPromo} />
+
+            {/* History Promo */}
+            <AdminRoute exact path="/history-promo" component={HistoryPromoList} />
 
             
             <Route component={NotFound} />
