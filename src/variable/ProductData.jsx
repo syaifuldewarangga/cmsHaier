@@ -1609,6 +1609,68 @@ const productData = [
         brand: "AQUA",
         description: ""
     },
+    
+    // Penambahan
+    {
+        category: "Home Air Conditioner",
+        model: "R32/",
+        brand: "AQUA",
+        description: "AC Fix Indoor Unit"
+    },
+    {
+        category: "Commercial AC",
+        model: "1U45",
+        brand: "AQUA",
+        description: ""
+    },
+    {
+        category: "Commercial AC",
+        model: "AB45",
+        brand: "AQUA",
+        description: "H-MRV cassette indoor"
+    },
+    {
+        category: "Drum Washing Machine",
+        model: "HW15",
+        brand: "AQUA",
+        description: "Free standing front-loading electronical DWM"
+    },
+    {
+        category: "Commercial AC",
+        model: "1U55",
+        brand: "HAIER",
+        description: "CAC one by one(outdoor)"
+    },
+    {
+        category: "Commercial AC",
+        model: "AB55",
+        brand: "HAIER",
+        description: "Cassette CAC one by one(indoor)"
+    },
+    {
+        category: "Home Air Conditioner",
+        model: "AP48",
+        brand: "AQUA",
+        description: "Cabinet split AC"
+    },
+    {
+        category: "Commercial AC",
+        model: "1U48",
+        brand: "AQUA",
+        description: "CAC one by one(outdoor)"
+    },
+    {
+        category: "Freezer",
+        model: "beve",
+        brand: "AQUA",
+        description: "Beverage cooler"
+    },
+    {
+        category: "TV",
+        model: "AQT6",
+        brand: "AQUA",
+        description: ""
+    },
 ]
 
 export {
