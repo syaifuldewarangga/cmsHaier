@@ -348,6 +348,52 @@ const FormProductValidate = (props) => {
       });
     }
 
+    const PostToGCC = async () => {
+      setIsLoading2(true)
+      const dataUser = props.data?.customer
+      try {
+        var token = localStorage.getItem('access_token');
+        const params = {
+            RegisterProductId: id,
+            Status: "APPROVED",
+            FirstName: dataUser.first_name,
+            LastName: dataUser.last_name,
+            Gender: dataUser.gender == "Perempuan" ? 1 : 0,
+            BirthDate: dataUser.birth_date,
+            LocationStateCode: dataUser.province,
+            LocationStateName: dataUser.province,
+            LocationCityCode: dataUser.city,
+            LocationCityName: dataUser.city,
+            LocationLocalityCode: dataUser.district,
+            LocationLocalityName: dataUser.district,
+            Address: dataUser.address,
+            Telphone: dataUser.phone,
+            OfficePhone: dataUser.phone_office,
+            DealerName: "Test",
+            EwarrantyInfo: "test ewarranty info",
+            BrandCode: "test",
+        };
+        const res = await axios.patch(props.base_url + 'v2/register-service/product/status', {}, {
+            headers: {
+              Authorization: 'Bearer ' + token,
+            },
+            params
+        })
+        if(res.data.code == 200){
+          alert('Berhasil Approve Data');
+          history.push('/product-validate/list');
+        }
+        // hideModal()
+        // fetchData()
+   
+      } catch (err) {
+        // console.log(err.response)
+        alert('Gagal Approve Data');
+        if(err.response)setErrorStore(err.response?.data?.errors.location)
+      } finally {
+        setIsLoading2(false)
+      }
+    }
     return (
       <div>
         <div className="form-user">
@@ -607,9 +653,6 @@ const FormProductValidate = (props) => {
                               // })
                           }}
                         />
-                      <div className="text-danger" style={{ fontSize: 14 }}>
-                        {errorStore}
-                      </div>
                     </div>
                   </div>
 
@@ -698,7 +741,12 @@ const FormProductValidate = (props) => {
               </div>
 
               <div className="row">
-                <div className="col-4">
+                <div className="text-danger" style={{ fontSize: 14 }}>
+                  {errorStore}
+                </div>
+              </div>
+              <div className="row gap-2 justify-content-between">
+                <div className="col-md-4 col-sm-12 ">
                   <Link to="/promo">
                     <div className="d-grid gap-2">
                       <button className="btn btn-outline-danger" type="button">
@@ -707,7 +755,7 @@ const FormProductValidate = (props) => {
                     </div>
                   </Link>
                 </div>
-                <div className="d-grid gap-2 col-4">
+                <div className="d-grid gap-2 col-md-4 col-sm-12">
                   <button 
                     className="btn btn-import" 
                     type="button" 
@@ -724,12 +772,12 @@ const FormProductValidate = (props) => {
                     }
                   </button>
                 </div>
-                <div className="d-grid gap-2 col-4">
+                <div className="d-grid gap-2 col-md-3 col-sm-12">
                   <button 
                     className="btn btn-outline-import " 
                     type="button" 
                     disabled={isLoading2 && 'disabled'}
-                    onClick={postToGSIS}
+                    onClick={PostToGCC}
                   >
                     {
                       isLoading2 ?
