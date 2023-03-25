@@ -1,5 +1,5 @@
 const BASE_URL = 'https://ewarranty.aquaelektronik.com:9002/api/'
-const URL = 'http://images.aquaelektronik.com/'
+const URL = 'https://images.aquaelektronik.com/'
 const GTM_URL = 'https://openplat-sg-aws.haier.net/api/'
 const GTM_TOKEN_URL = 'https://openplat-sg-aws.haier.net/GTM3HSI/gateway/auth/oauth2/token'
 const GSIS_URL = 'https://ewarranty.aquaelektronik.com:9002/oapi/gsis/'
