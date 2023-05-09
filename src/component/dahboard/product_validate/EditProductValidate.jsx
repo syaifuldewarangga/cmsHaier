@@ -37,7 +37,6 @@ const EditProductValidate = (props) => {
             ...res.data
         })
         setIsLoading(false)
-        console.log(res.data);
     }
     useEffect(() => {
         getDataById();
