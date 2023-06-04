@@ -7,30 +7,27 @@ function BannerData(props) {
   return (
     <tbody>
       <tr>
-        {
-          permissionCek(props.user_permission, 'UPDATE_USER') && permissionCek(props.user_permission, 'DELETE_USER') ?
-          <td className="align-middle">
-            <div className="d-flex justify-content-start">
-              {
-                permissionCek(props.user_permission, 'UPDATE_BANNER') &&
-                <Link to={'/banner/edit/' + props.data.id}>
-                  <button className="btn d-flex btn-edit me-3 btn-sm">
-                    <span class="material-icons-outlined md-18"> edit </span>
-                  </button>
-                </Link>
-              }
-              {
-                permissionCek(props.user_permission, 'DELETE_BANNER') &&
-                <button
-                  className="btn d-flex btn-danger me-3 btn-sm"
-                  onClick={() => props.remove(props.data.id)}
-                >
-                  <span class="material-icons-outlined md-18"> delete </span>
+        <td className="align-middle">
+          <div className="d-flex justify-content-start">
+            {
+              permissionCek(props.user_permission, 'UPDATE_BANNER') &&
+              <Link to={'/banner/edit/' + props.data.id}>
+                <button className="btn d-flex btn-edit me-3 btn-sm">
+                  <span class="material-icons-outlined md-18"> edit </span>
                 </button>
-              }
-            </div>
-          </td> : null
-        }
+              </Link>
+            }
+            {
+              permissionCek(props.user_permission, 'DELETE_BANNER') &&
+              <button
+                className="btn d-flex btn-danger me-3 btn-sm"
+                onClick={() => props.remove(props.data.id)}
+              >
+                <span class="material-icons-outlined md-18"> delete </span>
+              </button>
+            }
+          </div>
+        </td>
         <td className="align-middle">
           <img
             src={props.url + props.data.image}
