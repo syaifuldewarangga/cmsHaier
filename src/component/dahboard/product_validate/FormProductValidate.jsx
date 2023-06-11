@@ -163,6 +163,7 @@ const FormProductValidate = (props) => {
     return () => m = false
   }, [selectedBrand])
 
+    const [detailAddress, setDetailAddress] = useState('')
     const fetchAPI = () => {
         setIsLoading(true)
         const userData = props.data.customer
@@ -203,8 +204,9 @@ const FormProductValidate = (props) => {
         // formdata.append('dealer_name', selectedDealer[0].name);
         formdata.append('dealer_name', 'blank');
         formdata.append('location_street_name', selectedStreet[0].street);
+        formdata.append('location_address', detailAddress);
 
-        // console.log(Object.fromEntries(formData))
+        // console.log(Object.fromEntries(formdata))
         var token = localStorage.getItem('access_token');
         const modalExist = document.getElementById('modalConfirm') 
         if(props.title === 'Edit Product Validate'){
@@ -477,6 +479,7 @@ const FormProductValidate = (props) => {
               // setSelectedDealer([{
               //   name: data.product_pending_information.dealerName
               // }])
+              setDetailAddress(data.product_pending_information.locationAddress)
               setSelectedCategory([{
                 categoryName: data.category,
                 categoryValue: data.product_pending_information.productCode
@@ -938,6 +941,23 @@ const FormProductValidate = (props) => {
                           />
                         </div>
                       </div>
+                      
+                      <div className="col-lg-12">
+                        <div className="mb-lg-5 mb-4">
+                          <label className="form-label">Detail Address</label>
+                          <textarea required value={detailAddress} className='form-control' name='detailAddress' 
+                            onChange={(e) => {
+                                if(e.target.value.length > 100){
+                                  setDetailAddress(e.target.value.substring(0, 100))
+                                }else{
+                                  setDetailAddress(e.target.value)
+                                }
+                            }} 
+                          >
+                          </textarea>
+                          <small>{`${detailAddress.length}/100`}</small>
+                      </div>      
+                    </div>
 
                       {/* Dealer */}
                       {/* <div className="col-lg-12">
