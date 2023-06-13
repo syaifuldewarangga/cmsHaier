@@ -479,7 +479,15 @@ const FormProductValidate = (props) => {
               // setSelectedDealer([{
               //   name: data.product_pending_information.dealerName
               // }])
-              setDetailAddress(data.product_pending_information.locationAddress)
+              setDetailAddress(
+                data.product_pending_information.locationAddress !== null ? 
+                  data.product_pending_information.locationAddress 
+                  : 
+                  data.customer.address !== null ? 
+                      data.customer.address
+                      :
+                      ''
+              )
               setSelectedCategory([{
                 categoryName: data.category,
                 categoryValue: data.product_pending_information.productCode
