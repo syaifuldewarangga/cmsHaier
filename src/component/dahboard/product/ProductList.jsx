@@ -45,6 +45,26 @@ function ProductList(props) {
     });
   }
 
+  const fetchDataProductHGWMS = async () => {
+    try {
+      const formData = new FormData()
+      formData.append('serialNumber', search)
+      const res = await axios.post(props.hgwms_url, formData)
+      let modelData = ModelCheck(res.data.barcodeInfo.productModel.substring(0,4))
+      setData([{
+        Barcode: res.data.barcodeInfo.serialNumber,
+        ProductName: res.data.barcodeInfo.productModel,
+        ProductID: res.data.barcodeInfo.productCode,
+        Brand: modelData.brand,
+        DataOfPurchase: '',
+        Category: modelData.category
+      }])
+      setIsLoading(false)
+    } catch (error) {
+      setData([])
+    }
+  }
+
   const fetchDataProductWMS = async () => {
     await axios.get(props.oapi_url + 'wms-order-out', {
       params: {
@@ -64,10 +84,12 @@ function ProductList(props) {
           Category: modelData.category
         }])
       } else {
-        setData([])
+        fetchDataProductHGWMS()
       }
     }).catch((err) => {
-      setData([])
+      if(err.response.status === 404){
+        fetchDataProductHGWMS()
+      }
     })
   }
 
@@ -204,13 +226,14 @@ function ProductList(props) {
         </div>
       </div>
 
-      <MultipleSearch />
+      {/* <MultipleSearch /> */}
     </div>
   );
 }
 
 const mapStateToProps = (state) => {
   return {
+    hgwms_url: state.HGWMS_URL,
     base_url: state.BASE_URL,
     gtm_url: state.GTM_URL,
     gtm_token_url: state.GTM_TOKEN_URL,

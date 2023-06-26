@@ -5,8 +5,10 @@ const GTM_TOKEN_URL = 'https://openplat-sg-aws.haier.net/GTM3HSI/gateway/auth/oa
 const GSIS_URL = 'https://testewarranty.aquaelektronik.com:9003/oapi/gsis/'
 const FRONTEND_URL = 'https://testewarranty.aquaelektronik.com/'
 const OAPI_URL = 'https://testewarranty.aquaelektronik.com:9003/oapi/'
+const HGWMS_URL = 'http://seawmstest.haier.net/wmsrest/barcodeInfoTrade/barcodeInfo'
 
 export {
+    HGWMS_URL,
     BASE_URL,
     URL,
     GTM_URL,
