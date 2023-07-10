@@ -49,7 +49,7 @@ function ProductList(props) {
     try {
       const formData = new FormData()
       formData.append('serialNumber', search)
-      const res = await axios.post(props.hgwms_url, formData)
+      const res = await axios.post(props.hgwms_url + 'barcodeInfo', formData)
       let modelData = ModelCheck(res.data.barcodeInfo.productModel.substring(0,4))
       setData([{
         Barcode: res.data.barcodeInfo.serialNumber,
@@ -226,7 +226,7 @@ function ProductList(props) {
         </div>
       </div>
 
-      {/* <MultipleSearch /> */}
+      <MultipleSearch />
     </div>
   );
 }

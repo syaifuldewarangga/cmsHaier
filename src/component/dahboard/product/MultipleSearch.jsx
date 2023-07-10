@@ -3,11 +3,41 @@ import React, { Fragment, useState } from 'react'
 import { connect } from 'react-redux'
 import { tableToCSV } from '../../../variable/TableToCSV';
 
+const filterAndReplaceData = (initialArray, replacementArray) => {
+    return [...initialArray.map((v, i) => {
+        if(replacementArray.code === '200' && replacementArray.barcodeInfo !== ""){
+            const replacementObject = replacementArray.barcodeInfo.find(replacement => replacement?.serialNumber === v.barcode);
+
+            return !!replacementObject ? 
+                {
+                    created_DATE: null,
+                    sr_NUM: v.sr_NUM,
+                    barcode: replacementObject.serialNumber,
+                    product_DESC_ZH: replacementObject.productModel,
+                    product_CODE: replacementObject.productCode
+                } : v;
+        }
+        return v
+    })]
+}
 
 function MultipleSearch(props) {
     var token = localStorage.getItem('access_token');
     const [data, setData] = useState([])
     const [isLoading, setIsLoading] = useState(false)
+
+    const getMultipleDataFromHGWMS = async (serialNumbers) => {
+        try {
+           const formData = new FormData() 
+           serialNumbers.map((v, i) => {
+                formData.append('serialNumbers', v)
+           })
+           const responseHgwms = await axios.post(props.hgwms_url + 'barcodeListInfo', formData)
+           return responseHgwms.data
+        } catch (err) {
+            // console.log(err.response)
+        }
+    }
 
     const handleBarcodeFile = async (e) => {
         setIsLoading(true)
@@ -19,11 +49,14 @@ function MultipleSearch(props) {
             headers: {
                 Authorization: 'Bearer ' + token
             },
-        }).then((res) => {
-            setData(res.data)
+        }).then(async (res) => {
+            const notFoundDataBarcode = [...res.data?.filter((v) => v.product_CODE == null ).map(v => v.barcode)]
+            const fromHgwms = await getMultipleDataFromHGWMS(notFoundDataBarcode);
+            const newData = filterAndReplaceData(res.data, fromHgwms)
+            setData(newData)
             setIsLoading(false)
         }).catch((error) => {
-            console.log(error.response)
+            setIsLoading(false)
         })
     }
 
@@ -122,7 +155,8 @@ function MultipleSearch(props) {
 
 const mapStateToProps = (state) => {
     return {
-        oapi_url: state.OAPI_URL
+        oapi_url: state.OAPI_URL,
+        hgwms_url: state.HGWMS_URL
     }
 }
 

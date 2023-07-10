@@ -5,7 +5,7 @@ const GTM_TOKEN_URL = 'https://openplat-sg-aws.haier.net/GTM3HSI/gateway/auth/oa
 const GSIS_URL = 'https://ewarranty.aquaelektronik.com:9002/oapi/gsis/'
 const OAPI_URL = 'https://ewarranty.aquaelektronik.com:9002/oapi/'
 const FRONTEND_URL = 'https://ewarranty.aquaelektronik.com'
-const HGWMS_URL = 'http://hotcwms.haier.net/wmsrest/barcodeInfoTrade/barcodeInfo'
+const HGWMS_URL = 'http://hotcwms.haier.net/wmsrest/barcodeInfoTrade/'
 
 export {
     HGWMS_URL,
