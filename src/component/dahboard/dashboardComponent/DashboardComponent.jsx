@@ -50,10 +50,6 @@ function DashboardComponent(props) {
   }
 
   const getTotalProductCategory = async () => {
-    var formData = new FormData();
-    formData.append('startDate', '2021/12/07');
-    formData.append('endDate', '2021/12/20');
-
     await axios.get(props.base_url + 'total-register-products/category', {
       headers: {
         Authorization: 'Bearer ' + token,
@@ -109,6 +105,7 @@ function DashboardComponent(props) {
   const onClicked = async () => {
     getUserByDate()
     getProductByDate()
+    getTotalProductCategory()
   };
   
   return (
