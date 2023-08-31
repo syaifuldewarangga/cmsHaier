@@ -87,13 +87,11 @@ function Report(props) {
         type === "csv" ? tableToCSV('table-customer-voice', 'Report Customer Voice') : exportTableToExcel('#table-customer-voice', "Report Customer Voice")
       })
     }else if (selectReport === 'promo-list'){
-      console.log('test')
       await axios.get(props.base_url + 'extended-warranty-promo/export', {
         headers: {
           Authorization: 'Bearer ' + token
         },
       }).then((res) => {
-        console.log(res.data)
         setPromoList(res.data)
         type === "csv" ? tableToCSV('table-promo-list', 'Report Promo List') : exportTableToExcel('#table-promo-list', "Report Promo List")
       })
@@ -208,6 +206,7 @@ function Report(props) {
           <th>Age</th>
           <th>Phone</th>
           <th>Fax</th>
+          <th>Source User</th>
 
           <th>Barcode</th>
           <th>Product ID</th>
@@ -222,6 +221,7 @@ function Report(props) {
           <th>Brand</th>
           <th>Category</th>
           <th>WA Flag</th>
+          <th>Source Product</th>
           <th>Registration Date</th>
         </tr>
         {
@@ -248,6 +248,8 @@ function Report(props) {
                     <td>{ item.age }</td>
                     <td>{ item.phone_office }</td>
                     <td>{ item.fax }</td>
+                    <td>{ !!item.source ? item.source : 'E-Warranty' }</td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -283,6 +285,7 @@ function Report(props) {
                         <td>{ item.age }</td>
                         <td>'{ item.phone_office }</td>
                         <td>{ item.fax }</td>
+                        <td>{ !!item.source ? item.source : 'E-Warranty' }</td>
 
                         <td>{product.barcode}</td>
                         <td>{product.product_id}</td>
@@ -292,11 +295,12 @@ function Report(props) {
                         <td>{product.store_location}</td>
                         <td>{product.store_name}</td>
                         <td>{product.product_model}</td>
-                        <td>{props.image_url+product.warranty_card}</td>
+                        <td>{!!props.warranty_card ? props.image_url+product.warranty_card : ''}</td>
                         <td>{props.image_url+product.invoice}</td>
                         <td>{product.brand}</td>
                         <td>{product.category}</td>
                         <td>{product.agreements}</td>
+                        <td>{ !!product.source ? product.source : 'E-Warranty' }</td>
                         <td>{moment(product.created_at).format('DD/MM/YYYY')}</td>
                         
                       </tr>
