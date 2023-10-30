@@ -49,7 +49,9 @@ function Report(props) {
     }
   }
 
+  const [loadingExport, setLoadingExport] = useState(false)
   const downloadReport = async (type = "csv") => {
+    setLoadingExport(true)
     if(selectReport === 'user') {
       await axios.get(props.base_url + 'report', {
         headers: {
@@ -72,6 +74,9 @@ function Report(props) {
         } else {
           console.log('message : ' + e.message);
         }
+      })
+      .finally(() => {
+        setLoadingExport(false)
       });
     } else if (selectReport === 'customer-voice') {
       await axios.get(props.base_url + 'customer-voice-export', {
@@ -86,6 +91,9 @@ function Report(props) {
         setCustomerVoice(res.data)
         type === "csv" ? tableToCSV('table-customer-voice', 'Report Customer Voice') : exportTableToExcel('#table-customer-voice', "Report Customer Voice")
       })
+      .finally(() => {
+        setLoadingExport(false)
+      });
     }else if (selectReport === 'promo-list'){
       await axios.get(props.base_url + 'extended-warranty-promo/export', {
         headers: {
@@ -95,6 +103,9 @@ function Report(props) {
         setPromoList(res.data)
         type === "csv" ? tableToCSV('table-promo-list', 'Report Promo List') : exportTableToExcel('#table-promo-list', "Report Promo List")
       })
+      .finally(() => {
+        setLoadingExport(false)
+      });
     }
   };
 
@@ -148,7 +159,9 @@ function Report(props) {
               </div>
               <div className="ms-3 d-flex">
                 <button
+                  disabled={loadingExport}
                   className="btn btn-export rounded-pill px-4 me-3 d-flex"
+                  style={{ minWidth: '110px' }}
                   onClick={() => {
                     selectReport === '' ||
                     date.from === '' ||
@@ -158,14 +171,25 @@ function Report(props) {
                       : downloadReport('csv');
                   }}
                 >
-                  <span class="material-icons-outlined me-2">
-                    {' '}
-                    cloud_download{' '}
-                  </span>
-                  <span style={{ fontWeight: '600' }}>CSV</span>
+                  {!loadingExport ?
+                  <>
+                    <span class="material-icons-outlined me-2">
+                      {' '}
+                      cloud_download{' '}
+                    </span>
+                    <span style={{ fontWeight: '600' }}>CSV</span>
+                  </>
+                  : 
+                  <div className="w-100 d-flex align-items-center justify-content-center mt-1">
+                    <div className="spinner-border spinner-border-sm" role="status">
+                    </div>
+                  </div>
+                  }
                 </button>
                 <button
+                  disabled={loadingExport}
                   className="btn btn-export rounded-pill px-4 d-flex"
+                  style={{ minWidth: '110px' }}
                   onClick={() => {
                     selectReport === '' ||
                     date.from === '' ||
@@ -175,11 +199,20 @@ function Report(props) {
                       : downloadReport('excel');
                   }}
                 >
-                  <span class="material-icons-outlined me-2">
-                    {' '}
-                    cloud_download{' '}
-                  </span>
-                  <span style={{ fontWeight: '600' }}>Excel</span>
+                  {!loadingExport ?
+                    <>
+                      <span class="material-icons-outlined me-2">
+                        {' '}
+                        cloud_download{' '}
+                      </span>
+                      <span style={{ fontWeight: '600' }}>Excel</span>
+                    </>
+                  :
+                  <div className="w-100 d-flex align-items-center justify-content-center mt-1">
+                    <div className="spinner-border spinner-border-sm" role="status">
+                    </div>
+                  </div>
+                  }
                 </button>
               </div>
             </div>
