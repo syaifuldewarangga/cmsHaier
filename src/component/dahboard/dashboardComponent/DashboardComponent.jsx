@@ -103,6 +103,14 @@ function DashboardComponent(props) {
   }
 
   const onClicked = async () => {
+    if(date.date1 !== '' && date.date1 > date.date2){
+      alert('Date is Invalid!')
+      setTotalUser(0)
+      setTotalProduct(0)
+      setTotalProductCategory([])
+      setLineChartUser([])
+      return
+    }
     getUserByDate()
     getProductByDate()
     getTotalProductCategory()
