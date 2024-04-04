@@ -55,9 +55,9 @@ function ProductList(props) {
         Barcode: res.data.barcodeInfo.serialNumber,
         ProductName: res.data.barcodeInfo.productModel,
         ProductID: res.data.barcodeInfo.productCode,
-        Brand: modelData.brand,
+        Brand: modelData?.brand,
         DataOfPurchase: '',
-        Category: modelData.category
+        Category: modelData?.category
       }])
       setIsLoading(false)
     } catch (error) {
