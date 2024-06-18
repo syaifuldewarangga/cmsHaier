@@ -60,6 +60,21 @@ import EditProductValidateList from '../../../component/dahboard/product_validat
 // history promo
 import HistoryPromoList from '../../../component/dahboard/promo/history_promo/HistoryPromoList';
 
+// Sub Dealer
+import SubDealerList from '../../../component/dahboard/sub-dealer/SubDealerList';
+import DetailSubDealerList from '../../../component/dahboard/sub-dealer/DetailSubDealer';
+
+// Incentive Product
+import IncentiveProductList from '../../../component/dahboard/incentive-product/IncentiveProductList';
+import AddIncentiveProduct from '../../../component/dahboard/incentive-product/AddIncentiveProduct';
+import EditIncentiveProduct from '../../../component/dahboard/incentive-product/EditIncentiveProduct';
+
+// Incentive Product
+import UserSalesProductList from '../../../component/dahboard/user/userSales/UserSalesList';
+import AddUserSales from '../../../component/dahboard/user/userSales/AddUserSales';
+import EditUserSales from '../../../component/dahboard/user/userSales/EditUserSales';
+import DetailUserSales from '../../../component/dahboard/user/userSales/DetailUserSales';
+
 class Dashboard extends Component {
   componentDidMount() {
     document.body.style = 'background: #f5f5f5;';
@@ -75,6 +90,18 @@ class Dashboard extends Component {
 
             <Route exact path="/" component={AdminLogin}></Route>
             <AdminRoute path="/dashboard" component={DashboardComponent} />
+
+            <AdminRoute exact path="/sub-dealer" component={SubDealerList} />
+            <AdminRoute exact path="/sub-dealer/detail/:id" component={DetailSubDealerList} />
+
+            <AdminRoute exact path="/user-sales" component={UserSalesProductList} />
+            <AdminRoute exact path="/user-sales/add" component={AddUserSales} />
+            <AdminRoute exact path="/user-sales/edit/:id" component={EditUserSales} />
+            <AdminRoute exact path="/user-sales/detail/:id" component={DetailUserSales} />
+
+            <AdminRoute exact path="/incentive-product" component={IncentiveProductList} />
+            <AdminRoute exact path="/incentive-product/add" component={AddIncentiveProduct} />
+            <AdminRoute exact path="/incentive-product/edit/:id" component={EditIncentiveProduct} />
 
             <AdminRoute exact path="/users" component={UserList} />
             <AdminRoute exact path="/users/add" component={AddUser} />

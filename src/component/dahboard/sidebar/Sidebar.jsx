@@ -24,6 +24,15 @@ const Sidebar = (props) => {
                         <li><Link className="link-name" to="#">Dashboard</Link></li>
                     </ul>
                 </li>
+                <li>
+                    <Link to="/sub-dealer">
+                        <i className="material-icons-outlined">local_grocery_store</i>
+                        <span className="link-name">Sub Dealer</span>
+                    </Link>
+                    <ul className="sub-menu blank">
+                        <li><Link className="link-name" to="/sub-dealer">Sub Dealer</Link></li>
+                    </ul>
+                </li>
 
                 <li>
                     <div className="icon-link drop-down-menu">
@@ -42,6 +51,10 @@ const Sidebar = (props) => {
                             <li><Link to="/user-role">User Role</Link></li> : null
                         }
                         {
+                            permissionCek(props.user_permission, 'GET_USER') ?
+                            <li><Link to="/user-sales">User Sales</Link></li> : null
+                        }
+                        {
                             permissionCek(props.user_permission, 'GET_STORE') ?
                             <li><Link to="/store">Store</Link></li> :  null
                         }
@@ -57,6 +70,10 @@ const Sidebar = (props) => {
                         {
                             permissionCek(props.user_permission, 'GET_CATEGORY') ?
                             <li><Link to="/category-article/list">Category Article</Link></li> : null
+                        }
+                        {
+                            permissionCek(props.user_permission, 'GET_CATEGORY') ?
+                            <li><Link to="/incentive-product">Incentive Sub Dealer</Link></li> : null
                         }
                     </ul>
                 </li>

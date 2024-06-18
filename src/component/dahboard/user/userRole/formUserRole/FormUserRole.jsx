@@ -1596,7 +1596,132 @@ function FormUserRole(props) {
                         </div>
                       </td>
                     </tr>
-                    
+
+                    {/* Sub Dealer */}
+                    <tr>
+                      <td className="align-middle">
+                        <div class="d-flex justify-align-items-center">
+                          <span class="material-icons me-2"> description </span>
+                          <span>Sub Dealer</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value={'GET_WARRANTY_PROMO'}
+                            onChange={(value) => {
+                              if (value.target.checked) {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.concat('GET_WARRANTY_PROMO'),
+                                });
+                              } else {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.filter(
+                                    (e) => e !== value.target.value
+                                  ),
+                                });
+                              }
+                            }}
+                            checked={
+                              data.role.includes('GET_WARRANTY_PROMO')
+                                ? 'checked'
+                                : null
+                            }
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value={'POST_WARRANTY_PROMO'}
+                            onChange={(value) => {
+                              if (value.target.checked) {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.concat('POST_WARRANTY_PROMO'),
+                                });
+                              } else {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.filter(
+                                    (e) => e !== value.target.value
+                                  ),
+                                });
+                              }
+                            }}
+                            checked={
+                              data.role.includes('POST_WARRANTY_PROMO')
+                                ? 'checked'
+                                : null
+                            }
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value={'UPDATE_WARRANTY_PROMO'}
+                            onChange={(value) => {
+                              if (value.target.checked) {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.concat('UPDATE_WARRANTY_PROMO'),
+                                });
+                              } else {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.filter(
+                                    (e) => e !== value.target.value
+                                  ),
+                                });
+                              }
+                            }}
+                            checked={
+                              data.role.includes('UPDATE_WARRANTY_PROMO')
+                                ? 'checked'
+                                : null
+                            }
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value={'DELETE_WARRANTY_PROMO'}
+                            onChange={(value) => {
+                              if (value.target.checked) {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.concat('DELETE_WARRANTY_PROMO'),
+                                });
+                              } else {
+                                setData({
+                                  ...data,
+                                  ['role']: data.role.filter(
+                                    (e) => e !== value.target.value
+                                  ),
+                                });
+                              }
+                            }}
+                            checked={
+                              data.role.includes('DELETE_WARRANTY_PROMO')
+                                ? 'checked'
+                                : null
+                            }
+                          />
+                        </div>
+                      </td>
+                    </tr>
                     
                   </tbody>
                 </table>

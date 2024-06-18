@@ -1,0 +1,23 @@
+.user-list th, .user-list td {
+    padding: 15px 7px!important;
+}
+
+.user-list a {
+    text-decoration: none;
+}
+
+.btn-add {
+    background: #78CD51;
+    color: #fff;
+}
+
+.btn-add:hover {
+    background: #4dbb1b;
+    color: #fff;
+}
+
+.btn-edit {
+    background: #41CAC0;
+    color: #fff;
+}
+
