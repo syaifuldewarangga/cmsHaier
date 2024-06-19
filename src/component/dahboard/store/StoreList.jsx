@@ -1,11 +1,45 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import StoreListData from './StoreListData/StoreListData';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import FormEditStore from './formEditStore/formEditStore';
 import { permissionCek } from '../../../action/permissionCek';
 import { client_id, client_secret, grant_type } from '../../../variable/GlobalVariable';
+import { tableToCSV } from '../../../variable/TableToCSV';
 
+const TableExport = ({ data }) => {
+    const renderData = useMemo(() => {
+      if(data?.length === 0) return
+      return data.map((v, i) => {
+          return (
+              <tr key={i + 1}>
+                  <td>{v.StoreName}</td>
+                  <td>{v.StoreCode}</td>
+                  <td>{v.PhoneOffice}</td>
+                  <td>{v.Province}</td>
+                  <td>{v.City}</td>
+                  <td>{v.District}</td>
+                  <td>{v.Street}</td>
+              </tr>
+          )
+      })
+
+    }, [data])
+    return (
+        <table className="d-none" id='table-export'>
+            <tr>
+                <th>Store Name</th>
+                <th>Store Code</th>
+                <th>Phone Office</th>
+                <th>Province</th>
+                <th>City</th>
+                <th>District</th>
+                <th>Street</th>
+            </tr>
+            {renderData}
+        </table>
+    )
+}
 function StoreList(props) {
   const [data, setData] = useState([]);
   const [storeID, setStoreID] = useState('')
@@ -97,6 +131,19 @@ function StoreList(props) {
                 }
               />
             </div>
+            <div className="d-flex col-lg-6 col-12 mb-3 justify-content-end">
+              <button
+                disabled={data.length === 0}
+                className="btn d-flex justify-content-center btn-export me-3"
+                onClick={() => tableToCSV('table-export', 'Store Data')}
+              >
+                <span class="material-icons-outlined me-3">
+                  {' '}
+                  file_download{' '}
+                </span>
+                <span className="fw-bold">Export</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -137,6 +184,7 @@ function StoreList(props) {
       <FormEditStore
         storeID={storeID}
       />
+      <TableExport data={data} />
     </div>
   );
 }
