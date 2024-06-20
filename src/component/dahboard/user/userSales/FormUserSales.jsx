@@ -1,22 +1,51 @@
-import React, { Fragment, useEffect, useState } from "react";
-import { connect } from "react-redux";
-import { useHistory, useParams, Link } from "react-router-dom";
-const regexCheck = (string) => {
-    return /^[a-zA-Z0-9]+$/.test(string);
-};
+import axios from "axios";
+import React, { Fragment, useState } from "react";
+import { useSelector } from "react-redux";
+import { Link, useHistory, useParams } from "react-router-dom";
+import useToken from "../../../../hooks/useToken";
+
 const FormUserSales = (props) => {
+    const { data } = props
     const { id } = useParams();
     const history = useHistory();
+    const { API_URL } = useSelector((state) => state.SUB_DEALER);
+    const token = useToken()
 
     const [isLoading, setIsLoading] = useState(false)
     const [errors, setErrors] = useState({});
-    useEffect(() => {
-        // console.log(props.data)
-        if (props.data) {
+
+    const save = async ({ formData, id }) => {
+        try {
+            let res = {}
+            if(!!id){
+                const formDataObj = Object.fromEntries(formData)
+                res = await axios.patch(`${API_URL}user/sales/${id}`, {}, {
+                    params: formDataObj,
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    }
+                })
+            }else{
+                res = await axios.post(`${API_URL}user/sales`, formData, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    }
+                })
+            }
+            alert('Berhasil!')
+            history.push('/user-sales')
+        } catch (error) {
+            setErrors(error?.response?.data?.errors)
+        } finally {
+            setIsLoading(false)
         }
-    }, [id]);
+    }
     const onSubmit = (e) => {
         e.preventDefault();
+        setIsLoading(true)
+        const formData = new FormData(e.target)
+        
+        save({ formData, id })
     };
 
     return (
@@ -37,21 +66,63 @@ const FormUserSales = (props) => {
                                 <div className="col-lg-6">
                                     <div className="mb-3">
                                         <label className="form-label">
-                                            Nama
+                                            First Name
                                         </label>
                                         <input
                                             type="text"
                                             className={`form-control ${
-                                                !!errors?.name
+                                                !!errors?.first_name
                                                     ? "is-invalid"
                                                     : null
                                             }`}
-                                            aria-label="name"
-                                            defaultValue={props?.data?.name}
+                                            name="first_name"
+                                            defaultValue={data?.first_name}
                                             required
                                         />
                                         <div className="invalid-feedback">
-                                            {!!errors?.name}
+                                            {!!errors?.first_name ? errors?.first_name[0] : ''}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-lg-6">
+                                    <div className="mb-3">
+                                        <label className="form-label">
+                                            Last Name
+                                        </label>
+                                        <input
+                                            type="text"
+                                            className={`form-control ${
+                                                !!errors?.last_name
+                                                    ? "is-invalid"
+                                                    : null
+                                            }`}
+                                            name="last_name"
+                                            defaultValue={data?.last_name}
+                                            required
+                                        />
+                                        <div className="invalid-feedback">
+                                            {!!errors?.last_name ? errors?.last_name[0] : ''}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-lg-6">
+                                    <div className="mb-3">
+                                        <label className="form-label">
+                                            Phone Number
+                                        </label>
+                                        <input
+                                            type="number"
+                                            className={`form-control ${
+                                                !!errors?.phone
+                                                    ? "is-invalid"
+                                                    : null
+                                            }`}
+                                            name="phone"
+                                            defaultValue={data?.phone}
+                                            required
+                                        />
+                                        <div className="invalid-feedback">
+                                            {!!errors?.phone ? errors?.phone[0] : ''}
                                         </div>
                                     </div>
                                 </div>
@@ -67,61 +138,12 @@ const FormUserSales = (props) => {
                                                     ? "is-invalid"
                                                     : null
                                             }`}
-                                            aria-label="email"
-                                            defaultValue={props?.data?.email}
+                                            name="email"
+                                            defaultValue={data?.email}
                                             required
                                         />
                                         <div className="invalid-feedback">
-                                            {!!errors?.email}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-lg-6">
-                                    <div className="mb-3">
-                                        <label className="form-label">
-                                            Phone Number
-                                        </label>
-                                        <input
-                                            type="text"
-                                            className={`form-control ${
-                                                !!errors?.no_telp
-                                                    ? "is-invalid"
-                                                    : null
-                                            }`}
-                                            aria-label="no_telp"
-                                            defaultValue={props?.data?.no_telp}
-                                            required
-                                        />
-                                        <div className="invalid-feedback">
-                                            {!!errors?.no_telp}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-lg-6">
-                                    <div className="mb-3">
-                                        <label className="form-label">
-                                            Gender
-                                        </label>
-                                        <select
-                                            className={`form-select ${
-                                                !!errors?.gender
-                                                    ? "is-invalid"
-                                                    : null
-                                            }`}
-                                            aria-label="gender"
-                                            defaultValue={props?.data?.gender}
-                                            required
-                                        >
-                                            <option selected disabled>
-                                                -- Select Gender --
-                                            </option>
-                                            <option value="Pria">Pria</option>
-                                            <option value="Wanita">
-                                                Wanita
-                                            </option>
-                                        </select>
-                                        <div className="invalid-feedback">
-                                            {!!errors?.gender}
+                                            {!!errors?.email ? errors?.email[0] : ''}
                                         </div>
                                     </div>
                                 </div>
@@ -134,8 +156,8 @@ const FormUserSales = (props) => {
                                                     ? "is-invalid"
                                                     : null
                                             }`}
-                                            aria-label="status"
-                                            defaultValue={props?.data?.status}
+                                            name="status"
+                                            defaultValue={data?.status}
                                             required
                                         >
                                             <option selected disabled>
@@ -145,31 +167,57 @@ const FormUserSales = (props) => {
                                             <option value="not_active">Not Active</option>
                                         </select>
                                         <div className="invalid-feedback">
-                                            {!!errors?.status}
+                                            {!!errors?.status ? errors?.status[0] : ''}
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-lg-12">
-                                    <div className="mb-3">
-                                        <label className="form-label">
-                                            Password
-                                        </label>
-                                        <input
-                                            type="password"
-                                            className={`form-control ${
-                                                !!errors?.password
-                                                    ? "is-invalid"
-                                                    : null
-                                            }`}
-                                            aria-label="password"
-                                            defaultValue={props?.data?.password}
-                                            required
-                                        />
-                                        <div className="invalid-feedback">
-                                            {!!errors?.password}
+                                {!data ?
+                                <>
+                                    <div className="col-lg-12">
+                                        <div className="mb-3">
+                                            <label className="form-label">
+                                                Password
+                                            </label>
+                                            <input
+                                                type="password"
+                                                className={`form-control ${
+                                                    !!errors?.password
+                                                        ? "is-invalid"
+                                                        : null
+                                                }`}
+                                                name="password"
+                                                defaultValue={data?.password}
+                                                required
+                                            />
+                                            <div className="invalid-feedback">
+                                                {!!errors?.password ? errors?.password[0] : ''}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                    <div className="col-lg-12">
+                                        <div className="mb-3">
+                                            <label className="form-label">
+                                                Password Confirmation
+                                            </label>
+                                            <input
+                                                type="password"
+                                                className={`form-control ${
+                                                    !!errors?.password_confirmation
+                                                        ? "is-invalid"
+                                                        : null
+                                                }`}
+                                                name="password_confirmation"
+                                                defaultValue={data?.password_confirmation}
+                                                required
+                                            />
+                                            <div className="invalid-feedback">
+                                                {!!errors?.password_confirmation ? errors?.password_confirmation[0] : ''}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </>
+                                : null
+                                }
                                 <div className="col-6">
                                     <Link to="/user-sales">
                                         <div className="d-grid gap-2">
@@ -213,11 +261,4 @@ const FormUserSales = (props) => {
     );
 };
 
-const mapStateToProps = (state) => {
-    return {
-        base_url: state.BASE_URL,
-        image_url: state.URL,
-    };
-};
-
-export default connect(mapStateToProps, null)(FormUserSales);
+export default FormUserSales;

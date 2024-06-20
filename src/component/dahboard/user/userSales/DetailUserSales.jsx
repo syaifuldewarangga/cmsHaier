@@ -1,15 +1,11 @@
 import axios from 'axios';
-import React, { useState } from 'react'
-import { connect } from 'react-redux';
-import { useParams, Link } from 'react-router-dom';
-import './DetailUserSales.css'
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { Link, useParams } from 'react-router-dom';
+import useToken from '../../../../hooks/useToken';
+import './DetailUserSales.css';
 
 const CardDetail = ({ data }) => {
-    const [form, setForm] = useState({
-        start_date: '',
-        end_date: ''
-    })
-    const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value })
     return (
         <div className="container">
             <div className="row gap-3">
@@ -20,23 +16,19 @@ const CardDetail = ({ data }) => {
                             <table className='table-sales'>
                                 <tr>
                                     <td>Nama</td>
-                                    <td>Joyo Suroyo</td>
+                                    <td>{data?.first_name + data?.last_name}</td>
                                 </tr>
                                 <tr>
                                     <td>No Telpon</td>
-                                    <td>02178586969</td>
+                                    <td>{data?.phone}</td>
                                 </tr>
                                 <tr>
                                     <td>Email Sales</td>
-                                    <td>02178586969</td>
-                                </tr>
-                                <tr>
-                                    <td>Gender</td>
-                                    <td>Pria</td>
+                                    <td>{data?.phone}</td>
                                 </tr>
                                 <tr>
                                     <td>Status</td>
-                                    <td>Active</td>
+                                    <td>{data?.status === 'active' ? 'Active' : 'Not Active'}</td>
                                 </tr>
                             </table>
                         </div>
@@ -109,60 +101,50 @@ const CardDetail = ({ data }) => {
         </div>
     )
 }
-const DetailUserSales = (props) => {
+const DetailUserSales = () => {
     const { id } = useParams();
-    const [data, setData] = React.useState([]);
-    const [loading, setLoading] = React.useState(false)
+    const { API_URL } = useSelector((state) => state.SUB_DEALER);
+    const token = useToken()
+
+    const [data, setData] = React.useState();
+    const [loading, setLoading] = React.useState(true)
+
     React.useEffect(() => {
-        var token = localStorage.getItem('access_token');
         async function fetchData() {
-            setLoading(true)
-            await axios.get(props.base_url + 'extended-warranty-promo/get', {
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                },
-                params: {
-                    id,
-                },
-            })
-            .then((res) => {
-                // console.log(res.data)
-                setData(res.data);
-            })
-            .catch((e) => {
-                if (e.response) {
-                    // console.log(e.response);
-                } else if (e.request) {
-                    // console.log('request : ' + e.request);
-                } else {
-                    // console.log('message : ' + e.message);
-                }
-            });
-            setLoading(false)
+            try {
+                const res = await axios.get(`${API_URL}user/${id}`, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                })
+                setData(res.data.data);
+                
+            } finally {
+                setLoading(false)
+            }
         }
-        fetchData();
-    }, [id]);
+        if(!!token){
+            fetchData();
+        }
+    }, [id, token]);
+
+    if(loading){
+        return <div>Loading...</div>
+    }
+    if(!loading && !data){
+        return <div>User Sales Not Found!</div>
+    }
 
     return (
         <div>
             <div className="d-flex justify-content-center">
-               <div className="col-lg-10">
-                {!loading ? 
+                <div className="col-lg-10">
                     <CardDetail 
                         data={data} 
                     />
-                :
-                    'Loading...'
-                }
-               </div>
+                </div>
             </div>
         </div>
     )
 }
-const mapStateToProps = (state) => {
-    return {
-      base_url: state.BASE_URL,
-      user_permission: state.USER_PERMISSION
-    };
-  };
-export default connect(mapStateToProps, null)(DetailUserSales);
+export default DetailUserSales;

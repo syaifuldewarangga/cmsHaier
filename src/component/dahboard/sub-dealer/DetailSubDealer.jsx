@@ -1,8 +1,9 @@
 import axios from 'axios';
-import React, { useState } from 'react'
-import { connect } from 'react-redux';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import './DetailSubDealer.css'
+import useToken from '../../../hooks/useToken';
+import './DetailSubDealer.css';
 
 const CardDetail = ({ data }) => {
     const [form, setForm] = useState({
@@ -16,27 +17,62 @@ const CardDetail = ({ data }) => {
                 <div className="col-12">
                     <div className="card">
                         <div className="card-body">
-                            <h5 className="card-title">Detail Informasi Sub Dealer</h5>
+                            <h5 className="card-title">PIC Information</h5>
+                            <table className='table-pic'>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>{data?.first_name + data?.last_name}</td>
+                                </tr>
+                                <tr>
+                                    <td>Phone</td>
+                                    <td>{data?.phone}</td>
+                                </tr>
+                                <tr>
+                                    <td>Email</td>
+                                    <td>{data?.email}</td>
+                                </tr>
+                                <tr>
+                                    <td>Gender</td>
+                                    <td>{data?.dealer_detail?.gender === 'man' ? 'Pria' : 'Wanita'}</td>
+                                </tr>
+                                <tr>
+                                    <td>Bank Name</td>
+                                    <td>{data?.dealer_detail?.bank_name}</td>
+                                </tr>
+                                <tr>
+                                    <td>Bank Account Name</td>
+                                    <td>{data?.dealer_detail?.bank_account_name}</td>
+                                </tr>
+                                <tr>
+                                    <td>Bank Account Number</td>
+                                    <td>{data?.dealer_detail?.bank_account_number}</td>
+                                </tr>
+                            </table>
+                            <h5 className="card-title mt-5">Store Information</h5>
                             <table className='table-user-toko'>
                                 <tr>
-                                    <td>Nama Toko</td>
-                                    <td>Jaya Elektronik Center</td>
+                                    <td>Name</td>
+                                    <td>{data?.dealer_detail?.store_name}</td>
                                 </tr>
                                 <tr>
-                                    <td>Nama PIC Toko</td>
-                                    <td>Jaya Suraya</td>
+                                    <td>Code</td>
+                                    <td>{data?.dealer_detail?.store_code}</td>
                                 </tr>
                                 <tr>
-                                    <td>No Telpon</td>
-                                    <td>02178586969</td>
+                                    <td>Province</td>
+                                    <td>{data?.dealer_detail?.province}</td>
                                 </tr>
                                 <tr>
-                                    <td>Email Toko</td>
-                                    <td>02178586969</td>
+                                    <td>City</td>
+                                    <td>{data?.dealer_detail?.city}</td>
                                 </tr>
                                 <tr>
-                                    <td>Alamat Toko</td>
-                                    <td>Jalan testing, NO 14 RT 02 / RW 04 Kab Bogor</td>
+                                    <td>District</td>
+                                    <td>{data?.dealer_detail?.district || '-'}</td>
+                                </tr>
+                                <tr>
+                                    <td>Address</td>
+                                    <td>{data?.dealer_detail?.address}</td>
                                 </tr>
                             </table>
                         </div>
@@ -232,58 +268,49 @@ const CardDetail = ({ data }) => {
 }
 const DetailSubDealer = (props) => {
     const { id } = useParams();
-    const [data, setData] = React.useState([]);
-    const [loading, setLoading] = React.useState(false)
+    const { API_URL } = useSelector((state) => state.SUB_DEALER);
+    const token = useToken()
+
+    const [data, setData] = React.useState();
+    const [loading, setLoading] = React.useState(true)
+
     React.useEffect(() => {
-        var token = localStorage.getItem('access_token');
         async function fetchData() {
-            setLoading(true)
-            await axios.get(props.base_url + 'extended-warranty-promo/get', {
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                },
-                params: {
-                    id,
-                },
-            })
-            .then((res) => {
-                // console.log(res.data)
-                setData(res.data);
-            })
-            .catch((e) => {
-                if (e.response) {
-                    // console.log(e.response);
-                } else if (e.request) {
-                    // console.log('request : ' + e.request);
-                } else {
-                    // console.log('message : ' + e.message);
-                }
-            });
-            setLoading(false)
+            try {
+                const res = await axios.get(`${API_URL}user/${id}`, {
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                })
+                setData(res.data.data);
+                
+            } finally {
+                setLoading(false)
+            }
         }
-        fetchData();
-    }, [id]);
+        if(!!token){
+            fetchData();
+        }
+    }, [id, token]);
+
+    if(loading){
+        return <div>Loading...</div>
+    }
+    if(!loading && !data){
+        return <div>User Sub Dealer Not Found!</div>
+    }
 
     return (
         <div>
             <div className="d-flex justify-content-center">
                <div className="col-lg-10">
-                {!loading ? 
-                    <CardDetail 
-                        data={data} 
-                    />
-                :
-                    'Loading...'
-                }
+                   <CardDetail 
+                       data={data} 
+                   />
                </div>
             </div>
         </div>
     )
 }
-const mapStateToProps = (state) => {
-    return {
-      base_url: state.BASE_URL,
-      user_permission: state.USER_PERMISSION
-    };
-  };
-export default connect(mapStateToProps, null)(DetailSubDealer);
+
+export default DetailSubDealer;

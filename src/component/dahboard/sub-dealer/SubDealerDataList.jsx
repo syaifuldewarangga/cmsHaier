@@ -1,50 +1,57 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { permissionCek } from '../../../action/permissionCek';
-import moment from 'moment'
+import React from "react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { permissionCek } from "../../../action/permissionCek";
 
-function PromoDataList(props) {
-  return (
-    <tbody>
-      <tr>
-        {
-          permissionCek(props.user_permission, 'UPDATE_WARRANTY_PROMO') && permissionCek(props.user_permission, 'DELETE_USER') ?
-          <td className="align-middle">
-            <div className="d-flex justify-content-start">
-              {
-                permissionCek(props.user_permission, 'UPDATE_WARRANTY_PROMO') &&
-                <Link to={'/sub-dealer/detail/' + props.data.id}>
-                  <button className="btn d-flex btn-edit me-3 btn-sm">
-                    <span class="material-icons-outlined md-18">info</span>
-                  </button>
-                </Link>
-              }
-              {
-                permissionCek(props.user_permission, 'UPDATE_WARRANTY_PROMO') &&
-                  <button className="btn d-flex btn-warning me-3 btn-sm" onClick={() => props.modalResetPassword(props.data.id)}>
-                      <span class="material-icons-outlined md-18">restart_alt</span>
-                  </button>
-              }
-            </div>
-          </td> : null
-        }
-        
-        <td className="align-middle">Toko Dealer 1</td>
-        <td className="align-middle">02158585858</td>
-        <td className="align-middle">sub.dealer@gmail.com</td>
-        
-      </tr>
-    </tbody>
-  );
+function SubDealerDataList(props) {
+    const { data } = props;
+    const user_permission = useSelector((state) => state.USER_PERMISSION);
+
+    return (
+        <tbody>
+            <tr>
+                {permissionCek(user_permission, "UPDATE_WARRANTY_PROMO") &&
+                permissionCek(user_permission, "DELETE_USER") ? (
+                    <td className="align-middle">
+                        <div className="d-flex justify-content-start">
+                            {permissionCek(
+                                user_permission,
+                                "UPDATE_WARRANTY_PROMO"
+                            ) && (
+                                <Link to={"/sub-dealer/detail/" + data?.id}>
+                                    <button className="btn d-flex btn-edit me-3 btn-sm">
+                                        <span class="material-icons-outlined md-18">
+                                            info
+                                        </span>
+                                    </button>
+                                </Link>
+                            )}
+                            {permissionCek(
+                                user_permission,
+                                "UPDATE_WARRANTY_PROMO"
+                            ) && (
+                                <button
+                                    className="btn d-flex btn-warning me-3 btn-sm"
+                                    onClick={() =>
+                                        props.modalResetPassword(data?.id)
+                                    }
+                                >
+                                    <span class="material-icons-outlined md-18">
+                                        restart_alt
+                                    </span>
+                                </button>
+                            )}
+                        </div>
+                    </td>
+                ) : null}
+
+                <td className="align-middle">{data?.first_name + data?.last_name}</td>
+                <td className="align-middle">{data?.phone}</td>
+                <td className="align-middle">{data?.email}</td>
+                <td className="align-middle">{data?.status === 'active' ? 'Active' : 'Not Active'}</td>
+            </tr>
+        </tbody>
+    );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    url: state.URL,
-    base_url: state.BASE_URL,
-    user_permission: state.USER_PERMISSION
-  };
-};
-
-export default connect(mapStateToProps, null)(PromoDataList);
+export default SubDealerDataList;

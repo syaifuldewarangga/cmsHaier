@@ -1,8 +1,8 @@
+import moment from 'moment';
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { permissionCek } from '../../../action/permissionCek';
-import moment from 'moment'
 const currentDate = new Date();
 const nextMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, currentDate.getDate());
 function IncentiveProductDataList(props) {
@@ -34,10 +34,14 @@ function IncentiveProductDataList(props) {
           </td> : null
         }
         
-        
-        <td className="align-middle">Incentive Product Mei 2024</td>
-        <td className="align-middle">{moment(currentDate).format('LL')}</td>
-        <td className="align-middle">{moment(nextMonthDate).format('LL')}</td>
+        <td className="align-middle">{props.data.name}</td>
+        <td className="align-middle">{moment(props.data.start_date).format('LL')}</td>
+        <td className="align-middle">{moment(props.data.end_date).format('LL')}</td>
+        <td className="align-middle">
+            <Link style={{ color: 'blue', textDecoration: 'underline', fontStyle: 'italic' }} to={'/incentive-product/detail/' + props.data.id}>
+                Click here to see detail 
+            </Link>
+        </td>
         
       </tr>
     </tbody>

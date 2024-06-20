@@ -68,8 +68,10 @@ import DetailSubDealerList from '../../../component/dahboard/sub-dealer/DetailSu
 import IncentiveProductList from '../../../component/dahboard/incentive-product/IncentiveProductList';
 import AddIncentiveProduct from '../../../component/dahboard/incentive-product/AddIncentiveProduct';
 import EditIncentiveProduct from '../../../component/dahboard/incentive-product/EditIncentiveProduct';
+import DetailIncentiveProduct from '../../../component/dahboard/incentive-product/DetailIncentiveProduct';
+import UpsertIncentiveProductRecord from '../../../component/dahboard/incentive-product/UpsertIncentiveProductRecord';
 
-// Incentive Product
+// User Sales
 import UserSalesProductList from '../../../component/dahboard/user/userSales/UserSalesList';
 import AddUserSales from '../../../component/dahboard/user/userSales/AddUserSales';
 import EditUserSales from '../../../component/dahboard/user/userSales/EditUserSales';
@@ -102,6 +104,8 @@ class Dashboard extends Component {
             <AdminRoute exact path="/incentive-product" component={IncentiveProductList} />
             <AdminRoute exact path="/incentive-product/add" component={AddIncentiveProduct} />
             <AdminRoute exact path="/incentive-product/edit/:id" component={EditIncentiveProduct} />
+            <AdminRoute exact path="/incentive-product/detail/:id" component={DetailIncentiveProduct} />
+            <AdminRoute exact path="/incentive-product/detail/:id/upsert" component={UpsertIncentiveProductRecord} />
 
             <AdminRoute exact path="/users" component={UserList} />
             <AdminRoute exact path="/users/add" component={AddUser} />

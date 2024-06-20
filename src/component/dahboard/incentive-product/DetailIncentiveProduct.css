@@ -1,15 +1,10 @@
-.table-pic {
-    width: 52%;
-    border-collapse: separate;
-    border-spacing: 20px;
-}
 .table-user-toko {
     width: 70%;
     border-collapse: separate;
     border-spacing: 20px;
 }
 .table-sales {
-    width: 50% !important;
+    width: 40%;
     border-collapse: separate;
     border-spacing: 20px;
 }

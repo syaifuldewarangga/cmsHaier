@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { permissionCek } from '../../../../action/permissionCek';
 
 function UserSalesDataList(props) {
+  const { data } = props;
   return (
     <tbody>
       <tr>
@@ -27,24 +28,15 @@ function UserSalesDataList(props) {
                   </button>
                 </Link>
               }
-              {
-                permissionCek(props.user_permission, 'DELETE_WARRANTY_PROMO') &&
-                <button
-                  className="btn d-flex btn-danger me-3 btn-sm"
-                  onClick={() => props.remove(props.data.id)}
-                >
-                  <span class="material-icons-outlined md-18"> delete </span>
-                </button>
-              }
             </div>
           </td> : null
         }
         
-        <td className="align-middle">User Sales 1</td>
-        <td className="align-middle">02158585858</td>
-        <td className="align-middle">user_sales1@gmail.com</td>
-        <td className="align-middle">Pria</td>
-        <td className="align-middle">Active</td>
+        <td className="align-middle">{data?.first_name + data?.last_name}</td>
+        <td className="align-middle">{data?.phone}</td>
+        <td className="align-middle">{data?.email}</td>
+        <td className="align-middle">Pria HARDCODED</td>
+        <td className="align-middle">{data?.status === 'active' ? 'Active' : 'Not Active'}</td>
       </tr>
     </tbody>
   );
