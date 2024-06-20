@@ -10,7 +10,7 @@ import ModalResetPassword from "./ModalResetPassword";
 import SubDealerDataList from "./SubDealerDataList";
 import "./SubDealerList.css";
 
-function SubDealerList(props) {
+function SubDealerList({ created_by = null }) {
     const { API_URL } = useSelector((state) => state.SUB_DEALER);
     const user_permission = useSelector((state) => state.USER_PERMISSION);
     const token = useToken()
@@ -25,6 +25,7 @@ function SubDealerList(props) {
         page: 1,
         limit: 10,
         role: ["dealer"],
+        created_by: !!created_by ? created_by : ''
     });
 
     const fetchData = async () => {
@@ -166,13 +167,16 @@ function SubDealerList(props) {
                     </div>
                 </div>
 
-                <div className="mt-3">
-                  <Pagination
-                        currentPage={params.page}
-                        totalPage={totalPage}
-                        changePage={handleChangePage}
-                    />
-                </div>
+                {data?.length > 0 ?
+                    <div className="mt-3">
+                    <Pagination
+                            currentPage={params.page}
+                            totalPage={totalPage}
+                            changePage={handleChangePage}
+                        />
+                    </div>
+                : null
+                }
                 <ModalResetPassword id={dataID} />
             </div>
         </div>

@@ -81,19 +81,23 @@ const CardDetail = ({ data }) => {
                 <div className="col-12">
                     <div className="card">
                         <div className="card-body">
-                            <h5 className="card-title">Detail Informasi Sales</h5>
+                            <h5 className="card-title">User Sales Information</h5>
                             <table className='table-sales'>
                                 <tr>
-                                    <td>Nama Sales</td>
-                                    <td>Joyo Suroyo</td>
+                                    <td>Nama</td>
+                                    <td>{data?.created_by?.first_name + data?.created_by?.last_name}</td>
                                 </tr>
                                 <tr>
                                     <td>No Telpon</td>
-                                    <td>02178586969</td>
+                                    <td>{data?.created_by?.phone}</td>
                                 </tr>
                                 <tr>
                                     <td>Email Sales</td>
-                                    <td>02178586969</td>
+                                    <td>{data?.created_by?.email}</td>
+                                </tr>
+                                <tr>
+                                    <td>Status</td>
+                                    <td>{data?.created_by?.status === 'active' ? 'Active' : 'Not Active'}</td>
                                 </tr>
                             </table>
                         </div>
