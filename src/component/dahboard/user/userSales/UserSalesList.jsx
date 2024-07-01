@@ -159,7 +159,6 @@ function UserSalesList() {
                                         <th>Name</th>
                                         <th>Phone Number</th>
                                         <th>Email</th>
-                                        <th>Gender</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>

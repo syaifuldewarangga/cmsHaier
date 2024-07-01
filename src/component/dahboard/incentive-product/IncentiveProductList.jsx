@@ -4,11 +4,11 @@ import React, { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useHistory } from 'react-router-dom';
 import { permissionCek } from "../../../action/permissionCek";
+import useToken from "../../../hooks/useToken";
 import Pagination from "../../pagination/Pagination";
 import IncentiveProductDataList from "./IncentiveProductDataList";
 import ModalConfirm from "./ModalConfirm";
 import "./style.css";
-import useToken from "../../../hooks/useToken";
 
 function IncentiveProductList(props) {
     const { API_URL } = useSelector((state) => state.SUB_DEALER);
@@ -210,7 +210,6 @@ function IncentiveProductList(props) {
                   : null
                   }
                 </div>
-                {console.log(params, totalPage)}
                 <ModalConfirm
                     isLoading={loadingDelete}
                     message="are you sure you want to delete this data?"

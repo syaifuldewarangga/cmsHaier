@@ -1,16 +1,302 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import moment from 'moment';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import useToken from '../../../hooks/useToken';
 import './DetailSubDealer.css';
 
-const CardDetail = ({ data }) => {
+const now = moment();
+
+const start_date = now.startOf('month').format('YYYY-MM-DD');
+
+const end_date = now.endOf('month').format('YYYY-MM-DD');
+
+const SellOutCard = ({ data }) => {
+    const { API_URL } = useSelector((state) => state.SUB_DEALER);
+    const token = useToken()
+
+    const [sellout, setSellout] = useState()
+    const [loadingSellOut, setLoadingSellOut] = useState(true)
+
     const [form, setForm] = useState({
-        start_date: '',
-        end_date: ''
+        start_date,
+        end_date
+    })
+    const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value})
+
+    useEffect(() => {
+        let mounted = true
+        
+        const fetchDataSellout = async () => {
+            if(!loadingSellOut){
+                setLoadingSellOut(true)
+            }
+            try {
+                const res = await axios.get(`${API_URL}sell-out`, {
+                    params: {
+                        start_date: moment(form.start_date).format('YYYY/MM/DD'),
+                        end_date: moment(form.end_date).format('YYYY/MM/DD')
+                    },
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                })
+                if(mounted){
+                    setSellout(res.data);
+                }
+            } finally {
+                setLoadingSellOut(false)
+            }
+        }
+
+        if(!!token){
+            fetchDataSellout();
+        }
+    }, [data, token, form]);
+
+    const renderData = useMemo(() => {
+        if(!sellout) return null
+        if(sellout.length === 0) {
+            return (
+                <tr> 
+                    <td colSpan={3}>kosong</td>
+                </tr>
+            )
+        }
+        return sellout.map((v, i) => {
+            return (
+                <tr key={v?.id}>
+                    <td scope='row'>{i + 1}</td>
+                    <td>{v.category}</td>
+                    <td>{v.total_product}</td>
+                </tr>
+            )
+        })
+    }, [sellout])
+
+    const totalSalesSellout = useMemo(() => {
+        if(!sellout) return 0
+        return sellout.reduce((prev, curr) => prev + curr.total_product, 0)
+    }, [sellout])
+
+    return (
+        <div className="col-12">
+            <div className="card">
+                <div className="card-body">
+                    <h5 className="card-title">Informasi Sellout</h5>
+                    <div className="row align-items-end mb-4 mt-4">
+                        <div className="col-lg-5">
+                            <input
+                                type="date"
+                                className={`form-control`}
+                                name="start_date"
+                                onChange={onChange}
+                                value={form.start_date}
+                                required
+                            />
+                        </div>
+                        <div className="col-lg-1">
+                            <label className="form-label text-center">To</label>
+                        </div>
+                        <div className="col-lg-4">
+                            <input
+                                type="date"
+                                className={`form-control`}
+                                name="end_date"
+                                onChange={onChange}
+                                value={form.end_date}
+                                required
+                            />
+                        </div>
+                        <div className="col-lg-2">
+                            <button className='btn btn-primary'>Filter</button>
+                        </div>
+                    </div>
+                    {!loadingSellOut ?
+                    <>
+                        <div className="row mb-4">
+                            <div className="col-4 col-sm-12">
+                                <div className="card bg-card">
+                                    <div className="d-flex align-items-center">
+                                        <div className="count-icon" style={{ background: '#6CCAC9' }}>
+                                            <span class="icon material-icons-outlined"> store </span>
+                                        </div>
+                                        <div className="count text-center">
+                                        <p className="total">{totalSalesSellout}</p>
+                                            <p className="description">Total Sales</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <table className='table'>
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Category Product</th>
+                                    <th scope="col">Total Product</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {renderData}
+                            </tbody>
+                        </table>
+                    </>
+                    : 
+                    <div className='col-12'>
+                        <div className="card">
+                            <div className="card-body" style={{ height: 350 }}>
+                                <div className="d-flex h-100 justify-content-center align-items-center">
+                                    <span
+                                        class="spinner-border spinner-border-md me-1"
+                                        role="status"
+                                        aria-hidden="true"
+                                    ></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+    )
+}
+
+const IncentiveCard = ({ data }) => {
+    const { API_URL } = useSelector((state) => state.SUB_DEALER);
+    const token = useToken()
+
+    const [incentive, setIncentive] = useState()
+    const [loadingIncentive, setLoadingIncentive] = useState(true)
+
+    const [form, setForm] = useState({
+        start_date,
+        end_date
     })
     const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value })
+
+    useEffect(() => {
+        let mounted = true
+        
+        const fetchDataIncentive = async () => {
+            if(!loadingIncentive){
+                setLoadingIncentive(true)
+            }
+            try {
+                const res = await axios.get(`${API_URL}incentive-report`, {
+                    params: {
+                        start_date: moment(form.start_date).format('YYYY/MM/DD'),
+                        end_date: moment(form.end_date).format('YYYY/MM/DD')
+                    },
+                    headers: {
+                        Authorization: 'Bearer ' + token,
+                    },
+                })
+                if(mounted){
+                    setIncentive(res.data.data);
+                }
+            } finally {
+                setLoadingIncentive(false)
+            }
+        }
+
+        if(!!token){
+            fetchDataIncentive();
+        }
+    }, [data, token, form]);
+
+    const renderData = useMemo(() => {
+        if(!incentive) return null
+        if(incentive.length === 0) {
+            return (
+                <tr> 
+                    <td align='center' colSpan={4}>Empty</td>
+                </tr>
+            )
+        }
+        return incentive.map((v, i) => {
+            return (
+                <tr key={v?.id}>
+                    <td scope='row'>{i + 1}</td>
+                    <td>{v.category}</td>
+                    <td>{v.model}</td>
+                    <td>{v.total_product}</td>
+                </tr>
+            )
+        })
+    }, [incentive])
+
+    return (
+        <div className="col-12">
+            <div className="card">
+                <div className="card-body">
+                    <h5 className="card-title">Informasi Incentive</h5>
+                    <div className="row align-items-end mb-4 mt-4">
+                        <div className="col-lg-5">
+                            <input
+                                type="date"
+                                className={`form-control`}
+                                name="start_date"
+                                onChange={onChange}
+                                value={form.start_date}
+                                required
+                            />
+                        </div>
+                        <div className="col-lg-1">
+                            <label className="form-label text-center">To</label>
+                        </div>
+                        <div className="col-lg-4">
+                            <input
+                                type="date"
+                                className={`form-control`}
+                                name="end_date"
+                                onChange={onChange}
+                                value={form.end_date}
+                                required
+                            />
+                        </div>
+                        <div className="col-lg-2">
+                            <button className='btn btn-primary'>Filter</button>
+                        </div>
+                    </div>
+                    {!loadingIncentive ?
+                    <table className='table'>
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Product Category</th>
+                                <th scope="col">Product Model</th>
+                                <th scope="col">Total Product</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {renderData} 
+                        </tbody>
+                    </table>
+                    : 
+                    <div className='col-12'>
+                        <div className="card">
+                            <div className="card-body" style={{ height: 100 }}>
+                                <div className="d-flex h-100 justify-content-center align-items-center">
+                                    <span
+                                        class="spinner-border spinner-border-md me-1"
+                                        role="status"
+                                        aria-hidden="true"
+                                    ></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div> 
+    )
+}
+
+const CardDetail = ({ data }) => {
     return (
         <div className="container">
             <div className="row gap-3">
@@ -103,169 +389,14 @@ const CardDetail = ({ data }) => {
                         </div>
                     </div>
                 </div>
-                <div className="col-12">
-                    <div className="card">
-                        <div className="card-body">
-                            <h5 className="card-title">Informasi Sellout</h5>
-                            <div className="row align-items-end mb-4 mt-4">
-                                <div className="col-lg-5">
-                                    <input
-                                        type="date"
-                                        className={`form-control`}
-                                        aria-label="start_date"
-                                        onChange={onChange}
-                                        value={form.start_date}
-                                        required
-                                    />
-                                </div>
-                                <div className="col-lg-1">
-                                    <label className="form-label text-center">To</label>
-                                </div>
-                                <div className="col-lg-4">
-                                    <input
-                                        type="date"
-                                        className={`form-control`}
-                                        aria-label="end_date"
-                                        onChange={onChange}
-                                        value={form.end_date}
-                                        required
-                                    />
-                                </div>
-                                <div className="col-lg-2">
-                                    <button className='btn btn-primary'>Filter</button>
-                                </div>
-                            </div>
-                            <div className="row mb-4">
-                                <div className="col-4">
-                                    <div className="card bg-card">
-                                        <div className="d-flex align-items-center">
-                                            <div className="count-icon" style={{ background: '#6CCAC9' }}>
-                                                <span class="icon material-icons-outlined"> store </span>
-                                            </div>
-                                            <div className="count text-center">
-                                            <p className="total">19</p>
-                                                <p className="description">Total Sales</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <table className='table'>
-                                <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Product</th>
-                                        <th scope="col">Unit</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td scope='row'>1</td>
-                                        <td>TV</td>
-                                        <td>2</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope='row'>2</td>
-                                        <td>WM</td>
-                                        <td>3</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope='row'>3</td>
-                                        <td>Refrigrator</td>
-                                        <td>6</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope='row'>4</td>
-                                        <td>AC</td>
-                                        <td>2</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope='row'>5</td>
-                                        <td>CC</td>
-                                        <td>6</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-12">
-                    <div className="card">
-                        <div className="card-body">
-                            <h5 className="card-title">Informasi Incentive</h5>
-                            <div className="row align-items-end mb-4 mt-4">
-                                <div className="col-lg-5">
-                                    <input
-                                        type="date"
-                                        className={`form-control`}
-                                        aria-label="start_date"
-                                        onChange={onChange}
-                                        value={form.start_date}
-                                        required
-                                    />
-                                </div>
-                                <div className="col-lg-1">
-                                    <label className="form-label text-center">To</label>
-                                </div>
-                                <div className="col-lg-4">
-                                    <input
-                                        type="date"
-                                        className={`form-control`}
-                                        aria-label="end_date"
-                                        onChange={onChange}
-                                        value={form.end_date}
-                                        required
-                                    />
-                                </div>
-                                <div className="col-lg-2">
-                                    <button className='btn btn-primary'>Filter</button>
-                                </div>
-                            </div>
-                            <table className='table'>
-                                <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Product</th>
-                                        <th scope="col">Incentive</th>
-                                        <th scope="col">Unit</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td scope='row'>1</td>
-                                        <td>TV</td>
-                                        <td>5.000</td>
-                                        <td>2</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope='row'>2</td>
-                                        <td>WM</td>
-                                        <td>10.000</td>
-                                        <td>3</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope='row'>3</td>
-                                        <td>Refrigrator</td>
-                                        <td>15.000</td>
-                                        <td>6</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope='row'>4</td>
-                                        <td>AC</td>
-                                        <td>25.000</td>
-                                        <td>2</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope='row'>5</td>
-                                        <td>CC</td>
-                                        <td>35.000</td>
-                                        <td>6</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                <SellOutCard data={data} />
+                <IncentiveCard data={data} />
+                
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
             </div>
         </div>
     )
