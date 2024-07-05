@@ -9,7 +9,32 @@ import readXlsxFile from 'read-excel-file';
 import useToken from '../../../hooks/useToken';
 import ModalConfirm from './ModalConfirm';
 
-const Form = (props) => {
+const dataMonth = [
+    { month: 'Januari', value: 1 },
+    { month: 'Februari', value: 2 },
+    { month: 'Maret', value: 3 },
+    { month: 'April', value: 4 },
+    { month: 'Mei', value: 5 },
+    { month: 'Juni', value: 6 },
+    { month: 'Juli', value: 7 },
+    { month: 'Agustus', value: 8 },
+    { month: 'September', value: 9 },
+    { month: 'Oktober', value: 10 },
+    { month: 'November', value: 11 },
+    { month: 'Desember', value: 12 },
+];
+
+const getYearList = () => {
+    const currentYear = new Date().getFullYear();
+    const yearsBefore = [currentYear - 3, currentYear - 2, currentYear - 1];
+    const yearList = [...yearsBefore, currentYear];
+
+    return yearList;
+};
+
+const getMonthNameByValue = (value) => dataMonth.find(v => v.value === value)?.month || '-'
+
+const FormIncentiveReference = (props) => {
     const { data } = props
     const { id } = useParams();
     const history = useHistory();
@@ -90,7 +115,7 @@ const Form = (props) => {
                 }
             })
             alert('Berhasil!')
-            history.push(`/incentive-product/detail/${id}`)
+            history.push(`/incentive-reference`)
         } catch (error) {
             setErrors(error?.response?.data?.errors)
         } finally {
@@ -129,14 +154,14 @@ const Form = (props) => {
 
     useEffect(() => {
         if (!!data) {
-            if(data?.record?.length > 0){
-                setProductModels([...data?.record?.filter(v => {
-                    return {
-                        product_model: v.product_model,
-                        incentive: v.incentive
-                    }
-                })])
-            }
+            // if(data?.record?.length > 0){
+            //     setProductModels([...data?.record?.filter(v => {
+            //         return {
+            //             product_model: v.product_model,
+            //             incentive: v.incentive
+            //         }
+            //     })])
+            // }
         }
     }, [id]);
 
@@ -204,7 +229,51 @@ const Form = (props) => {
                     </div>
                     {!loadingPage ?
                         <div className="card-body"> 
+                            <div className="row mb-4">
+                                <div className="col-lg-12">
+                                    <h5>Date Information</h5>
+                                </div>
+                                <div className="col-lg-6">
+                                    <div className="mb-3">
+                                        <label className="form-label">
+                                            Year
+                                        </label>
+                                        <select name="year" defaultValue={data?.year} className="form-control">
+                                            <option selected disabled>Select Year</option>
+                                            {getYearList().map((v, i) => {
+                                                return (
+                                                    <option key={v} value={v}>{v}</option>
+                                                )
+                                            })}
+                                        </select>
+                                        <div className="invalid-feedback">
+                                            {errors?.year?.[0]}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-lg-6">
+                                    <div className="mb-3">
+                                        <label className="form-label">
+                                            Month
+                                        </label>
+                                        <select name="month" defaultValue={data?.month} className="form-control">
+                                            <option selected disabled>Select Month</option>
+                                            {dataMonth.map((v, i) => {
+                                                return (
+                                                    <option key={v} value={v.value}>{v.month}</option>
+                                                )
+                                            })}
+                                        </select>
+                                        <div className="invalid-feedback">
+                                            {errors?.month?.[0]}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div className="row">
+                                <div className="col-lg-12">
+                                    <h5>Incentive Information</h5>
+                                </div>
                                 {options.length > 0 &&
                                     productModels.map((productModel, index) => {
                                         const error_product_model = errors?.[`record.${index}.product_model`]?.[0] || undefined
@@ -415,7 +484,7 @@ const Form = (props) => {
 
                             <div className="row">
                                 <div className="col-6">
-                                    <Link to={`/incentive-product/detail/${id}`}>
+                                    <Link to={`/incentive-reference`}>
                                         <div className="d-grid gap-2">
                                             <button
                                                 className="btn btn-outline-import"
@@ -477,53 +546,4 @@ const Form = (props) => {
     );
 };
 
-const UpsertIncentiveProductRecord = (props) => {
-    const { id } = useParams();
-    const [data, setData] = React.useState();
-    const [loading, setLoading] = React.useState(true)
-
-    const { API_URL } = useSelector((state) => state.SUB_DEALER);
-    const token = useToken()
-
-    React.useEffect(() => {
-        async function fetchData() {
-            try {
-                const res = await axios.get(`${API_URL}incentive/${id}`, {
-                    headers: {
-                        Authorization: 'Bearer ' + token,
-                    },
-                })
-                setData(res.data.data);
-                
-            } finally {
-                setLoading(false)
-            }
-        }
-        if(!!token){
-            fetchData();
-        }
-    }, [id, token]);
-
-    if(loading){
-        return <div>Loading...</div>
-    }
-    if(!loading && !data){
-        return <div>Incentive Not Found!</div>
-    }
-    return (
-        <div>
-            <div className="d-flex justify-content-center">
-               <div className="col-lg-10">
-                   <Form 
-                       title= "Edit Incentive Product"
-                       data={data} 
-                   />
-               </div>
-            </div>
-        </div>
-    );
-};
-
-
-
-export default UpsertIncentiveProductRecord;
+export default FormIncentiveReference;

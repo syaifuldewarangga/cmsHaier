@@ -75,6 +75,10 @@ const Sidebar = (props) => {
                             permissionCek(props.user_permission, 'GET_CATEGORY') ?
                             <li><Link to="/incentive-product">Incentive Sub Dealer</Link></li> : null
                         }
+                        {
+                            permissionCek(props.user_permission, 'GET_CATEGORY') ?
+                            <li><Link to="/incentive-reference">Incentive Reference</Link></li> : null
+                        }
                     </ul>
                 </li>
                 {
