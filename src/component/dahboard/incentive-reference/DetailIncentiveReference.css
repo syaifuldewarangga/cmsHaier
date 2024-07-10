@@ -1,0 +1,58 @@
+.table-user-toko {
+    width: 70%;
+    border-collapse: separate;
+    border-spacing: 20px;
+}
+.table-sales {
+    width: 40%;
+    border-collapse: separate;
+    border-spacing: 20px;
+}
+.table-sellout {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.title {
+    font-weight: 600;
+}
+
+.card {
+    border-radius: 5px;
+    border: none;
+}
+
+
+.bg-card {
+    background-color: #F5F5F5;
+    border-radius: 10px;
+}
+.count-icon {
+    border-radius: 10px 0 0 10px;
+}
+
+.count-icon .icon{
+    font-size: 50px;
+    color: #fff;
+    padding: 20px;
+}
+.count{
+    margin: auto;
+}
+.count p{
+    margin: 0;
+}
+
+.count .total{
+    font-size: 25px;
+}
+
+
+@media (max-width: 768px) {
+    .table-sales {
+        width: 100%; 
+    }
+    .table-user-toko {
+        width: 100%;
+    }
+}

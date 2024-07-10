@@ -9,7 +9,7 @@ const EditUserSales = (props) => {
     const { id } = useParams();
     const [data, setData] = React.useState();
     const [loading, setLoading] = React.useState(true)
-    const token = useToken()
+    const { token } = useToken()
 
     const { API_URL } = useSelector((state) => state.SUB_DEALER);
 

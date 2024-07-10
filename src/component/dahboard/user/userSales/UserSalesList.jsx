@@ -12,7 +12,7 @@ function UserSalesList() {
     // const token = useToken()
     const { API_URL } = useSelector((state) => state.SUB_DEALER);
     const user_permission = useSelector(state => state.USER_PERMISSION)
-    const token = useToken()
+    const { token } = useToken()
 
     const [data, setData] = useState();
 

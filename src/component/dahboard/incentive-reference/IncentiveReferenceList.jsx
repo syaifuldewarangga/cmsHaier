@@ -14,7 +14,7 @@ function IncentiveReferenceList(props) {
     const { API_URL } = useSelector((state) => state.SUB_DEALER);
     const user_permission = useSelector((state) => state.USER_PERMISSION);
     const history = useHistory()
-    const token = useToken()
+    const { token } = useToken()
 
     const [dataID, setDataID] = useState("");
     const [data, setData] = useState();
@@ -30,7 +30,7 @@ function IncentiveReferenceList(props) {
     const fetchData = async () => {
         setData();
         try {
-            const res = await axios.get(API_URL + "incentive", {
+            const res = await axios.get(API_URL + "monthly-incentives", {
                 headers: {
                     Authorization: "Bearer " + token,
                 },
@@ -89,13 +89,14 @@ function IncentiveReferenceList(props) {
     const handleDelete = async () => {
         setLoadingDelete(true)
         try {
-          const res = await axios.delete(`${API_URL}incentive/${dataID}`, {
+          const res = await axios.delete(`${API_URL}monthly-incentives/${dataID}`, {
               headers: {
                   Authorization: "Bearer " + token,
               },
           })
+          alert('Success Delete Incentive Reference!')
           hideModal()
-          history.push('/incentive-product')
+          history.push('/incentive-reference')
         } catch (error) {
           
         } finally {
@@ -188,9 +189,9 @@ function IncentiveReferenceList(props) {
                                         ) === true ? (
                                             <th>Action</th>
                                         ) : null}
-                                        <th>Month</th>
                                         <th>Year</th>
-                                        <th>Product Model Count</th>
+                                        <th>Month</th>
+                                        <th>Detail Product Model</th>
                                     </tr>
                                 </thead>
                                 {renderData}

@@ -14,7 +14,7 @@ const end_date = now.endOf('month').format('YYYY-MM-DD');
 
 const SellOutCard = ({ data }) => {
     const { API_URL } = useSelector((state) => state.SUB_DEALER);
-    const token = useToken()
+    const { token } = useToken()
 
     const [sellout, setSellout] = useState()
     const [loadingSellOut, setLoadingSellOut] = useState(true)
@@ -166,7 +166,7 @@ const SellOutCard = ({ data }) => {
 
 const IncentiveCard = ({ data }) => {
     const { API_URL } = useSelector((state) => state.SUB_DEALER);
-    const token = useToken()
+    const { token } = useToken()
 
     const [incentive, setIncentive] = useState()
     const [loadingIncentive, setLoadingIncentive] = useState(true)
@@ -404,7 +404,7 @@ const CardDetail = ({ data }) => {
 const DetailSubDealer = (props) => {
     const { id } = useParams();
     const { API_URL } = useSelector((state) => state.SUB_DEALER);
-    const token = useToken()
+    const { token } = useToken()
 
     const [data, setData] = React.useState();
     const [loading, setLoading] = React.useState(true)

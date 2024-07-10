@@ -49,7 +49,7 @@ const CardDetail = ({ data }) => {
 const DetailUserSales = () => {
     const { id } = useParams();
     const { API_URL } = useSelector((state) => state.SUB_DEALER);
-    const token = useToken()
+    const { token } = useToken()
 
     const [data, setData] = React.useState();
     const [loading, setLoading] = React.useState(true)

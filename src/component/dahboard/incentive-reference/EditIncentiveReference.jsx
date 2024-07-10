@@ -11,12 +11,12 @@ const EditIncentiveReference = (props) => {
     const [loading, setLoading] = React.useState(true)
 
     const { API_URL } = useSelector((state) => state.SUB_DEALER);
-    const token = useToken()
+    const { token } = useToken()
 
     React.useEffect(() => {
         async function fetchData() {
             try {
-                const res = await axios.get(`${API_URL}incentive/${id}`, {
+                const res = await axios.get(`${API_URL}monthly-incentives/${id}`, {
                     headers: {
                         Authorization: 'Bearer ' + token,
                     },
@@ -36,7 +36,7 @@ const EditIncentiveReference = (props) => {
         return <div>Loading...</div>
     }
     if(!loading && !data){
-        return <div>Incentive Not Found!</div>
+        return <div>Incentive Reference Not Found!</div>
     }
     return (
         <div>

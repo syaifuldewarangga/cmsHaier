@@ -75,6 +75,8 @@ import UpsertIncentiveProductRecord from '../../../component/dahboard/incentive-
 import IncentiveReferenceList from '../../../component/dahboard/incentive-reference/IncentiveReferenceList';
 import AddIncentiveReference from '../../../component/dahboard/incentive-reference/AddIncentiveReference';
 import EditIncentiveReference from '../../../component/dahboard/incentive-reference/EditIncentiveReference';
+import DetailIncentiveReference from '../../../component/dahboard/incentive-reference/DetailIncentiveReference';
+import UpsertIncentiveReferenceRecord from '../../../component/dahboard/incentive-reference/UpsertIncentiveReferenceRecord';
 
 // User Sales
 import UserSalesProductList from '../../../component/dahboard/user/userSales/UserSalesList';
@@ -115,6 +117,8 @@ class Dashboard extends Component {
             <AdminRoute exact path="/incentive-reference" component={IncentiveReferenceList} />
             <AdminRoute exact path="/incentive-reference/add" component={AddIncentiveReference} />
             <AdminRoute exact path="/incentive-reference/edit/:id" component={EditIncentiveReference} />
+            <AdminRoute exact path="/incentive-reference/detail/:id" component={DetailIncentiveReference} />
+            <AdminRoute exact path="/incentive-reference/detail/:id/upsert" component={UpsertIncentiveReferenceRecord} />
 
             <AdminRoute exact path="/users" component={UserList} />
             <AdminRoute exact path="/users/add" component={AddUser} />

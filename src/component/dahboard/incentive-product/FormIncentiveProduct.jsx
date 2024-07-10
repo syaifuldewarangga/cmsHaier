@@ -8,7 +8,7 @@ const FormIncentiveProduct = (props) => {
     const { data } = props
     const { id } = useParams();
     const history = useHistory();
-    const token = useToken()
+    const { token } = useToken()
     const { API_URL } = useSelector((state) => state.SUB_DEALER);
 
     const [isLoading, setIsLoading] = useState(false)

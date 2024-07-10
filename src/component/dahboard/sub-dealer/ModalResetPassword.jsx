@@ -8,7 +8,7 @@ import useToken from "../../../hooks/useToken";
 const ModalResetPassword = ({ id }) => {
     const { API_URL } = useSelector((state) => state.SUB_DEALER);
     const history = useHistory();
-    const token = useToken()
+    const { token } = useToken()
 
     const [errors, setErrors] = useState({})
     const [isLoading, setIsLoading] = useState(false)

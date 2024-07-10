@@ -13,7 +13,7 @@ import "./SubDealerList.css";
 function SubDealerList({ created_by = null }) {
     const { API_URL } = useSelector((state) => state.SUB_DEALER);
     const user_permission = useSelector((state) => state.USER_PERMISSION);
-    const token = useToken()
+    const { token } = useToken()
 
     const [dataID, setDataID] = useState("");
     const [data, setData] = useState();

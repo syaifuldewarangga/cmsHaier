@@ -3,11 +3,12 @@ import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import useToken from '../../../hooks/useToken';
-import './DetailIncentiveProduct.css';
+import './DetailIncentiveReference.css';
+import { getMonthNameByValue } from './FormIncentiveReference';
 
 const CardDetail = ({ data }) => {
     const renderData = useMemo(() => {
-        if(data?.record?.length === 0) {
+        if(data?.record?.length === 0 || !data?.record) {
             return (
                 <tbody>
                     <tr>
@@ -40,19 +41,15 @@ const CardDetail = ({ data }) => {
                 <div className="col-12">
                     <div className="card">
                         <div className="card-body">
-                            <h5 className="card-title">Incentive Information</h5>
+                            <h5 className="card-title">Incentive Reference Information</h5>
                             <table className='table-sales'>
                                 <tr>
-                                    <td>Program Name</td>
-                                    <td>{data?.name}</td>
+                                    <td>Year</td>
+                                    <td>{data?.year}</td>
                                 </tr>
                                 <tr>
-                                    <td>Start Date</td>
-                                    <td>{data?.start_date}</td>
-                                </tr>
-                                <tr>
-                                    <td>End Date</td>
-                                    <td>{data?.end_date}</td>
+                                    <td>Month</td>
+                                    <td>{getMonthNameByValue(data?.month)}</td>
                                 </tr>
                             </table>
                         </div>
@@ -67,8 +64,8 @@ const CardDetail = ({ data }) => {
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="d-flex justify-content-end">
-                                        <Link to={`/incentive-product/detail/${data?.id}/upsert`}>
-                                            <button className='btn btn-outline-primary'>{data?.record?.length === 0 ? 'Add Product Model' : 'Edit Product Model'}</button>
+                                        <Link to={`/incentive-reference/detail/${data?.id}/upsert`}>
+                                            <button className='btn btn-outline-primary'>{data?.record?.length === 0 || !data?.record ? 'Add Product Model' : 'Edit Product Model'}</button>
                                         </Link>
                                     </div>
                                 </div>
@@ -90,7 +87,7 @@ const CardDetail = ({ data }) => {
         </div>
     )
 }
-const DetailIncentiveProduct = () => {
+const DetailIncentiveReference = () => {
     const { id } = useParams();
     const { API_URL } = useSelector((state) => state.SUB_DEALER);
     const { token } = useToken()
@@ -101,7 +98,7 @@ const DetailIncentiveProduct = () => {
     React.useEffect(() => {
         async function fetchData() {
             try {
-                const res = await axios.get(`${API_URL}incentive/${id}`, {
+                const res = await axios.get(`${API_URL}monthly-incentives/${id}`, {
                     headers: {
                         Authorization: 'Bearer ' + token,
                     },
@@ -136,4 +133,4 @@ const DetailIncentiveProduct = () => {
         </div>
     )
 }
-export default DetailIncentiveProduct;
+export default DetailIncentiveReference;

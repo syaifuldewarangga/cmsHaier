@@ -9,7 +9,7 @@ const FormUserSales = (props) => {
     const { id } = useParams();
     const history = useHistory();
     const { API_URL } = useSelector((state) => state.SUB_DEALER);
-    const token = useToken()
+    const { token } = useToken()
 
     const [isLoading, setIsLoading] = useState(false)
     const [errors, setErrors] = useState({});

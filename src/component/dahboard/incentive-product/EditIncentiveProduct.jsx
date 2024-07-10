@@ -11,7 +11,7 @@ const EditIncentiveProduct = (props) => {
     const [loading, setLoading] = React.useState(true)
 
     const { API_URL } = useSelector((state) => state.SUB_DEALER);
-    const token = useToken()
+    const { token } = useToken()
 
     React.useEffect(() => {
         async function fetchData() {

@@ -14,7 +14,7 @@ function IncentiveProductList(props) {
     const { API_URL } = useSelector((state) => state.SUB_DEALER);
     const user_permission = useSelector((state) => state.USER_PERMISSION);
     const history = useHistory()
-    const token = useToken()
+    const { token, refetchToken } = useToken()
 
     const [dataID, setDataID] = useState("");
     const [data, setData] = useState();
@@ -41,6 +41,10 @@ function IncentiveProductList(props) {
             setData([...res.data.data.data]);
             setTotalPage(res.data.data.meta.last_page);
         } catch (error) {
+            
+            if(error?.response?.status === 401) {
+                refetchToken()
+            }
         } finally {
         }
     };

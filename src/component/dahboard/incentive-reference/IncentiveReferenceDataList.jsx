@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { permissionCek } from '../../../action/permissionCek';
+import { getMonthNameByValue } from './FormIncentiveReference';
 const currentDate = new Date();
 const nextMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, currentDate.getDate());
 function IncentiveReferenceDataList(props) {
@@ -34,9 +35,13 @@ function IncentiveReferenceDataList(props) {
           </td> : null
         }
         
-        <td className="align-middle">July</td>
-        <td className="align-middle">2024</td>
-        <td className="align-middle">Product Model (10)</td>
+        <td className="align-middle">{props.data.year}</td>
+        <td className="align-middle">{getMonthNameByValue(props.data.month)}</td>
+        <td className="align-middle">
+            <Link to={'/incentive-reference/detail/' + props.data.id}>
+                <div style={{ textDecoration: 'underline' }}>See Detail</div>
+            </Link>
+        </td>
       </tr>
     </tbody>
   );

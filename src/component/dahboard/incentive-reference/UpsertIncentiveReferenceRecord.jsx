@@ -84,13 +84,13 @@ const Form = (props) => {
         const modalExist = document.getElementById("modalConfirm");
         try {
             let res = {}
-            res = await axios.post(`${API_URL}incentive/${id}/upsert-record`, body, {
+            res = await axios.post(`${API_URL}monthly-incentives/${id}/upsert-record`, body, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 }
             })
             alert('Berhasil!')
-            history.push(`/incentive-product/detail/${id}`)
+            history.push(`/incentive-reference/detail/${id}`)
         } catch (error) {
             setErrors(error?.response?.data?.errors)
         } finally {
@@ -415,7 +415,7 @@ const Form = (props) => {
 
                             <div className="row">
                                 <div className="col-6">
-                                    <Link to={`/incentive-product/detail/${id}`}>
+                                    <Link to={`/incentive-reference/detail/${id}`}>
                                         <div className="d-grid gap-2">
                                             <button
                                                 className="btn btn-outline-import"
@@ -477,7 +477,7 @@ const Form = (props) => {
     );
 };
 
-const UpsertIncentiveProductRecord = (props) => {
+const UpsertIncentiveReferenceRecord = (props) => {
     const { id } = useParams();
     const [data, setData] = React.useState();
     const [loading, setLoading] = React.useState(true)
@@ -488,7 +488,7 @@ const UpsertIncentiveProductRecord = (props) => {
     React.useEffect(() => {
         async function fetchData() {
             try {
-                const res = await axios.get(`${API_URL}incentive/${id}`, {
+                const res = await axios.get(`${API_URL}monthly-incentives/${id}`, {
                     headers: {
                         Authorization: 'Bearer ' + token,
                     },
@@ -508,7 +508,7 @@ const UpsertIncentiveProductRecord = (props) => {
         return <div>Loading...</div>
     }
     if(!loading && !data){
-        return <div>Incentive Not Found!</div>
+        return <div>Incentive Reference Not Found!</div>
     }
     return (
         <div>
@@ -526,4 +526,4 @@ const UpsertIncentiveProductRecord = (props) => {
 
 
 
-export default UpsertIncentiveProductRecord;
+export default UpsertIncentiveReferenceRecord;
