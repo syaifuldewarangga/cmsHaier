@@ -27,6 +27,7 @@ function StoreListData(props) {
         <td>{props.data.City}</td>
         <td>{props.data.District}</td>
         <td>{props.data.Street}</td>
+        <td>{props.data.Island}</td>
         {/* <td>GAADA JUGA</td>
         <td>INI APA LAGI</td> */}
       </tr>
