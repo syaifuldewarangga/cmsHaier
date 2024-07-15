@@ -20,6 +20,7 @@ const TableExport = ({ data }) => {
                   <td>{v.City}</td>
                   <td>{v.District}</td>
                   <td>{v.Street}</td>
+                  <td>{v.Island}</td>
               </tr>
           )
       })
@@ -35,6 +36,7 @@ const TableExport = ({ data }) => {
                 <th>City</th>
                 <th>District</th>
                 <th>Street</th>
+                <th>Island</th>
             </tr>
             {renderData}
         </table>
@@ -163,6 +165,7 @@ function StoreList(props) {
                     <th>City</th>
                     <th>District</th>
                     <th>Street</th>
+                    <th>Island</th>
                     {/* <th>Operational</th>
                     <th>Office Hours</th> */}
                   </tr>
