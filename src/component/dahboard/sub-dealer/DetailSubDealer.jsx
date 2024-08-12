@@ -333,16 +333,16 @@ const CardDetail = ({ data }) => {
                                     <td>Bank Account Number</td>
                                     <td>{data?.dealer_detail?.bank_account_number}</td>
                                 </tr>
+                                <tr>
+                                    <td>Status</td>
+                                    <td>{data?.status}</td>
+                                </tr>
                             </table>
                             <h5 className="card-title mt-5">Store Information</h5>
                             <table className='table-user-toko'>
                                 <tr>
                                     <td>Name</td>
                                     <td>{data?.dealer_detail?.store_name}</td>
-                                </tr>
-                                <tr>
-                                    <td>Code</td>
-                                    <td>{data?.dealer_detail?.store_code}</td>
                                 </tr>
                                 <tr>
                                     <td>Province</td>
@@ -371,19 +371,19 @@ const CardDetail = ({ data }) => {
                             <table className='table-sales'>
                                 <tr>
                                     <td>Nama</td>
-                                    <td>{data?.created_by?.first_name + data?.created_by?.last_name}</td>
+                                    <td>{data?.dealer_detail?.sales?.first_name + data?.dealer_detail?.sales?.last_name}</td>
                                 </tr>
                                 <tr>
                                     <td>No Telpon</td>
-                                    <td>{data?.created_by?.phone}</td>
+                                    <td>{data?.dealer_detail?.sales?.phone}</td>
                                 </tr>
                                 <tr>
                                     <td>Email Sales</td>
-                                    <td>{data?.created_by?.email}</td>
+                                    <td>{data?.dealer_detail?.sales?.email}</td>
                                 </tr>
                                 <tr>
                                     <td>Status</td>
-                                    <td>{data?.created_by?.status === 'active' ? 'Active' : 'Not Active'}</td>
+                                    <td>{data?.dealer_detail?.sales?.status === 'active' ? 'Active' : 'Not Active'}</td>
                                 </tr>
                             </table>
                         </div>

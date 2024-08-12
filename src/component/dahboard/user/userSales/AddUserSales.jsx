@@ -9,7 +9,7 @@ class AddUserSales extends Component
                  <div className="d-flex justify-content-center">
                     <div className="col-lg-10">
                         <FormUserSales 
-                            title= "Add User Sales" 
+                            title= "Add User Sales / BM" 
                         />
                     </div>
                  </div>

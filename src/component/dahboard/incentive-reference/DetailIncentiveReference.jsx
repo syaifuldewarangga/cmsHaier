@@ -29,6 +29,7 @@ const CardDetail = ({ data }) => {
                         <th scope="col">{i + 1}</th>
                         <th scope="col">{v?.product_model}</th>
                         <th scope="col">{v?.incentive}</th>
+                        <th scope="col">{v?.retail_price}</th>
                     </tr>
                 </tbody>
             )
@@ -76,6 +77,7 @@ const CardDetail = ({ data }) => {
                                         <th scope="col">#</th>
                                         <th scope="col">Product Model</th>
                                         <th scope="col">Incentive</th>
+                                        <th scope="col">Retail Price</th>
                                     </tr>
                                 </thead>
                                 {renderData}

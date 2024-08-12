@@ -10,7 +10,7 @@ import ModalResetPassword from "./ModalResetPassword";
 import SubDealerDataList from "./SubDealerDataList";
 import "./SubDealerList.css";
 
-function SubDealerList({ created_by = null }) {
+function SubDealerList({ sales_id = null }) {
     const { API_URL } = useSelector((state) => state.SUB_DEALER);
     const user_permission = useSelector((state) => state.USER_PERMISSION);
     const { token } = useToken()
@@ -24,14 +24,14 @@ function SubDealerList({ created_by = null }) {
         search: "",
         page: 1,
         limit: 10,
-        role: ["dealer"],
-        created_by: !!created_by ? created_by : ''
+        status: "",
+        sales_id: !!sales_id ? sales_id : ''
     });
 
     const fetchData = async () => {
         setData();
         try {
-            const res = await axios.get(API_URL + "user", {
+            const res = await axios.get(API_URL + "user/dealer", {
                 headers: {
                     Authorization: "Bearer " + token,
                 },
@@ -127,18 +127,38 @@ function SubDealerList({ created_by = null }) {
             <div className="mt-5">
                 <div>
                     <div className="row justify-content">
-                        <div className="d-flex col-lg-6 col-12 mb-3">
-                            <input
-                                class="form-control me-2"
-                                type="search"
-                                placeholder="Search"
-                                aria-label="search"
-                                onChange={(e) => setTempSearch(e.target.value)}
-                            />
+                        <div className="col-lg-6 col-12 mb-3">
+                            <div className="row">
+                                <div className="col-8">
+                                    <input
+                                        class="form-control"
+                                        type="search"
+                                        placeholder="Search"
+                                        aria-label="search"
+                                        onChange={(e) => setTempSearch(e.target.value)}
+                                    />
+                                </div>
+                                <div className="col-4">
+                                    <select 
+                                        className="form-control" name="role" value={params.status}
+                                        onChange={(e) => {
+                                            setParams({
+                                                ...params,
+                                                status: e.target.value === "" ? "" : e.target.value
+                                            })
+                                        }}
+                                    >
+                                        <option value="">All Status</option>
+                                        <option value="pending">pending</option>
+                                        <option value="rejected">rejected</option>
+                                        <option value="active">active</option>
+                                        <option value="suspend">suspend</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-
                 <div>
                     <div className="card">
                         <div className="table-responsive">

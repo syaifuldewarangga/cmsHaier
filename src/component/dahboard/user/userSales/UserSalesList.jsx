@@ -22,7 +22,7 @@ function UserSalesList() {
         search: "",
         page: 1,
         limit: 10,
-        role: ["sales"],
+        role: ["sales", "bm"],
     });
 
     const fetchData = async () => {
@@ -111,18 +111,37 @@ function UserSalesList() {
 
     return (
         <div className="user-list">
-            <h5 className="dashboard title">User Sales</h5>
+            <h5 className="dashboard title">User Sales / BM</h5>
             <div className="mt-5">
                 <div>
                     <div className="row justify-content">
-                        <div className="d-flex col-lg-6 col-12 mb-3">
-                            <input
-                                class="form-control me-2"
-                                type="search"
-                                placeholder="Search"
-                                aria-label="search"
-                                onChange={(e) => setTempSearch(e.target.value)}
-                            />
+                        <div className="col-lg-6 col-12 mb-3">
+                            <div className="row">
+                                <div className="col-8">
+                                    <input
+                                        class="form-control"
+                                        type="search"
+                                        placeholder="Search"
+                                        aria-label="search"
+                                        onChange={(e) => setTempSearch(e.target.value)}
+                                    />
+                                </div>
+                                <div className="col-4">
+                                    <select 
+                                        className="form-control" name="role" value={params.role}
+                                        onChange={(e) => {
+                                            setParams({
+                                                ...params,
+                                                role: e.target.value === "" ? ["sales", "bm"] : [e.target.value]
+                                            })
+                                        }}
+                                    >
+                                        <option value="">BM & Sales</option>
+                                        <option value="bm">BM</option>
+                                        <option value="sales">Sales</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                         <div className="col-lg-6 d-flex mb-3 justify-content-lg-end">
                             <Link to="/user-sales/add">
@@ -132,7 +151,7 @@ function UserSalesList() {
                                         add{" "}
                                     </span>
                                     <span className="fw-bold">
-                                        Add User Sales
+                                        Add User Sales / BM
                                     </span>
                                 </button>
                             </Link>
@@ -159,6 +178,7 @@ function UserSalesList() {
                                         <th>Name</th>
                                         <th>Phone Number</th>
                                         <th>Email</th>
+                                        <th>Role</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>

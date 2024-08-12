@@ -19,14 +19,14 @@ const FormUserSales = (props) => {
             let res = {}
             if(!!id){
                 const formDataObj = Object.fromEntries(formData)
-                res = await axios.patch(`${API_URL}user/sales/${id}`, {}, {
+                res = await axios.patch(`${API_URL}user/${id}`, {}, {
                     params: formDataObj,
                     headers: {
                         Authorization: `Bearer ${token}`,
                     }
                 })
             }else{
-                res = await axios.post(`${API_URL}user/sales`, formData, {
+                res = await axios.post(`${API_URL}user`, formData, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     }
@@ -164,7 +164,31 @@ const FormUserSales = (props) => {
                                                 -- Select Status --
                                             </option>
                                             <option value="active">Active</option>
-                                            <option value="not_active">Not Active</option>
+                                            <option value="suspend">Suspend</option>
+                                        </select>
+                                        <div className="invalid-feedback">
+                                            {!!errors?.status ? errors?.status[0] : ''}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-lg-12">
+                                    <div className="mb-3">
+                                        <label className="form-label">Role</label>
+                                        <select
+                                            className={`form-select ${
+                                                !!errors?.status
+                                                    ? "is-invalid"
+                                                    : null
+                                            }`}
+                                            name="role"
+                                            defaultValue={data?.role}
+                                            required
+                                        >
+                                            <option selected disabled>
+                                                -- Select Role --
+                                            </option>
+                                            <option value="bm">BM</option>
+                                            <option value="sales">Sales</option>
                                         </select>
                                         <div className="invalid-feedback">
                                             {!!errors?.status ? errors?.status[0] : ''}

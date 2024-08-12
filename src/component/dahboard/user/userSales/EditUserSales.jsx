@@ -44,7 +44,7 @@ const EditUserSales = (props) => {
             <div className="d-flex justify-content-center">
                <div className="col-lg-10">
                     <FormUserSales 
-                        title= "Edit User Sales"
+                        title= "Edit User Sales / BM"
                         data={data} 
                     />
                </div>

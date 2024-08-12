@@ -20,7 +20,7 @@ const Form = (props) => {
 
     const [isLoading, setIsLoading] = useState(false);
     const [productModels, setProductModels] = useState([
-        { product_model: "", incentive: "" },
+        { product_model: "", incentive: "", retail_price: "" },
     ]);
     const [options, setOptions] = useState([]);
     const [errors, setErrors] = useState({})
@@ -39,10 +39,10 @@ const Form = (props) => {
     };
 
     const handleDownloadTemplate = () => {
-        const filePath = process.env.PUBLIC_URL + "/templates/template_import_incentive_sub_dealer.xlsx";
+        const filePath = process.env.PUBLIC_URL + "/templates/template_import_incentive_reference_sub_dealer.xlsx";
         const link = document.createElement("a");
         link.href = filePath;
-        link.download = "template_import_incentive_sub_dealer.xlsx"; // specify the filename
+        link.download = "template_import_incentive_reference_sub_dealer.xlsx"; // specify the filename
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -54,6 +54,7 @@ const Form = (props) => {
             return {
                 product_model: v[0],
                 incentive: v[1],
+                retail_price: v[2]
             };
         }).slice(1, data.length);
         setProductModels([...productModels, ...temp]);
@@ -108,6 +109,7 @@ const Form = (props) => {
             temp.push({
                 product_model: v.product_model,
                 incentive: v.incentive,
+                retail_price: v?.retail_price
             })
         });
         const body = {
@@ -133,7 +135,8 @@ const Form = (props) => {
                 setProductModels([...data?.record?.filter(v => {
                     return {
                         product_model: v.product_model,
-                        incentive: v.incentive
+                        incentive: v.incentive,
+                        retail_price: v.retail_price
                     }
                 })])
             }
@@ -215,7 +218,7 @@ const Form = (props) => {
 
                                         return (
                                             <Fragment key={index}>
-                                                <div className="col-6 mb-3">
+                                                <div className="col-4 mb-3">
                                                     <div>
                                                         {index === 0 ?
                                                             <label className="form-label">
@@ -312,7 +315,7 @@ const Form = (props) => {
                                                         )}
                                                     </div>
                                                 </div>
-                                                <div className="col-6 mb-3">
+                                                <div className="col-4 mb-3">
                                                     <div>
                                                         {index === 0 ?
                                                             <label className="form-label">
@@ -340,6 +343,44 @@ const Form = (props) => {
                                                                     );
                                                                 }}
                                                                 value={productModel.incentive}
+                                                                required
+                                                            />
+                                                        </div>
+                                                        {!!error_incentive && (
+                                                            <div className="invalid-feedback d-block">
+                                                                {error_incentive?.replaceAll(index, ' ').replaceAll('.', ' ')}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                <div className="col-4 mb-3">
+                                                    <div>
+                                                        {index === 0 ?
+                                                            <label className="form-label">
+                                                                Retail Price
+                                                            </label>
+                                                        : null
+                                                        }
+                                                        <div className="d-flex align-items-center w-100">
+                                                            <input
+                                                                type="number"
+                                                                className={`
+                                                                    form-control
+                                                                    ${!!error_incentive ? 'is-invalid' : null}
+                                                                `}
+                                                                aria-label="name"
+                                                                onChange={(e) => {
+                                                                    const incentive = e.target .value;
+                                                                    setProductModels(( currentproductModels) => produce(currentproductModels, (v) => {
+                                                                                    v[index] = {
+                                                                                        ...v[index],
+                                                                                        retail_price: incentive,
+                                                                                    };
+                                                                                }
+                                                                            )
+                                                                    );
+                                                                }}
+                                                                value={productModel.retail_price}
                                                                 required
                                                             />
                                                             {productModels.length > 1 ? (
@@ -510,12 +551,13 @@ const UpsertIncentiveReferenceRecord = (props) => {
     if(!loading && !data){
         return <div>Incentive Reference Not Found!</div>
     }
+    console.log(data)
     return (
         <div>
             <div className="d-flex justify-content-center">
                <div className="col-lg-10">
                    <Form 
-                       title= "Edit Incentive Product"
+                       title={`${data.record?.length > 0 ? 'Edit' : 'Add'} Incentive Product`}
                        data={data} 
                    />
                </div>

@@ -52,7 +52,7 @@ const Sidebar = (props) => {
                         }
                         {
                             permissionCek(props.user_permission, 'GET_USER') ?
-                            <li><Link to="/user-sales">User Sales</Link></li> : null
+                            <li><Link to="/user-sales">User Sales & BM</Link></li> : null
                         }
                         {
                             permissionCek(props.user_permission, 'GET_STORE') ?

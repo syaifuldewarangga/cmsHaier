@@ -32,10 +32,11 @@ function UserSalesDataList(props) {
           </td> : null
         }
         
-        <td className="align-middle">{data?.first_name + data?.last_name}</td>
+        <td className="align-middle">{data?.first_name + ' ' + data?.last_name}</td>
         <td className="align-middle">{data?.phone}</td>
         <td className="align-middle">{data?.email}</td>
-        <td className="align-middle">{data?.status === 'active' ? 'Active' : 'Not Active'}</td>
+        <td className="align-middle">{data?.role}</td>
+        <td className="align-middle">{data?.status === 'active' ? 'Active' : 'Suspend'}</td>
       </tr>
     </tbody>
   );

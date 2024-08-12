@@ -1,10 +1,10 @@
 import axios from 'axios';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import useToken from '../../../../hooks/useToken';
-import './DetailUserSales.css';
 import SubDealerList from '../../sub-dealer/SubDealerList';
+import './DetailUserSales.css';
 
 const CardDetail = ({ data }) => {
     return (
@@ -13,7 +13,7 @@ const CardDetail = ({ data }) => {
                 <div className="col-12">
                     <div className="card">
                         <div className="card-body">
-                            <h5 className="card-title">User Sales Information</h5>
+                            <h5 className="card-title">User Information</h5>
                             <table className='table-sales'>
                                 <tr>
                                     <td>Nama</td>
@@ -28,20 +28,27 @@ const CardDetail = ({ data }) => {
                                     <td>{data?.email}</td>
                                 </tr>
                                 <tr>
+                                    <td>Role</td>
+                                    <td>{data?.role}</td>
+                                </tr>
+                                <tr>
                                     <td>Status</td>
-                                    <td>{data?.status === 'active' ? 'Active' : 'Not Active'}</td>
+                                    <td>{data?.status === 'active' ? 'Active' : 'Suspend'}</td>
                                 </tr>
                             </table>
                         </div>
                     </div>
                 </div>
-                <div className="col-12">
-                    <div className="card">
-                        <div className="card-body">
-                            <SubDealerList created_by={data?.id} />
+                {data?.role === 'sales' ?
+                    <div className="col-12">
+                        <div className="card">
+                            <div className="card-body">
+                                <SubDealerList sales_id={data?.id} />
+                            </div>
                         </div>
                     </div>
-                </div>
+                : null
+                }
             </div>
         </div>
     )
